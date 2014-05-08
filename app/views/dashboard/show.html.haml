@@ -1,0 +1,7 @@
+- if @has_authorized_projects
+  .dashboard.row
+    .activities.col-md-6
+      = render 'activities'
+
+- else
+  = render "zero_authorized_projects"

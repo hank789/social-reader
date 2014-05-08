@@ -1,0 +1,108 @@
+%h3.page-title
+  Admin area
+%p.light
+  You can manage services, users and other data from here.
+%hr
+.admin-dashboard
+  .row
+    .col-sm-4
+      .light-well
+        %h4 Services
+        .data
+          = link_to '#' do
+            %h1= @services.count
+          %hr
+    .col-sm-4
+      .light-well
+        %h4 Users
+        .data
+          = link_to admin_users_path do
+            %h1= User.count
+          %hr
+          = link_to 'New User', new_admin_user_path, class: "btn btn-new"
+    .col-sm-4
+      .light-well
+        %h4 Groups
+
+  .row.prepend-top-10
+    .col-md-4
+      %h4 Latest services
+      %hr
+      - @services.each do |service|
+        %p
+          = service.type
+          %span.light.pull-right
+            #{time_ago_with_tooltip(service.created_at)}
+
+    .col-md-4
+      %h4 Latest users
+      %hr
+      - @users.each do |user|
+        %p
+          = link_to [:admin, user], class: 'str-truncated' do
+            = user.name
+          %span.light.pull-right
+            #{time_ago_with_tooltip(user.created_at)}
+
+    .col-md-4
+      %h4 Latest groups
+      %hr
+
+
+  %br
+  .row
+    .col-md-4
+      %h4 Stats
+      %hr
+      %p
+        Issues
+        %span.light.pull-right
+          = Post.count
+      %p
+        Monthly active users
+        %span.light.pull-right
+          = User.where("current_sign_in_at > ?", 30.days.ago).count
+    .col-md-4
+      %h4
+        Features
+      %hr
+      %p
+        Sign up
+        %span.light.pull-right
+          = boolean_to_icon gitlab_config.signup_enabled
+      %p
+        LDAP
+        %span.light.pull-right
+          = boolean_to_icon Gitlab.config.ldap.enabled
+      %p
+        Gravatar
+        %span.light.pull-right
+          = boolean_to_icon Gitlab.config.gravatar.enabled
+      %p
+        OmniAuth
+        %span.light.pull-right
+          = boolean_to_icon Gitlab.config.omniauth.enabled
+    .col-md-4
+      %h4 Components
+      %hr
+      %p
+        GitLab
+        %span.pull-right
+          = Gitlab::VERSION
+      %p
+        GitLab Shell
+        %span.pull-right
+          = Gitlab::Shell.new.version
+      %p
+        GitLab API
+        %span.pull-right
+          = API::API::version
+      %p
+        Ruby
+        %span.pull-right
+          #{RUBY_VERSION}p#{RUBY_PATCHLEVEL}
+
+      %p
+        Rails
+        %span.pull-right
+          #{Rails::VERSION::STRING}
