@@ -1,4 +1,4 @@
-class Services::Facebook < Service
+class FacebookService < Service
   include Rails.application.routes.url_helpers
 
   OVERRIDE_FIELDS_ON_FB_UPDATE = [:contact_id, :person_id, :request_id, :invitation_id, :photo_url, :name, :username]

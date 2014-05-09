@@ -12,6 +12,8 @@
 #
 
 class Author < ActiveRecord::Base
+  attr_accessible :name, :service_id, :guid, :avatar, :description
+  validates_uniqueness_of :guid, :scope => :service_id
 
-
+  has_many :posts, dependent: :destroy, foreign_key: :author_id
 end

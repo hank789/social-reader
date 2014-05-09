@@ -18,44 +18,26 @@
 #
 
 class Post < ActiveRecord::Base
-  include Issuable
-  include InternalId
+
+  belongs_to :author
+  # For Hash only
+  serialize :data
+  validates :author, presence: true
+  validates :title, presence: true, length: { within: 0..255 }
+  validates_uniqueness_of :guid, :scope => :service_id
+
+  scope :authored, ->(user) { where(author_id: user) }
+  scope :recent, -> { order("created_at DESC") }
+  scope :of_services, ->(ids) { where(service_id: ids) }
 
   ActsAsTaggableOn.strict_case_match = true
 
-  belongs_to :project
-  validates :project, presence: true
+  belongs_to :service
 
-  scope :of_group, ->(group) { where(project_id: group.project_ids) }
-  scope :of_user_team, ->(team) { where(project_id: team.project_ids, assignee_id: team.member_ids) }
-
-  attr_accessible :title, :assignee_id, :position, :description,
-                  :milestone_id, :label_list, :state_event
+  attr_accessible :title, :author_id, :position, :description, :guid, :service_id, :data,
+                  :label_list
 
   acts_as_taggable_on :labels
-
-  scope :cared, ->(user) { where(assignee_id: user) }
-  scope :open_for, ->(user) { opened.assigned_to(user) }
-
-  state_machine :state, initial: :opened do
-    event :close do
-      transition [:reopened, :opened] => :closed
-    end
-
-    event :reopen do
-      transition closed: :reopened
-    end
-
-    state :opened
-    state :reopened
-    state :closed
-  end
-
-  # Mentionable overrides.
-
-  def gfm_reference
-    "issue ##{iid}"
-  end
 
   # Reset issue events cache
   #

@@ -26,6 +26,21 @@ class ServicesController < ApplicationController
     redirect_to_origin
   end
 
+  def get_tweets
+    service = Service.find_by_id(1)
+    tweets=service.get_home_timeline_tweets(service.since_id)
+    last_tweet = tweets.first
+    if last_tweet && last_tweet.id
+      service.since_id = last_tweet.id
+      service.save
+    end
+
+    tweets.each do |tweet|
+      service.post tweet
+    end
+
+  end
+
   def failure
     Rails.logger.info  "error in oauth #{params.inspect}"
     flash[:error] = 'services.failure.error'

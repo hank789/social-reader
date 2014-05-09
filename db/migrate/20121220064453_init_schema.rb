@@ -41,19 +41,19 @@ class InitSchema < ActiveRecord::Migration
     create_table "posts", force: true do |t|
       t.string   "title"
       t.integer  "author_id"
-      t.integer  "service"
+      t.integer  "service_id"
       t.datetime "created_at"
       t.datetime "updated_at"
       t.integer  "position",     default: 0
       t.text     "description"
-      t.integer  "guid"
+      t.string  "guid"
       t.text     "data"
     end
 
     add_index "posts", ["author_id"], name: "index_posts_on_author_id", using: :btree
     add_index "posts", ["created_at"], name: "index_posts_on_created_at", using: :btree
-    add_index "posts", ["service", "guid"], name: "index_posts_on_service_and_guid", unique: true, using: :btree
-    add_index "posts", ["service"], name: "index_posts_on_service", using: :btree
+    add_index "posts", ["service_id", "guid"], name: "index_posts_on_service_id_and_guid", unique: true, using: :btree
+    add_index "posts", ["service_id"], name: "index_posts_on_service_id", using: :btree
     add_index "posts", ["title"], name: "index_posts_on_title", using: :btree
 
     create_table "keys", force: true do |t|
@@ -165,16 +165,17 @@ class InitSchema < ActiveRecord::Migration
       t.datetime "created_at"
       t.datetime "updated_at"
       t.string   "name"
-      t.integer  "service"
+      t.text     "description"
+      t.integer  "service_id"
+      t.string   "avatar"
       t.string   "guid"
-      t.string   "data"
     end
 
     add_index "authors", ["guid"], name: "index_authors_on_guid", using: :btree
-    add_index "authors", ["service"], name: "index_authors_on_service", using: :btree
+    add_index "authors", ["service_id"], name: "index_authors_on_service_id", using: :btree
 
     create_table "services", force: true do |t|
-      t.string   "type"
+      t.string   "service_name"
       t.string   "uid"
       t.string   "access_token"
       t.string   "access_secret"
@@ -188,6 +189,7 @@ class InitSchema < ActiveRecord::Migration
       t.boolean  "active",      default: false, null: false
       t.integer  "access",     default: 0, null: false
       t.datetime "last_activity_at"
+      t.string   "since_id"
     end
 
     add_index "services", ["user_id"], name: "index_services_on_user_id", using: :btree

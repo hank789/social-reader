@@ -90,9 +90,9 @@ class User < ActiveRecord::Base
   has_many :created_projects,         foreign_key: :creator_id, class_name: 'Project'
 
   has_many :users_projects,           dependent: :destroy
-  has_many :posts,                   dependent: :destroy, foreign_key: :author_id
-  has_many :events,                   dependent: :destroy, foreign_key: :author_id,   class_name: "Event"
-  has_many :recent_events, -> { order "id DESC" }, foreign_key: :author_id,   class_name: "Event"
+  # has_many :posts,                   dependent: :destroy, foreign_key: :user_id
+  has_many :events,                   dependent: :destroy, foreign_key: :user_id,   class_name: "Event"
+  has_many :recent_events, -> { order "id DESC" }, foreign_key: :user_id,   class_name: "Event"
 
   has_many :services
 
@@ -440,7 +440,7 @@ class User < ActiveRecord::Base
   # Thus it will automatically generate a new fragment
   # when the event is updated because the key changes.
   def reset_events_cache
-    Event.where(author_id: self.id).
+    Event.where(user_id: self.id).
       order('id DESC').limit(1000).
       update_all(updated_at: Time.now)
   end

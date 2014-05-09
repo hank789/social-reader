@@ -5,20 +5,18 @@
 #  id          :integer          not null, primary key
 #  target_type :string(255)
 #  target_id   :integer
-#  title       :string(255)
-#  data        :text
 #  project_id  :integer
 #  created_at  :datetime
 #  updated_at  :datetime
 #  action      :integer
-#  author_id   :integer
+#  user_id   :integer
 #
 
 class Event < ActiveRecord::Base
-  attr_accessible :project, :action, :data, :author_id, :project_id,
+  attr_accessible :project, :action, :user_id, :project_id,
                   :target_id, :target_type
 
-  default_scope { where.not(author_id: nil) }
+  default_scope { where.not(user_id: nil) }
 
   CREATED   = 1
   UPDATED   = 2
@@ -30,11 +28,7 @@ class Event < ActiveRecord::Base
   JOINED    = 8 # User joined project
   LEFT      = 9 # User left project
 
-  delegate :name, :email, to: :author, prefix: true, allow_nil: true
-  delegate :title, to: :issue, prefix: true, allow_nil: true
-  delegate :title, to: :merge_request, prefix: true, allow_nil: true
-
-  belongs_to :author, class_name: "User"
+  belongs_to :user
   belongs_to :project
   belongs_to :target, polymorphic: true
 
@@ -66,7 +60,7 @@ class Event < ActiveRecord::Base
           before: before,
           after: after
         },
-        author_id: user.id
+        user_id: user.id
       )
     end
   end

@@ -20,10 +20,12 @@
 # To add new service you should build a class inherited from Service
 # and implement a set of methods
 class Service < ActiveRecord::Base
-  attr_accessible :provider, :info, :nickname, :uid, :access_token, :access_secret, :users_project_id, :active, :access
-
+  attr_accessible :provider, :info, :nickname, :uid, :access_token, :access_secret, :users_project_id, :active, :access, :service_name, :since_id
+  self.inheritance_column = :service_name
   belongs_to :user
-  validates_uniqueness_of :uid, :scope => :type
+  validates_uniqueness_of :uid, :scope => :service_name
+  # For Hash only
+  serialize :info
 
   def profile_photo_url
     nil
@@ -36,7 +38,7 @@ class Service < ActiveRecord::Base
   class << self
 
     def titles(service_strings)
-      service_strings.map {|s| "Services::#{s.titleize}"}
+      service_strings.map {|s| "#{s.titleize}Service"}
     end
 
     def first_from_omniauth( auth_hash )
@@ -54,7 +56,7 @@ class Service < ActiveRecord::Base
     end
 
     def service_type
-      "Services::#{options[:provider].camelize}"
+      "#{options[:provider].camelize}Service"
     end
 
     def options
@@ -65,6 +67,7 @@ class Service < ActiveRecord::Base
           uid:           auth['uid'],
           provider:      auth['provider'],
           info:          auth['info'],
+          service_name: "#{auth['provider'].camelize}Service",
           users_project_id: 1,
           active:       1,
           access:       1

@@ -164,7 +164,7 @@ gem 'nprogress-rails'
 
 
 # service
-gem 'twitter', '4.8.1'
+gem 'twitter', '~> 5.8.0'
 
 group :development do
   gem "annotate", "~> 2.6.0.beta2"

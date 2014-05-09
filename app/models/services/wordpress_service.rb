@@ -1,4 +1,4 @@
-class Services::Wordpress < Service
+class WordpressService < Service
   MAX_CHARACTERS = 1000
 
   attr_accessor :username, :password, :host, :path

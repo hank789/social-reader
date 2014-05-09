@@ -1,4 +1,4 @@
-class Services::Tumblr < Service
+class TumblrService < Service
   MAX_CHARACTERS = 1000
 
   def provider
