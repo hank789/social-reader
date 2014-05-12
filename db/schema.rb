@@ -38,62 +38,40 @@ ActiveRecord::Schema.define(version: 20140502125220) do
   add_index "emails", ["user_id"], name: "index_emails_on_user_id", using: :btree
 
   create_table "events", force: true do |t|
-    t.string   "target_type"
-    t.integer  "target_id"
-    t.integer  "project_id"
+    t.string   "service_id"
+    t.integer  "post_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "priority"
     t.integer  "action"
     t.integer  "user_id"
   end
 
   add_index "events", ["action"], name: "index_events_on_action", using: :btree
+  add_index "events", ["priority"], name: "index_events_on_priority", using: :btree
   add_index "events", ["user_id"], name: "index_events_on_user_id", using: :btree
   add_index "events", ["created_at"], name: "index_events_on_created_at", using: :btree
-  add_index "events", ["project_id"], name: "index_events_on_project_id", using: :btree
-  add_index "events", ["target_id"], name: "index_events_on_target_id", using: :btree
-  add_index "events", ["target_type"], name: "index_events_on_target_type", using: :btree
+  add_index "events", ["service_id"], name: "index_events_on_service_id", using: :btree
+  add_index "events", ["post_id"], name: "index_events_on_post_id", using: :btree
 
   create_table "posts", force: true do |t|
     t.string   "title"
     t.integer  "author_id"
-    t.integer  "service_id"
+    t.string   "provider"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "position",     default: 0
     t.text     "description"
     t.string   "guid"
+    t.string   "link"
     t.text     "data"
   end
 
   add_index "posts", ["author_id"], name: "index_posts_on_author_id", using: :btree
   add_index "posts", ["created_at"], name: "index_posts_on_created_at", using: :btree
-  add_index "posts", ["service_id", "guid"], name: "index_posts_on_service_id_and_guid", unique: true, using: :btree
-  add_index "posts", ["service_id"], name: "index_posts_on_service_id", using: :btree
+  add_index "posts", ["provider", "guid"], name: "index_posts_on_provider_and_guid", unique: true, using: :btree
+  add_index "posts", ["provider"], name: "index_posts_on_provider", using: :btree
   add_index "posts", ["title"], name: "index_posts_on_title", using: :btree
-
-  create_table "keys", force: true do |t|
-    t.integer  "user_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.text     "key"
-    t.string   "title"
-    t.string   "type"
-    t.string   "fingerprint"
-  end
-
-  add_index "keys", ["user_id"], name: "index_keys_on_user_id", using: :btree
-
-  create_table "projects", force: true do |t|
-    t.string   "name"
-    t.string   "slug"
-    t.text     "description"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.integer  "creator_id"
-  end
-
-  add_index "projects", ["creator_id"], name: "index_projects_on_creator_id", using: :btree
 
   create_table "taggings", force: true do |t|
     t.integer  "tag_id"
@@ -166,29 +144,19 @@ ActiveRecord::Schema.define(version: 20140502125220) do
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
   add_index "users", ["username"], name: "index_users_on_username", using: :btree
 
-  create_table "users_projects", force: true do |t|
-    t.integer  "user_id",                        null: false
-    t.integer  "project_id",                     null: false
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.integer  "notification_level", default: 3, null: false
-  end
-
-  add_index "users_projects", ["project_id"], name: "index_users_projects_on_project_id", using: :btree
-  add_index "users_projects", ["user_id"], name: "index_users_projects_on_user_id", using: :btree
-
   create_table "authors", force: true do |t|
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "name"
     t.text     "description"
-    t.integer  "service_id"
+    t.string   "provider"
     t.string   "avatar"
+    t.string   "profile_url"
     t.string   "guid"
   end
 
   add_index "authors", ["guid"], name: "index_authors_on_guid", using: :btree
-  add_index "authors", ["service_id"], name: "index_authors_on_service_id", using: :btree
+  add_index "authors", ["provider"], name: "index_authors_on_provider", using: :btree
 
   create_table "services", force: true do |t|
     t.string   "service_name"
@@ -199,18 +167,18 @@ ActiveRecord::Schema.define(version: 20140502125220) do
     t.text     "info"
     t.string   "nickname"
     t.integer  "user_id",                        null: false
-    t.integer  "users_project_id",                  null: false
+    t.integer  "priority",                       null: false
     t.datetime "created_at"
     t.datetime "updated_at"
     t.boolean  "active",      default: false, null: false
-    t.integer  "access",     default: 0, null: false
+    t.integer  "visibility_level",     default: 0, null: false
     t.datetime "last_activity_at"
     t.string   "since_id"
   end
 
   add_index "services", ["user_id"], name: "index_services_on_user_id", using: :btree
-  add_index "services", ["users_project_id"], name: "index_services_on_users_project_id", using: :btree
-  add_index "services", ["access"], name: "index_services_on_access", using: :btree
+  add_index "services", ["priority"], name: "index_services_on_priority", using: :btree
+  add_index "services", ["visibility_level"], name: "index_services_on_visibility_level", using: :btree
   add_index "services", ["last_activity_at"], name: "index_services_on_last_activity_at", using: :btree
 
 end

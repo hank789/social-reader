@@ -6,7 +6,7 @@ class Ability
       return [] if user.blocked?
 
       case subject.class.name
-      when "Project" then project_abilities(user, subject)
+      when "Service" then service_abilities(user, subject)
       when "Post" then issue_abilities(user, subject)
       else []
       end.concat(global_abilities(user))
@@ -15,10 +15,10 @@ class Ability
     # List of possible abilities
     # for non-authenticated user
     def not_auth_abilities(user, subject)
-      project = if subject.kind_of?(Project)
+      service = if subject.kind_of?(Service)
                   subject
-                elsif subject.respond_to?(:project)
-                  subject.project
+                elsif subject.respond_to?(:service)
+                  subject.service
                 else
                   nil
                 end
@@ -32,24 +32,12 @@ class Ability
       rules
     end
 
-    def project_abilities(user, project)
+    def service_abilities(user, service)
       rules = []
 
-      team = project.team
+      team = service.team
 
-      # Rules based on role in project
-      if team.masters.include?(user)
-        rules += project_master_rules
-
-      elsif team.developers.include?(user)
-        rules += project_dev_rules
-
-      elsif team.reporters.include?(user)
-        rules += project_report_rules
-
-      elsif team.guests.include?(user)
-        rules += project_guest_rules
-      end
+      # Rules based on role in service
 
       if project.public? || project.internal?
         rules += public_project_rules

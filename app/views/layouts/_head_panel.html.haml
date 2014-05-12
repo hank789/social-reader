@@ -25,7 +25,7 @@
                 %i.icon-cogs
           - if current_user.can_create_project?
             %li
-              = link_to new_service_path, title: "New project", class: 'has_bottom_tooltip', 'data-original-title' => 'New project'  do
+              = link_to new_service_path, title: "New service", class: 'has_bottom_tooltip', 'data-original-title' => 'New service'  do
                 %i.icon-plus
           %li
             = link_to profile_path, title: "Profile settings", class: 'has_bottom_tooltip', 'data-original-title' => 'Profile settings"'  do

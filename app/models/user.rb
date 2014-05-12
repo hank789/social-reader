@@ -111,7 +111,6 @@ class User < ActiveRecord::Base
                       message: "only letters, digits & '_' '-' '.' allowed. Letter should be first" }
 
   validates :notification_level, inclusion: { in: Notification.notification_levels }, presence: true
-  validate :namespace_uniq, if: ->(user) { user.username_changed? }
   validate :avatar_type, if: ->(user) { user.avatar_changed? }
   validate :unique_email, if: ->(user) { user.email_changed? }
   validates :avatar, file_size: { maximum: 100.kilobytes.to_i }
@@ -122,8 +121,6 @@ class User < ActiveRecord::Base
   before_save :ensure_authentication_token
 
   alias_attribute :private_token, :authentication_token
-
-  delegate :path, to: :namespace, allow_nil: true, prefix: true
 
   state_machine :state, initial: :active do
     after_transition any => :blocked do |user, transition|
@@ -160,13 +157,8 @@ class User < ActiveRecord::Base
   scope :blocked, -> { with_state(:blocked) }
   scope :active, -> { with_state(:active) }
   scope :alphabetically, -> { order('name ASC') }
-  scope :in_team, ->(team){ where(id: team.member_ids) }
-  scope :not_in_team, ->(team){ where('users.id NOT IN (:ids)', ids: team.member_ids) }
-  scope :not_in_project, ->(project) { project.users.present? ? where("id not in (:ids)", ids: project.users.map(&:id) ) : all }
   scope :without_projects, -> { where('id NOT IN (SELECT DISTINCT(user_id) FROM users_projects)') }
   scope :ldap, -> { where(provider:  'ldap') }
-
-  scope :potential_team_members, ->(team) { team.members.any? ? active.not_in_team(team) : active  }
 
   #
   # Class methods
@@ -259,28 +251,11 @@ class User < ActiveRecord::Base
     self.errors.add(:email, 'has already been taken') if Email.exists?(email: self.email)
   end
 
-  # Groups user has access to
-  def authorized_groups
-    @authorized_groups ||= begin
-                             group_ids = (groups.pluck(:id) + authorized_projects.pluck(:namespace_id))
-                             Group.where(id: group_ids).order('namespaces.name ASC')
-                           end
-  end
 
-
-  # Projects user has access to
-  def authorized_projects
-    @authorized_projects ||= begin
-                               # project_ids = personal_projects.pluck(:id)
-                               # project_ids += groups_projects.pluck(:id)
-                               project_ids = projects.pluck(:id).uniq
-                               Project.where(id: project_ids)
-                             end
-  end
-
-  def owned_projects
-    @owned_projects ||= begin
-                          Project.where(namespace_id: owned_groups.pluck(:id).push(namespace.id)).joins(:namespace)
+  # Services user has access to
+  def owned_services
+    @owned_services ||= begin
+                          Service.where(user_id: self.id)
                         end
   end
 

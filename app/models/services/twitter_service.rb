@@ -11,13 +11,14 @@ class TwitterService < Service
 
   def post tweet
     author = Author.new
-    author.service_id = self.id
+    author.provider = self.provider
     author.name = tweet.user.name
     author.guid = tweet.user.id
     author.avatar = tweet.user.profile_image_url.to_s
-    author.description = tweet.user.tweet.user.description.to_s
+    author.description = tweet.user.description.to_s
+    author.profile_url = "https://twitter.com/#{tweet.user.screen_name.to_s}"
     if !author.save
-      author = Author.find_last_by_service_id_and_guid(self.id,tweet.user.id)
+      author = Author.find_last_by_provider_and_guid(self.provider,tweet.user.id)
     end
 
 
@@ -25,33 +26,36 @@ class TwitterService < Service
     post.title = tweet.text
     post.author_id = author.id
     post.guid = tweet.id
-    post.service_id = self.id
+    post.provider = self.provider
+    # post.link = tweet.id
     post.created_at = tweet.created_at
     post.updated_at = tweet.created_at
-    post.data = tweet.to_h
+    post.data = tweet
     if !post.save
-      post = Post.find_last_by_service_id_and_guid(self.id, tweet.id)
+      post = Post.find_last_by_provider_and_guid(self.provider, tweet.id)
     end
 
     # to-do link & tag &mention
 
     event = Event.new
-    event.target_id = post.id
-    event.target_type = self.id
-    event.project_id = self.users_project_id
-    event.action = 1
+    event.post_id = post.id
+    event.service_id = self.id
+    event.priority = self.priority
     event.user_id = self.user_id
+    event.action = Event::UNREAD
+    event.created_at = tweet.created_at
+    event.updated_at = tweet.created_at
     event.save
 
   end
 
   def get_home_timeline_tweets(since_id)
+    if since_id.nil?
+      options = {:count => 200, :include_rts => true}
+    else
+      options = {:count => 200, :include_rts => true, :since_id => since_id}
+    end
     collect_with_max_id do |max_id|
-      if since_id
-        options = {:count => 200, :include_rts => true, :since_id => since_id}
-      else
-        options = {:count => 200, :include_rts => true}
-      end
       options[:max_id] = max_id unless max_id.nil?
       client.home_timeline(options)
     end

@@ -6,20 +6,20 @@ class EventFilter
       %w{ push posts merge_requests team}
     end
 
-    def push
-      'push'
+    def todo
+      'todo'
     end
 
-    def merged
-      'merged'
+    def important
+      'important'
     end
 
-    def comments
-      'comments'
+    def normal
+      'normal'
     end
 
-    def team
-      'team'
+    def low
+      'low'
     end
   end
 
@@ -37,17 +37,12 @@ class EventFilter
     filter = params.dup
 
     actions = []
-    actions << Event::PUSHED if filter.include? 'push'
-    actions << Event::MERGED if filter.include? 'merged'
+    actions << Event::TODO if filter.include? 'todo'
+    actions << Event::IMPORTANT if filter.include? 'important'
+    actions << Event::NORMAL if filter.include? 'normal'
+    actions << Event::LOW if filter.include? 'low'
 
-    if filter.include? 'team'
-      actions << Event::JOINED
-      actions << Event::LEFT
-    end
-
-    actions << Event::COMMENTED if filter.include? 'comments'
-
-    events = events.where(action: actions)
+    events = events.where(priority: actions)
   end
 
   def options key

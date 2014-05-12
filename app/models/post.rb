@@ -24,17 +24,17 @@ class Post < ActiveRecord::Base
   serialize :data
   validates :author, presence: true
   validates :title, presence: true, length: { within: 0..255 }
-  validates_uniqueness_of :guid, :scope => :service_id
+  validates_uniqueness_of :guid, :scope => :provider
 
   scope :authored, ->(user) { where(author_id: user) }
   scope :recent, -> { order("created_at DESC") }
-  scope :of_services, ->(ids) { where(service_id: ids) }
 
   ActsAsTaggableOn.strict_case_match = true
 
-  belongs_to :service
+  has_many :events
+  belongs_to :author
 
-  attr_accessible :title, :author_id, :position, :description, :guid, :service_id, :data,
+  attr_accessible :title, :author_id, :position, :description, :guid, :provider, :data,
                   :label_list
 
   acts_as_taggable_on :labels

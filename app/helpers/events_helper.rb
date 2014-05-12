@@ -1,22 +1,18 @@
 module EventsHelper
   def link_to_author(event)
-    author = event.author
+    author = event.post.author
 
     if author
-      link_to author.name, user_path(author.username)
+      link_to author.name, event.post.author.profile_url
     else
       event.author_name
     end
   end
 
   def event_action_name(event)
-    target = if event.target_type
-               event.target_type.titleize.downcase
-             else
-               'project'
-             end
+    #target = 'project'
 
-    [event.action_name, target].join(" ")
+    #[event.action_name, target].join(" ")
   end
 
   def event_filter_link key, tooltip
@@ -36,10 +32,10 @@ module EventsHelper
 
   def icon_for_event
     {
-      EventFilter.push     => "icon-upload-alt",
-      EventFilter.merged   => "icon-check",
-      EventFilter.comments => "icon-comments",
-      EventFilter.team     => "icon-user",
+      EventFilter.todo     => "icon-upload-alt",
+      EventFilter.important   => "icon-check",
+      EventFilter.normal => "icon-comments",
+      EventFilter.low     => "icon-user",
     }
   end
 

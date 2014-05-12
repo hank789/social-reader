@@ -20,9 +20,10 @@
 # To add new service you should build a class inherited from Service
 # and implement a set of methods
 class Service < ActiveRecord::Base
-  attr_accessible :provider, :info, :nickname, :uid, :access_token, :access_secret, :users_project_id, :active, :access, :service_name, :since_id
+  attr_accessible :provider, :info, :nickname, :uid, :access_token, :access_secret, :priority, :active, :visibility_level, :service_name, :since_id
   self.inheritance_column = :service_name
   belongs_to :user
+  has_many :events
   validates_uniqueness_of :uid, :scope => :service_name
   # For Hash only
   serialize :info
@@ -68,10 +69,14 @@ class Service < ActiveRecord::Base
           provider:      auth['provider'],
           info:          auth['info'],
           service_name: "#{auth['provider'].camelize}Service",
-          users_project_id: 1,
+          priority:     Event::TODO,
           active:       1,
-          access:       1
+          visibility_level:       1
       }
+    end
+
+    def visibility_levels
+      Gitlab::VisibilityLevel.options
     end
 
     private :auth, :service_type, :options
