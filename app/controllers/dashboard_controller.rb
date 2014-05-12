@@ -15,7 +15,7 @@ class DashboardController < ApplicationController
     @services_count = @services.count
     @services = @services.limit(@services_limit)
 
-    @events = Event.where(user_id: current_user.id)
+    @events = Event.load_events(current_user.id)
     @events = @event_filter.apply_filter(@events)
     @events = @events.limit(20).offset(params[:offset] || 0)
 

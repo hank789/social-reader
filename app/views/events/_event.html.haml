@@ -4,7 +4,7 @@
       #{time_ago_with_tooltip(event.created_at)}
 
     = cache event do
-      = image_tag event.post.author.avatar, class: "avatar s24", alt:''
-
+      .event-avatar
+        = image_tag event.post.author.avatar, class: "avatar s32", alt:''
       = render "events/event/common", event: event
 

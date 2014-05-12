@@ -159,4 +159,12 @@ class TwitterService < Service
   def delete_from_twitter service_post_id
     client.status_destroy service_post_id
   end
+
+  def hashtags
+
+  end
+
+  def mentions
+
+  end
 end
