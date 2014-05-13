@@ -154,6 +154,7 @@ class InitSchema < ActiveRecord::Migration
       t.integer  "priority",                       null: false
       t.datetime "created_at"
       t.datetime "updated_at"
+      t.datetime "deleted_at"
       t.boolean  "active",      default: false, null: false
       t.integer  "visibility_level",     default: 0, null: false
       t.datetime "last_activity_at"

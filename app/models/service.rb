@@ -27,6 +27,7 @@ class Service < ActiveRecord::Base
   validates_uniqueness_of :uid, :scope => :service_name
   # For Hash only
   serialize :info
+  default_scope { where(active: 1) }
 
   def profile_photo_url
     nil

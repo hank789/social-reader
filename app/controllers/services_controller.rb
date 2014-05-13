@@ -5,6 +5,7 @@ class ServicesController < ApplicationController
   skip_before_action :verify_authenticity_token, :only => :create
   before_action :authenticate_user!
   before_action :abort_if_already_authorized, :abort_if_read_only_access, :only => :create
+  before_action :check_service_active, :only => [:edit , :update]
 
   respond_to :html
 
@@ -16,21 +17,26 @@ class ServicesController < ApplicationController
   end
   def create
     service = Service.initialize_from_omniauth( omniauth_hash )
-
-    if current_user.services << service
+    exist_service = Service.where(uid: service.uid, active: 0).first
+    if exist_service
+      exist_service.active = 1
+      exist_service.save
+      redirect_to edit_service_path(exist_service)
+    else if current_user.services << service
       redirect_to edit_service_path(service)
     else
-      flash[:alert] = 'services.create.failure'
+      flash[:alert] = 'there was an error connecting that service'
       redirect_to_origin
+    end
+
     end
   end
 
   def edit
-    @service = Service.find(params[:id])
+
   end
 
   def update
-    @service = Service.find(params[:id])
     @service.priority = params[:"#{@service.provider}_service"][:priority_level]
     @service.visibility_level = params[:"#{@service.provider}_service"][:visibility_level]
     if @service.save
@@ -56,21 +62,23 @@ class ServicesController < ApplicationController
 
   def failure
     Rails.logger.info  "error in oauth #{params.inspect}"
-    flash[:alert] = 'services.failure.error'
-    redirect_to services_url
+    flash[:alert] = 'there was an error connecting that service'
+    redirect_to new_service_url
   end
 
   def destroy
     @service = current_user.services.find(params[:id])
-    @service.destroy
-    flash[:notice] = I18n.t 'services.destroy.success'
-    redirect_to services_url
+    @service.active = 0
+    @service.deleted_at = Time.now
+    @service.save
+    flash[:notice] = 'Successfully deleted authentication.'
+    redirect_to new_service_url
   end
 
   private
 
   def abort_if_already_authorized
-    if service = Service.where(uid: omniauth_hash['uid']).first
+    if service = Service.where(uid: omniauth_hash['uid'], active: 1).first
       flash[:alert] =  'services.create.already_authorized'
       redirect_to_origin
     end
@@ -107,5 +115,13 @@ class ServicesController < ApplicationController
   #https://gist.github.com/oliverbarnes/6096959 #=> hash with twitter specific extra
   def twitter_access_level
     twitter_access_token.response.header['x-access-level']
+  end
+
+  def check_service_active
+    @service = Service.find(params[:id])
+    if @service.active == false
+      flash[:alert] =  'Invalid request'
+      redirect_to new_service_url
+    end
   end
 end
