@@ -13,6 +13,7 @@ module EventsHelper
     #target = 'project'
 
     #[event.action_name, target].join(" ")
+    event.service.provider
   end
 
   def event_filter_link key, tooltip

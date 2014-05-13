@@ -71,7 +71,7 @@ class Service < ActiveRecord::Base
           service_name: "#{auth['provider'].camelize}Service",
           priority:     Event::TODO,
           active:       1,
-          visibility_level:       1
+          visibility_level:       Gitlab::VisibilityLevel::PRIVATE
       }
     end
 

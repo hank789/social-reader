@@ -15,6 +15,16 @@ class OmniauthCallbacksController < Devise::OmniauthCallbacksController
     error.to_s.humanize if error
   end
 
+  def failure
+    exception = env["omniauth.error"]
+    error   = exception.error_reason if exception.respond_to?(:error_reason)
+    error ||= exception.error        if exception.respond_to?(:error)
+    error ||= exception.message      if exception.respond_to?(:message)
+    error ||= env["omniauth.error.type"].to_s
+    flash[:alert] = error.to_s.humanize if error
+    redirect_to new_service_url
+  end
+
   def ldap
     # We only find ourselves here
     # if the authentication to LDAP was successful.

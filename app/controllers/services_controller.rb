@@ -12,18 +12,31 @@ class ServicesController < ApplicationController
     @services = current_user.services
   end
   def new
-    @service = Service.new
+    @services = current_user.services
   end
   def create
     service = Service.initialize_from_omniauth( omniauth_hash )
 
     if current_user.services << service
-
-      flash[:notice] = 'services.create.success'
+      redirect_to edit_service_path(service)
     else
-      flash[:error] = 'services.create.failure'
+      flash[:alert] = 'services.create.failure'
+      redirect_to_origin
     end
-    redirect_to_origin
+  end
+
+  def edit
+    @service = Service.find(params[:id])
+  end
+
+  def update
+    @service = Service.find(params[:id])
+    @service.priority = params[:"#{@service.provider}_service"][:priority_level]
+    @service.visibility_level = params[:"#{@service.provider}_service"][:visibility_level]
+    if @service.save
+      flash[:notice] = 'Service was successfully saved.'
+    end
+    redirect_to edit_service_url(@service)
   end
 
   def get_tweets
@@ -43,7 +56,7 @@ class ServicesController < ApplicationController
 
   def failure
     Rails.logger.info  "error in oauth #{params.inspect}"
-    flash[:error] = 'services.failure.error'
+    flash[:alert] = 'services.failure.error'
     redirect_to services_url
   end
 
@@ -58,14 +71,14 @@ class ServicesController < ApplicationController
 
   def abort_if_already_authorized
     if service = Service.where(uid: omniauth_hash['uid']).first
-      flash[:error] =  'services.create.already_authorized'
+      flash[:alert] =  'services.create.already_authorized'
       redirect_to_origin
     end
   end
 
   def abort_if_read_only_access
     if omniauth_hash['provider'] == 'twitter' && twitter_access_level == 'read'
-      flash[:error] =  'services.create.read_only_access'
+      flash[:alert] =  'services.create.read_only_access'
       redirect_to_origin
     end
   end

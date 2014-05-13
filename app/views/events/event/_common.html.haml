@@ -3,8 +3,7 @@
   %span.event_label{class: event.action_name}= event_action_name(event)
 .event-body
   %strong= gfm event.post.title
-  at
-  = event.service.provider
+
 - if event.post.description
   .event-body
     .event-note

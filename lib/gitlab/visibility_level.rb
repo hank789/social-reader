@@ -6,7 +6,6 @@
 module Gitlab
   module VisibilityLevel
     PRIVATE  = 0
-    INTERNAL = 10
     PUBLIC   = 20
 
     class << self
@@ -17,7 +16,6 @@ module Gitlab
       def options
         {
           'Private'  => PRIVATE,
-          'Internal' => INTERNAL,
           'Public'   => PUBLIC
         }
       end
@@ -29,10 +27,6 @@ module Gitlab
 
     def private?
       visibility_level_field == PRIVATE
-    end
-
-    def internal?
-      visibility_level_field == INTERNAL
     end
 
     def public?

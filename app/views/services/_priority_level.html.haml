@@ -1,0 +1,21 @@
+.form-group.project-visibility-level-holder
+  = f.label :priority_level, class: 'control-label' do
+    Priority Level
+  .col-sm-10
+    - if can_change_priority_level
+      - Event.priority_options.values.each do |level|
+        .radio
+          = f.radio_button :priority_level, level, checked: (priority_level == level)
+          = label :service_priority_level, level do
+            = priority_level_icon(level)
+            .option-title
+              = priority_level_label(level)
+            .option-descr
+              = priority_level_description(level)
+    - else
+      .col-sm-10
+        %span.info
+          = priority_level_icon(priority_level)
+          %strong
+            = priority_level_label(priority_level)
+          .light= priority_level_description(priority_level)

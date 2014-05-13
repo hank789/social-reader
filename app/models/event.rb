@@ -37,16 +37,14 @@ class Event < ActiveRecord::Base
   scope :priority_todo, -> { where(priority: TODO) }
 
   class << self
-
-  end
-
-  def priority_options
-    {
-        'To-Do'  => TODO,
-        'Important' => IMPORTANT,
-        'Normal'   => NORMAL,
-        'Low' => LOW
-    }
+    def priority_options
+      {
+          'To-Do'  => TODO,
+          'Important' => IMPORTANT,
+          'Normal'   => NORMAL,
+          'Low' => LOW
+      }
+    end
   end
 
   def proper?
@@ -78,41 +76,14 @@ class Event < ActiveRecord::Base
     priority == self.class::LOW
   end
 
-  def milestone?
-    target_type == "Milestone"
+  def read?
+    action == READ
   end
 
-  def note?
-    target_type == "Note"
+  def unread?
+    action == UNREAD
   end
 
-  def issue?
-    target_type == "Post"
-  end
-
-  def merge_request?
-    target_type == "MergeRequest"
-  end
-
-  def joined?
-    action == JOINED
-  end
-
-  def left?
-    action == LEFT
-  end
-
-  def membership_changed?
-    joined? || left?
-  end
-
-  def issue
-    target if target_type == "Post"
-  end
-
-  def merge_request
-    target if target_type == "MergeRequest"
-  end
 
   def action_name
     "opened"

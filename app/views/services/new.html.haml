@@ -1,18 +1,12 @@
-.project-edit-container
-  .project-edit-content
+%h3.page-title
+  Add Service Integrations
+%p.light
+  Poqbod is most useful when you can see everything your team is doing — that includes all the tools you use outside of Poqbod! Integrations let you automatically pull information and activity from outside tools into Poqbod in a way that's timely, relevant, and searchable. Or, make your own!
+%hr
 
-    = form_for @service, remote: true, html: { class: 'new_project form-horizontal' } do |f|
-      .form-group.project-name-holder
-        = f.label :name, class: 'control-label' do
-          %strong Choose Services
-        .col-sm-10
-          = link_to "/users/auth/twitter",class: "btn btn-new" do
-            Twitter
-
-
-.save-project-loader.hide
-  %center
-    %h2
-      %i.icon-spinner.icon-spin
-      Creating project &amp; repository.
-    %p Please wait a moment, this page will automatically refresh when ready.
+- if @services.count > 0
+  - for service in @services
+    = render "services/item/#{service.provider}", service: service
+- Gitlab.config.services.each do |service|
+  - unless @services.any?{|x| x.provider == service[0].to_s} || service[1]["enable"] == false
+    = render "services/item/#{service[0].to_s}"

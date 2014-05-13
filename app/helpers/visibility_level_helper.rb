@@ -3,8 +3,6 @@ module VisibilityLevelHelper
     case level
     when Gitlab::VisibilityLevel::PRIVATE
       'cgreen'
-    when Gitlab::VisibilityLevel::INTERNAL
-      'camber'
     when Gitlab::VisibilityLevel::PUBLIC
       'cblue'
     end
@@ -15,14 +13,10 @@ module VisibilityLevelHelper
       haml_tag :span do
         case level
         when Gitlab::VisibilityLevel::PRIVATE
-          haml_concat "Project access must be granted explicitly for each user."
-        when Gitlab::VisibilityLevel::INTERNAL
-          haml_concat "The project can be cloned by"
-          haml_concat "any logged in user."
+          haml_concat "Service access must be granted explicitly for each user."
         when Gitlab::VisibilityLevel::PUBLIC
-          haml_concat "The project can be cloned"
-          haml_concat "without any"
-          haml_concat "authentication."
+          haml_concat "The service can be visited by"
+          haml_concat "any logged in user."
         end
       end
     end
@@ -32,15 +26,13 @@ module VisibilityLevelHelper
     case level
     when Gitlab::VisibilityLevel::PRIVATE
       private_icon
-    when Gitlab::VisibilityLevel::INTERNAL
-      internal_icon
     when Gitlab::VisibilityLevel::PUBLIC
       public_icon
     end
   end
 
   def visibility_level_label(level)
-    Project.visibility_levels.key(level)
+    Service.visibility_levels.key(level)
   end
 
   def restricted_visibility_levels
