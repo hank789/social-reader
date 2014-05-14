@@ -17,7 +17,7 @@ gem 'rails-observers'
 gem "default_value_for", "~> 3.0.0"
 
 # Supported DBs
-gem "mysql2", group: :mysql
+gem "mysql2", '~> 0.3.15', group: :mysql
 # gem "pg", group: :postgres
 
 # Auth
@@ -144,7 +144,7 @@ gem "rack-attack"
 # Ace editor
 gem 'ace-rails-ap'
 
-gem "sass-rails"
+gem "sass-rails", '~> 4.0.2'
 gem "coffee-rails"
 gem "uglifier"
 gem "therubyracer"

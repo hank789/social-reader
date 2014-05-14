@@ -47,13 +47,13 @@ class ServicesController < ApplicationController
 
   def get_tweets
     service = Service.find_by_id(1)
-    tweets=service.get_home_timeline_tweets(service.since_id)
+    tweets=service.get_home_timeline_items(service.since_id)
     last_tweet = tweets.first
     if last_tweet && last_tweet.id
       service.since_id = last_tweet.id
       service.save
     end
-
+    tweets.reverse
     tweets.each do |tweet|
       service.post tweet
     end

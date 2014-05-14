@@ -26,8 +26,8 @@ Gitlab::Application.routes.draw do
   # Public namespace
   #
   namespace :public do
-    resources :projects, only: [:index]
-    root to: "projects#index"
+    resources :services, only: [:index]
+    root to: "services#index"
   end
 
   #
@@ -41,7 +41,6 @@ Gitlab::Application.routes.draw do
   namespace :admin do
     resources :users, constraints: { id: /[a-zA-Z.\/0-9_\-]+/ } do
       member do
-        put :team_update
         put :block
         put :unblock
       end
@@ -97,9 +96,8 @@ Gitlab::Application.routes.draw do
   #
   resource :dashboard, controller: "dashboard", only: [:show] do
     member do
-      get :projects
+      get :services
       get :posts
-      get :merge_requests
     end
   end
 

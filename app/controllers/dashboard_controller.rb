@@ -3,6 +3,7 @@ class DashboardController < ApplicationController
 
   before_filter :load_services, except: [:services]
   before_filter :event_filter, only: :show
+  before_filter :check_last_events
 
 
   def show
@@ -42,15 +43,9 @@ class DashboardController < ApplicationController
                   current_user.authorized_services
                 end
 
-    @services = @services.where(namespace_id: Group.find_by(name: params[:group])) if params[:group].present?
     @services = @services.where(visibility_level: params[:visibility_level]) if params[:visibility_level].present?
-    @services = @services.includes(:namespace)
-    @services = @services.tagged_with(params[:label]) if params[:label].present?
     @services = @services.sort(@sort = params[:sort])
     @services = @services.page(params[:page]).per(30)
-
-    @labels = current_user.authorized_services.tags_on(:labels)
-    @groups = current_user.authorized_groups
   end
 
   protected
@@ -63,5 +58,15 @@ class DashboardController < ApplicationController
     params[:scope] = 'assigned-to-me' if params[:scope].blank?
     params[:state] = 'opened' if params[:state].blank?
     params[:authorized_only] = true
+  end
+
+  def check_last_events
+    if current_user
+      current_user.services.each do |service|
+        if (service.last_activity_at && Time.now.to_i - service.last_activity_at.to_time.to_i >= 90) || (!service.last_activity_at && Time.now.to_i - service.updated_at.to_time.to_i >= 10)
+          ServicePullWorker.perform_async(service.id)
+        end
+      end
+    end
   end
 end

@@ -50,12 +50,12 @@ class InitSchema < ActiveRecord::Migration
       t.string   "link"
       t.text     "data"
     end
+    execute %{ALTER TABLE posts MODIFY title varchar(255) COLLATE utf8mb4_general_ci NOT NULL}
+    execute %{ALTER TABLE posts MODIFY description varchar(255) COLLATE utf8mb4_general_ci}
+    execute %{ALTER TABLE posts MODIFY data text COLLATE utf8mb4_general_ci}
 
     add_index "posts", ["author_id"], name: "index_posts_on_author_id", using: :btree
-    add_index "posts", ["created_at"], name: "index_posts_on_created_at", using: :btree
     add_index "posts", ["provider", "guid"], name: "index_posts_on_provider_and_guid", unique: true, using: :btree
-    add_index "posts", ["provider"], name: "index_posts_on_provider", using: :btree
-    add_index "posts", ["title"], name: "index_posts_on_title", using: :btree
 
     create_table "taggings", force: true do |t|
       t.integer  "tag_id"

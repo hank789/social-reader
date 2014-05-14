@@ -49,7 +49,7 @@ class TwitterService < Service
 
   end
 
-  def get_home_timeline_tweets(since_id)
+  def get_home_timeline_items(since_id)
     if since_id.nil?
       options = {:count => 200, :include_rts => true}
     else
