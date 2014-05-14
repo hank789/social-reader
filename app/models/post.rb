@@ -32,6 +32,7 @@ class Post < ActiveRecord::Base
   ActsAsTaggableOn.strict_case_match = true
 
   has_many :events
+  has_many :photos
   belongs_to :author
 
   attr_accessible :title, :author_id, :position, :description, :guid, :provider, :data,

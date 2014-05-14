@@ -18,7 +18,9 @@ class TwitterService < Service
     author.description = tweet.user.description.to_s
     author.profile_url = "https://twitter.com/#{tweet.user.screen_name.to_s}"
     if !author.save
-      author = Author.find_last_by_provider_and_guid(self.provider,tweet.user.id)
+      author_exist = Author.find_last_by_provider_and_guid(self.provider,tweet.user.id)
+      author.id = author_exist.id
+      author.save
     end
 
 
@@ -32,10 +34,19 @@ class TwitterService < Service
     post.updated_at = tweet.created_at
     post.data = tweet
     if !post.save
-      post = Post.find_last_by_provider_and_guid(self.provider, tweet.id)
+      post_exist = Post.find_last_by_provider_and_guid(self.provider, tweet.id)
+      post.id = post_exist.id
+      post.save
     end
 
     # to-do link & tag &mention
+    if tweet.media? && tweet.media[0].class == Twitter::Media::Photo
+      photo = Photo.new
+      photo.post_id = post.id
+      photo.remote_image_url = tweet.media[0].media_url.to_s
+      photo.guid = tweet.media[0].id
+      photo.save
+    end
 
     event = Event.new
     event.post_id = post.id

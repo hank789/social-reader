@@ -4,7 +4,8 @@
 .event-body
   %strong= gfm event.post.title
 
-- if event.post.description
+- if event.post.photos.count >= 1
   .event-body
     .event-note
-      = event.post.description
+      - event.post.photos.each do |photo|
+        = image_tag photo.image.url

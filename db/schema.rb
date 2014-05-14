@@ -182,4 +182,15 @@ ActiveRecord::Schema.define(version: 20140502125220) do
   add_index "services", ["visibility_level"], name: "index_services_on_visibility_level", using: :btree
   add_index "services", ["last_activity_at"], name: "index_services_on_last_activity_at", using: :btree
 
+  create_table "photos", force: true do |t|
+    t.string   "image"
+    t.integer  "post_id"
+    t.string   "guid"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.datetime "deleted_at"
+  end
+
+  add_index "photos", ["post_id"], name: "index_photos_on_post_id", using: :btree
+
 end
