@@ -1,7 +1,7 @@
 # coding: utf-8
 class Photo < ActiveRecord::Base
 
-  attr_accessible :post_id, :image, :guid
+  attr_accessible :post_id, :image, :provider
 
   belongs_to :post
 

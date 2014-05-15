@@ -2,7 +2,7 @@
   %span.author_name= link_to_author event
   %span.event_label{class: event.action_name}= event_action_name(event)
 .event-body
-  %strong= gfm event.post.title
+  %strong= raw event_title(event)
 
 - if event.post.photos.count >= 1
   .event-body

@@ -55,7 +55,7 @@ class InitSchema < ActiveRecord::Migration
     execute %{ALTER TABLE posts MODIFY data text COLLATE utf8mb4_general_ci}
 
     add_index "posts", ["author_id"], name: "index_posts_on_author_id", using: :btree
-    add_index "posts", ["provider", "guid"], name: "index_posts_on_provider_and_guid", unique: true, using: :btree
+    add_index "posts", ["guid","provider"], name: "index_posts_on_guid_and_provider", unique: true, using: :btree
 
     create_table "taggings", force: true do |t|
       t.integer  "tag_id"
@@ -140,7 +140,7 @@ class InitSchema < ActiveRecord::Migration
     end
 
     add_index "authors", ["guid"], name: "index_authors_on_guid", using: :btree
-    add_index "authors", ["provider"], name: "index_authors_on_provider", using: :btree
+    add_index "authors", ["guid","provider"], name: "index_authors_on_guid_and_provider", using: :btree
 
     create_table "services", force: true do |t|
       t.string   "service_name"
@@ -163,19 +163,20 @@ class InitSchema < ActiveRecord::Migration
 
     add_index "services", ["user_id"], name: "index_services_on_user_id", using: :btree
     add_index "services", ["priority"], name: "index_services_on_priority", using: :btree
-    add_index "services", ["visibility_level"], name: "index_services_on_visibility_level", using: :btree
-    add_index "services", ["last_activity_at"], name: "index_services_on_last_activity_at", using: :btree
+    add_index "services", ["active"], name: "index_services_on_active", using: :btree
+    add_index "services", ["uid","service_name"], name: "index_services_on_uid_and_service_name", using: :btree
 
     create_table "photos", force: true do |t|
       t.string   "image"
       t.integer  "post_id"
-      t.string   "guid"
+      t.string   "provider"
       t.datetime "created_at"
       t.datetime "updated_at"
       t.datetime "deleted_at"
     end
 
     add_index "photos", ["post_id"], name: "index_photos_on_post_id", using: :btree
+    add_index "photos", ["provider"], name: "index_photos_on_provider", using: :btree
 
   end
 

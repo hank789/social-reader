@@ -25,11 +25,11 @@ class TwitterService < Service
 
 
     post = Post.new
-    post.title = tweet.text
+    post.title = tweet.full_text
     post.author_id = author.id
     post.guid = tweet.id
     post.provider = self.provider
-    # post.link = tweet.id
+    post.link = tweet.uri.to_s
     post.created_at = tweet.created_at
     post.updated_at = tweet.created_at
     post.data = tweet
@@ -44,7 +44,7 @@ class TwitterService < Service
       photo = Photo.new
       photo.post_id = post.id
       photo.remote_image_url = tweet.media[0].media_url.to_s
-      photo.guid = tweet.media[0].id
+      photo.provider = self.provider
       photo.save
     end
 

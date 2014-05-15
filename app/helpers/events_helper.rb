@@ -1,12 +1,7 @@
 module EventsHelper
   def link_to_author(event)
     author = event.post.author
-
-    if author
-      link_to author.name, event.post.author.profile_url
-    else
-      event.author_name
-    end
+    link_to author.name, author.profile_url
   end
 
   def event_action_name(event)
@@ -31,6 +26,67 @@ module EventsHelper
     end
   end
 
+  def event_title(event)
+    case event.post.provider
+    when "twitter"
+      twitter_title(event.post.data)
+    end
+  end
+
+  def twitter_title(tweet)
+    entities = {}
+    if tweet.user_mentions?
+      tweet.user_mentions.each do |entity|
+        entities["start_#{entity.indices[0].to_s.rjust(5,'0')}"] = {:find=>entity.screen_name,:replace=>"<a target='_blank' href='http://twitter.com/#{entity.screen_name}'>@#{entity.screen_name}</a>",:start=>entity.indices[0],:end=>entity.indices[1]}
+      end
+    end
+    if tweet.hashtags?
+      tweet.hashtags.each do |entity|
+        entities["start_#{entity.indices[0].to_s.rjust(5,'0')}"] = {:find=>entity.text,:replace=>twitter_hashtag_link(entity.text),:start=>entity.indices[0],:end=>entity.indices[1]}
+      end
+    end
+    if tweet.uris?
+      tweet.uris.each do |entity|
+        entities["start_#{entity.indices[0].to_s.rjust(5,'0')}"] = {:find=>entity.url.to_s,:replace=>"<a target='_blank' href='#{entity.expanded_url.to_s}'>#{entity.display_url.to_s}</a>",:start=>entity.indices[0],:end=>entity.indices[1]}
+      end
+    end
+    entities = entities.sort
+    str = tweet.full_text
+    diff = 0
+    entities.each do |entity|
+      start_num = entity[1][:start] + diff
+      end_num = entity[1][:end] + diff
+      str = substr_replace(str,entity[1][:replace], start_num, end_num - start_num)
+      diff += entity[1][:replace].length - (end_num - start_num)
+    end
+    str
+  end
+
+  def substr_replace(str,replacement,start,length=nil)
+    string_length =  str.length
+    if start < 0
+      start = [0, string_length + start].max
+    elsif start > string_length
+      start = string_length
+    end
+    if length < 0
+      length = [0,string_length - start + length].max
+    elsif length.nil? || length > string_length
+      length = string_length
+    end
+    if start + length > string_length
+      length = string_length - start
+    end
+    str[0,start] + replacement + str[start+length,string_length-start-length]
+  end
+
+  def twitter_hashtag_link(hashtag)
+    if hashtag[0] != "#"
+      hashtag = "#" + hashtag
+    end
+    "<a target='_blank' href='http://twitter.com/search?q=#{hashtag}'>#{hashtag}</a>"
+  end
+
   def icon_for_event
     {
       EventFilter.todo     => "icon-upload-alt",
@@ -38,81 +94,6 @@ module EventsHelper
       EventFilter.normal => "icon-comments",
       EventFilter.low     => "icon-user",
     }
-  end
-
-  def event_feed_title(event)
-    if event.issue?
-      "#{event.author_name} #{event.action_name} issue ##{event.target_id}: #{event.issue_title} at #{event.project_name}"
-    elsif event.merge_request?
-      "#{event.author_name} #{event.action_name} MR ##{event.target_id}: #{event.merge_request_title} at #{event.project_name}"
-    elsif event.push?
-      "#{event.author_name} #{event.push_action_name} #{event.ref_type} #{event.ref_name} at #{event.project_name}"
-    elsif event.membership_changed?
-      "#{event.author_name} #{event.action_name} #{event.project_name}"
-    elsif event.note?
-      "#{event.author_name} commented on #{event.note_target_type} ##{truncate event.note_target_id} at #{event.project_name}"
-    else
-      ""
-    end
-  end
-
-  def event_feed_url(event)
-    if event.issue?
-      project_issue_url(event.project, event.issue)
-    elsif event.merge_request?
-      project_merge_request_url(event.project, event.merge_request)
-
-    elsif event.push?
-      if event.push_with_commits?
-        if event.commits_count > 1
-          project_compare_url(event.project, from: event.commit_from, to: event.commit_to)
-        else
-          project_commit_url(event.project, id: event.commit_to)
-        end
-      else
-        project_commits_url(event.project, event.ref_name)
-      end
-    end
-  end
-
-  def event_feed_summary(event)
-    if event.issue?
-      render "events/event_issue", issue: event.issue
-    elsif event.push?
-      render "events/event_push", event: event
-    end
-  end
-
-  def event_note_target_path(event)
-    if event.note? && event.note_commit?
-      project_commit_path(event.project, event.note_target)
-    else
-      polymorphic_path([event.project, event.note_target], anchor: dom_id(event.target))
-    end
-  end
-
-  def event_note_title_html(event)
-    if event.note_target
-      if event.note_commit?
-        link_to project_commit_path(event.project, event.note_commit_id, anchor: dom_id(event.target)), class: "commit_short_id" do
-          "#{event.note_target_type} #{event.note_short_commit_id}"
-        end
-      elsif event.note_project_snippet?
-        link_to(project_snippet_path(event.project, event.note_target)) do
-          "#{event.note_target_type} ##{truncate event.note_target_id}"
-        end
-      else
-        link_to event_note_target_path(event) do
-          "#{event.note_target_type} ##{truncate event.note_target_iid}"
-        end
-      end
-    elsif event.wall_note?
-      link_to 'wall', project_wall_path(event.project)
-    else
-      content_tag :strong do
-        "(deleted)"
-      end
-    end
   end
 
   def event_note(text)

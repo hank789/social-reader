@@ -40,6 +40,7 @@ class Post < ActiveRecord::Base
 
   acts_as_taggable_on :labels
 
+
   # Reset issue events cache
   #
   # Since we do cache @event we need to reset cache in special cases:
