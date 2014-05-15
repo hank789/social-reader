@@ -91,12 +91,12 @@ end
 gem "state_machine"
 
 # Post tags
-gem "acts-as-taggable-on"
+gem "acts-as-taggable-on", '~> 3.2.1'
 
 # Background jobs
 gem 'slim'
 gem 'sinatra', require: nil
-gem 'sidekiq', '2.17.0'
+gem 'sidekiq', '~> 3.0.2'
 
 # HTTP requests
 gem "httparty"

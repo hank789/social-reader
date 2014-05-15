@@ -7,14 +7,27 @@
 # database schema. If you need to create the application database on another
 # system, you should be using db:schema:load, not running all the migrations
 # from scratch. The latter is a flawed and unsustainable approach (the more migrations
-# you'll amass, the slower it'll run and the greater likelihood for posts).
+# you'll amass, the slower it'll run and the greater likelihood for issues).
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140502125220) do
+ActiveRecord::Schema.define(version: 20140515071535) do
 
-  # These are extensions that must be enabled in order to support this database
-  enable_extension "plpgsql"
+  create_table "authors", force: true do |t|
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "name"
+    t.string   "slug"
+    t.text     "description"
+    t.string   "provider"
+    t.string   "avatar"
+    t.string   "profile_url"
+    t.string   "guid"
+    t.text     "data"
+  end
+
+  add_index "authors", ["guid", "provider"], name: "index_authors_on_guid_and_provider", using: :btree
+  add_index "authors", ["slug"], name: "index_authors_on_slug", using: :btree
 
   create_table "broadcast_messages", force: true do |t|
     t.text     "message",    null: false
@@ -48,30 +61,63 @@ ActiveRecord::Schema.define(version: 20140502125220) do
   end
 
   add_index "events", ["action"], name: "index_events_on_action", using: :btree
-  add_index "events", ["priority"], name: "index_events_on_priority", using: :btree
-  add_index "events", ["user_id"], name: "index_events_on_user_id", using: :btree
   add_index "events", ["created_at"], name: "index_events_on_created_at", using: :btree
-  add_index "events", ["service_id"], name: "index_events_on_service_id", using: :btree
   add_index "events", ["post_id"], name: "index_events_on_post_id", using: :btree
+  add_index "events", ["priority"], name: "index_events_on_priority", using: :btree
+  add_index "events", ["service_id"], name: "index_events_on_service_id", using: :btree
+  add_index "events", ["user_id"], name: "index_events_on_user_id", using: :btree
+
+  create_table "photos", force: true do |t|
+    t.string   "image"
+    t.integer  "post_id"
+    t.string   "provider"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.datetime "deleted_at"
+  end
+
+  add_index "photos", ["post_id"], name: "index_photos_on_post_id", using: :btree
+  add_index "photos", ["provider"], name: "index_photos_on_provider", using: :btree
 
   create_table "posts", force: true do |t|
-    t.string   "title"
+    t.string   "title",                   null: false
     t.integer  "author_id"
     t.string   "provider"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "position",     default: 0
-    t.text     "description"
+    t.integer  "position",    default: 0
+    t.string   "description"
     t.string   "guid"
     t.string   "link"
     t.text     "data"
   end
-  execute %{ALTER TABLE posts MODIFY title varchar(255) COLLATE utf8mb4_general_ci NOT NULL}
-  execute %{ALTER TABLE posts MODIFY description varchar(255) COLLATE utf8mb4_general_ci}
-  execute %{ALTER TABLE posts MODIFY data text COLLATE utf8mb4_general_ci}
 
   add_index "posts", ["author_id"], name: "index_posts_on_author_id", using: :btree
-  add_index "posts", ["provider", "guid"], name: "index_posts_on_provider_and_guid", unique: true, using: :btree
+  add_index "posts", ["guid", "provider"], name: "index_posts_on_guid_and_provider", unique: true, using: :btree
+
+  create_table "services", force: true do |t|
+    t.string   "service_name"
+    t.string   "uid"
+    t.string   "access_token"
+    t.string   "access_secret"
+    t.string   "provider"
+    t.text     "info"
+    t.string   "nickname"
+    t.integer  "user_id",                          null: false
+    t.integer  "priority",                         null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.datetime "deleted_at"
+    t.boolean  "active",           default: false, null: false
+    t.integer  "visibility_level", default: 0,     null: false
+    t.datetime "last_activity_at"
+    t.string   "since_id"
+  end
+
+  add_index "services", ["active"], name: "index_services_on_active", using: :btree
+  add_index "services", ["priority"], name: "index_services_on_priority", using: :btree
+  add_index "services", ["uid", "service_name"], name: "index_services_on_uid_and_service_name", using: :btree
+  add_index "services", ["user_id"], name: "index_services_on_user_id", using: :btree
 
   create_table "taggings", force: true do |t|
     t.integer  "tag_id"
@@ -79,16 +125,18 @@ ActiveRecord::Schema.define(version: 20140502125220) do
     t.string   "taggable_type"
     t.integer  "tagger_id"
     t.string   "tagger_type"
-    t.string   "context"
+    t.string   "context",       limit: 128
     t.datetime "created_at"
   end
 
-  add_index "taggings", ["tag_id"], name: "index_taggings_on_tag_id", using: :btree
-  add_index "taggings", ["taggable_id", "taggable_type", "context"], name: "index_taggings_on_taggable_id_and_taggable_type_and_context", using: :btree
+  add_index "taggings", ["tag_id", "taggable_id", "taggable_type", "context", "tagger_id", "tagger_type"], name: "taggings_idx", unique: true, using: :btree
 
   create_table "tags", force: true do |t|
-    t.string "name"
+    t.string  "name"
+    t.integer "taggings_count", default: 0
   end
+
+  add_index "tags", ["name"], name: "index_tags_on_name", using: :btree
 
   create_table "users", force: true do |t|
     t.string   "email",                    default: "",    null: false
@@ -143,54 +191,5 @@ ActiveRecord::Schema.define(version: 20140502125220) do
   add_index "users", ["name"], name: "index_users_on_name", using: :btree
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
   add_index "users", ["username"], name: "index_users_on_username", using: :btree
-
-  create_table "authors", force: true do |t|
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.string   "name"
-    t.text     "description"
-    t.string   "provider"
-    t.string   "avatar"
-    t.string   "profile_url"
-    t.string   "guid"
-  end
-
-  add_index "authors", ["guid"], name: "index_authors_on_guid", using: :btree
-  add_index "authors", ["provider"], name: "index_authors_on_provider", using: :btree
-
-  create_table "services", force: true do |t|
-    t.string   "service_name"
-    t.string   "uid"
-    t.string   "access_token"
-    t.string   "access_secret"
-    t.string   "provider"
-    t.text     "info"
-    t.string   "nickname"
-    t.integer  "user_id",                        null: false
-    t.integer  "priority",                       null: false
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.datetime "deleted_at"
-    t.boolean  "active",      default: false, null: false
-    t.integer  "visibility_level",     default: 0, null: false
-    t.datetime "last_activity_at"
-    t.string   "since_id"
-  end
-
-  add_index "services", ["user_id"], name: "index_services_on_user_id", using: :btree
-  add_index "services", ["priority"], name: "index_services_on_priority", using: :btree
-  add_index "services", ["visibility_level"], name: "index_services_on_visibility_level", using: :btree
-  add_index "services", ["last_activity_at"], name: "index_services_on_last_activity_at", using: :btree
-
-  create_table "photos", force: true do |t|
-    t.string   "image"
-    t.integer  "post_id"
-    t.string   "guid"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.datetime "deleted_at"
-  end
-
-  add_index "photos", ["post_id"], name: "index_photos_on_post_id", using: :btree
 
 end

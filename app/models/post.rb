@@ -20,6 +20,8 @@
 class Post < ActiveRecord::Base
 
   belongs_to :author
+  acts_as_taggable_on :author_post_tag
+  acts_as_taggable_on :author_post_mention
   # For Hash only
   serialize :data
   validates :author, presence: true

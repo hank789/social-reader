@@ -20,7 +20,7 @@
 # To add new service you should build a class inherited from Service
 # and implement a set of methods
 class Service < ActiveRecord::Base
-  attr_accessible :provider, :info, :nickname, :uid, :access_token, :access_secret, :priority, :active, :visibility_level, :service_name, :since_id
+  attr_accessible :provider, :info, :nickname, :uid, :access_token, :access_secret, :priority, :active, :visibility_level, :service_name, :since_id, :last_activity_at
   self.inheritance_column = :service_name
   belongs_to :user
   has_many :events

@@ -63,7 +63,9 @@ class DashboardController < ApplicationController
   def check_last_events
     if current_user
       current_user.services.each do |service|
-        if (service.last_activity_at && Time.now.to_i - service.last_activity_at.to_time.to_i >= 90) || (!service.last_activity_at && Time.now.to_i - service.updated_at.to_time.to_i >= 10)
+        if (service.last_activity_at && Time.now.to_i - service.last_activity_at.to_time.to_i >= 90) || (!service.last_activity_at && Time.now.to_i - service.updated_at.to_time.to_i >= 30)
+          service.last_activity_at = Time.now
+          service.save
           ServicePullWorker.perform_async(service.id)
         end
       end

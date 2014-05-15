@@ -57,23 +57,6 @@ class InitSchema < ActiveRecord::Migration
     add_index "posts", ["author_id"], name: "index_posts_on_author_id", using: :btree
     add_index "posts", ["guid","provider"], name: "index_posts_on_guid_and_provider", unique: true, using: :btree
 
-    create_table "taggings", force: true do |t|
-      t.integer  "tag_id"
-      t.integer  "taggable_id"
-      t.string   "taggable_type"
-      t.integer  "tagger_id"
-      t.string   "tagger_type"
-      t.string   "context"
-      t.datetime "created_at"
-    end
-
-    add_index "taggings", ["tag_id"], name: "index_taggings_on_tag_id", using: :btree
-    add_index "taggings", ["taggable_id", "taggable_type", "context"], name: "index_taggings_on_taggable_id_and_taggable_type_and_context", using: :btree
-
-    create_table "tags", force: true do |t|
-      t.string "name"
-    end
-
     create_table "users", force: true do |t|
       t.string   "email",                    default: "",    null: false
       t.string   "encrypted_password",       default: "",    null: false
@@ -132,14 +115,16 @@ class InitSchema < ActiveRecord::Migration
       t.datetime "created_at"
       t.datetime "updated_at"
       t.string   "name"
+      t.string   "slug"
       t.text     "description"
       t.string   "provider"
       t.string   "avatar"
       t.string   "profile_url"
       t.string   "guid"
+      t.text     "data"
     end
 
-    add_index "authors", ["guid"], name: "index_authors_on_guid", using: :btree
+    add_index "authors", ["slug"], name: "index_authors_on_slug", using: :btree
     add_index "authors", ["guid","provider"], name: "index_authors_on_guid_and_provider", using: :btree
 
     create_table "services", force: true do |t|

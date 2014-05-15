@@ -12,8 +12,10 @@
 #
 
 class Author < ActiveRecord::Base
-  attr_accessible :name, :provider, :guid, :avatar, :description, :profile_url
+  attr_accessible :name, :provider, :guid, :avatar, :description, :profile_url, :slug, :data
   validates_uniqueness_of :guid, :scope => :provider
-
+  acts_as_tagger
+  # For Hash only
+  serialize :data
   has_many :posts, foreign_key: :author_id
 end

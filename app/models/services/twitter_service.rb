@@ -14,9 +14,11 @@ class TwitterService < Service
     author.provider = self.provider
     author.name = tweet.user.name
     author.guid = tweet.user.id
+    author.slug = tweet.user.screen_name
     author.avatar = tweet.user.profile_image_url.to_s
     author.description = tweet.user.description.to_s
     author.profile_url = "https://twitter.com/#{tweet.user.screen_name.to_s}"
+    author.data = tweet.user
     if !author.save
       author_exist = Author.find_last_by_provider_and_guid(self.provider,tweet.user.id)
       author.id = author_exist.id
@@ -46,6 +48,16 @@ class TwitterService < Service
       photo.remote_image_url = tweet.media[0].media_url.to_s
       photo.provider = self.provider
       photo.save
+    end
+    if tweet.hashtags?
+      tweet.hashtags.each do |entity|
+        author.tag( post, :with =>entity.text, :on => :author_post_tag )
+      end
+    end
+    if tweet.user_mentions?
+      tweet.user_mentions.each do |entity|
+        author.tag( post, :with =>entity.screen_name, :on => :author_post_mention )
+      end
     end
 
     event = Event.new
