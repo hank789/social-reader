@@ -42,6 +42,9 @@ class Post < ActiveRecord::Base
 
   acts_as_taggable_on :labels
 
+  def search query
+    joins(:event).where("posts.title LIKE :query OR posts.description LIKE :query", query: "%#{query}%")
+  end
 
   # Reset issue events cache
   #

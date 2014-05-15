@@ -11,22 +11,13 @@ module Search
       query = Shellwords.shellescape(query) if query.present?
       return result unless query.present?
 
-      group = Group.find_by(id: params[:group_id]) if params[:group_id].present?
-      projects = Project.accessible_to(current_user)
-      projects = projects.where(namespace_id: group.id) if group
-      project_ids = projects.pluck(:id)
-
-      result[:projects] = projects.search(query).limit(20)
-      result[:merge_requests] = MergeRequest.in_projects(project_ids).search(query).order('updated_at DESC').limit(20)
-      result[:posts] = Post.where(project_id: project_ids).search(query).order('updated_at DESC').limit(20)
-      result[:total_results] = %w(projects posts merge_requests).sum { |items| result[items.to_sym].size }
+      result[:posts] = Post.search(query).order('updated_at DESC').limit(20)
+      result[:total_results] = %w(posts).sum { |items| result[items.to_sym].size }
       result
     end
 
     def result
       @result ||= {
-        projects: [],
-        merge_requests: [],
         posts: [],
         total_results: 0,
       }

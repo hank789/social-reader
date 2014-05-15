@@ -8,7 +8,7 @@ module EventsHelper
     #target = 'project'
 
     #[event.action_name, target].join(" ")
-    event.service.provider
+    raw "via <a href='#{event.post.link}' target='_blank'>#{event.service.provider}</a>"
   end
 
   def event_filter_link key, tooltip
