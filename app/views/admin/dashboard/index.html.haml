@@ -30,7 +30,7 @@
       %hr
       - @services.each do |service|
         %p
-          = service.type
+          = service.provider
           %span.light.pull-right
             #{time_ago_with_tooltip(service.created_at)}
 

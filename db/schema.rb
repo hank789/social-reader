@@ -58,9 +58,11 @@ ActiveRecord::Schema.define(version: 20140515071535) do
     t.integer  "priority"
     t.integer  "action"
     t.integer  "user_id"
+    t.integer  "author_id"
   end
 
   add_index "events", ["action"], name: "index_events_on_action", using: :btree
+  add_index "events", ["author_id"], name: "index_events_on_author_id", using: :btree
   add_index "events", ["created_at"], name: "index_events_on_created_at", using: :btree
   add_index "events", ["post_id"], name: "index_events_on_post_id", using: :btree
   add_index "events", ["priority"], name: "index_events_on_priority", using: :btree

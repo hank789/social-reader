@@ -14,7 +14,7 @@
 
 class Event < ActiveRecord::Base
   attr_accessible :project, :action, :user_id, :priority,
-                  :post_id, :service_id, :action
+                  :post_id, :service_id, :action, :author_id
 
   default_scope { where.not(user_id: nil) }
   validates_uniqueness_of :post_id, :scope => [:user_id, :priority]

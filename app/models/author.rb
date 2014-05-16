@@ -18,4 +18,5 @@ class Author < ActiveRecord::Base
   # For Hash only
   serialize :data
   has_many :posts, foreign_key: :author_id
+  mount_uploader :avatar, AttachmentUploader
 end

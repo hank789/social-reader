@@ -37,9 +37,14 @@ class ServicesController < ApplicationController
   end
 
   def update
-    @service.priority = params[:"#{@service.provider}_service"][:priority_level]
+    origin_priority = @service.priority
+    new_priority = params[:"#{@service.provider}_service"][:priority_level]
+    @service.priority = new_priority
     @service.visibility_level = params[:"#{@service.provider}_service"][:visibility_level]
     if @service.save
+      if origin_priority != new_priority
+        Event.where(service_id: @service.id).update_all(priority: new_priority)
+      end
       flash[:notice] = 'Service was successfully saved.'
     end
     redirect_to edit_service_url(@service)

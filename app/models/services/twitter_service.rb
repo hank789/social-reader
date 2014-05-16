@@ -15,7 +15,7 @@ class TwitterService < Service
     author.name = tweet.user.name
     author.guid = tweet.user.id
     author.slug = tweet.user.screen_name
-    author.avatar = tweet.user.profile_image_url.to_s
+    author.remote_avatar_url = tweet.user.profile_image_url.to_s
     author.description = tweet.user.description.to_s
     author.profile_url = "https://twitter.com/#{tweet.user.screen_name.to_s}"
     author.data = tweet.user
@@ -66,6 +66,7 @@ class TwitterService < Service
     event.priority = self.priority
     event.user_id = self.user_id
     event.action = Event::UNREAD
+    event.author_id = author.id
     event.created_at = tweet.created_at
     event.updated_at = tweet.created_at
     event.save
