@@ -1,16 +1,7 @@
 # GitLab logrotate settings
 # based on: http://stackoverflow.com/a/4883967
 
-/Users/hank/RubymineProjects/git/gitlab/log/*.log {
-    daily
-    missingok
-    rotate 90
-    compress
-    notifempty
-    copytruncate
-}
-
-/Users/hank/RubymineProjects/git/gitlab-shell/gitlab-shell.log {
+/var/www/poqbod/log/*.log {
     daily
     missingok
     rotate 90
