@@ -71,16 +71,16 @@ production: &base
     #restricted_visibility_levels: [ "public" ]
 
     ## Automatic issue closing
-    # If a commit message matches this regular expression, all issues referenced from the matched text will be closed.
+    # If a commit message matches this regular expression, all posts referenced from the matched text will be closed.
     # This happens when the commit is pushed or merged into the default branch of a project.
     # When not specified the default issue_closing_pattern as specified below will be used.
     # issue_closing_pattern: '([Cc]lose[sd]|[Ff]ixe[sd]) #(\d+)'
 
     ## Default project features settings
     default_projects_features:
-      issues: true
-      merge_requests: true
-      wiki: true
+      posts: true
+      merge_requests: false
+      wiki: false
       wall: false
       snippets: false
       visibility_level: "private"  # can be "private" | "internal" | "public"
@@ -90,7 +90,7 @@ production: &base
     # The default is 'tmp/repositories' relative to the root of the Rails app.
     # repository_downloads_path: tmp/repositories
 
-  ## External issues trackers
+  ## External posts trackers
   issues_tracker:
     # redmine:
     #   title: "Redmine"
@@ -104,18 +104,18 @@ production: &base
     #   ## Use placeholders:
     #   ##  :project_id        - GitLab project identifier
     #   ##  :issues_tracker_id - Project Name or Id in external issue tracker
-    #   ##  :id                - Issue id (from commit messages)
-    #   issues_url: "http://redmine.sample/issues/:id"
+    #   ##  :id                - Post id (from commit messages)
+    #   issues_url: "http://redmine.sample/posts/:id"
     #
-    #   ## If not nil, links to creating new issues will be replaced with this
+    #   ## If not nil, links to creating new posts will be replaced with this
     #   ## Use placeholders:
     #   ##  :project_id        - GitLab project identifier
     #   ##  :issues_tracker_id - Project Name or Id in external issue tracker
-    #   new_issue_url: "http://redmine.sample/projects/:issues_tracker_id/issues/new"
+    #   new_issue_url: "http://redmine.sample/projects/:issues_tracker_id/posts/new"
     #
     # jira:
     #   title: "Atlassian Jira"
-    #   project_url: "http://jira.sample/issues/?jql=project=:issues_tracker_id"
+    #   project_url: "http://jira.sample/posts/?jql=project=:issues_tracker_id"
     #   issues_url: "http://jira.sample/browse/:id"
     #   new_issue_url: "http://jira.sample/secure/CreateIssue.jspa"
 
@@ -195,7 +195,31 @@ production: &base
       #     app_secret: 'YOUR APP SECRET',
       #     args: { scope: 'user:email' } }
 
-
+  ## Settings around Diasporas capabilities to post to services
+  services: ## Section
+    ## OAuth credentials for Facebook:
+    facebook: ## Section
+      enable: false
+      app_id: 'abcdef'
+      secret: 'changeme'
+    
+    ## OAuth credentials for Twitter:
+    twitter: ## Section
+      enable: true
+      key: 'tU57xZSJ48bcUQXErrC4rOmRn'
+      secret: 'hxQGYswO2dlw4lVw4ux03ajzbj3txYygNpRiLq1gJ0sXyjgh9t'
+    
+    ## OAuth credentials for Tumblr
+    tumblr: ## Section
+      enable: false
+      key: 'abcdef'
+      secret: 'changeme'
+      
+    ## OAuth credentials for Wordpress
+    wordpress: ## Section
+      enable: false
+      client_id: 'abcdef'
+      secret: 'changeme'
 
   #
   # 3. Advanced settings
@@ -243,7 +267,7 @@ test:
       title: "Redmine"
       project_url: "http://redmine/projects/:issues_tracker_id"
       issues_url: "http://redmine/:project_id/:issues_tracker_id/:id"
-      new_issue_url: "http://redmine/projects/:issues_tracker_id/issues/new"
+      new_issue_url: "http://redmine/projects/:issues_tracker_id/posts/new"
 
 staging:
   <<: *base
