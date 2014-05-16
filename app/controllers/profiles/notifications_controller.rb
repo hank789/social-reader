@@ -3,8 +3,7 @@ class Profiles::NotificationsController < ApplicationController
 
   def show
     @notification = current_user.notification
-    @users_projects = current_user.users_projects
-    @users_groups = current_user.users_groups
+    @users_services = current_user.services
   end
 
   def update

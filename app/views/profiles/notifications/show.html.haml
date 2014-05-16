@@ -32,20 +32,16 @@
 .clearfix
   %hr
   %p
-    You can also specify notification level per group or per project
+    You can also specify notification level per service or per author
     %br
-    By default all projects and groups uses notification level set above
+    By default all services and authors uses notification level set above
 .row.all-notifications
   .col-md-6
-    %h4 Groups:
+    %h4 Authors:
     %ul.bordered-list
-      - @users_groups.each do |users_group|
-        - notification = Notification.new(users_group)
-        = render 'settings', type: 'group', membership: users_group, notification: notification
+
 
   .col-md-6
-    %h4 Projects:
+    %h4 Services:
     %ul.bordered-list
-      - @users_projects.each do |users_project|
-        - notification = Notification.new(users_project)
-        = render 'settings', type: 'project', membership: users_project, notification: notification
+
