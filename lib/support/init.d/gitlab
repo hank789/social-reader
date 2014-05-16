@@ -24,12 +24,12 @@
 
 
 ### Environment variables
-RAILS_ENV="development"
+RAILS_ENV="production"
 
 # Script variable names should be lower-case not to conflict with
 # internal /bin/sh variables such as PATH, EDITOR or SHELL.
-app_user="hank"
-app_root="/home/$app_user/gitlab"
+app_user="poqbod"
+app_root="/var/www/$app_user"
 pid_path="$app_root/tmp/pids"
 socket_path="$app_root/tmp/sockets"
 web_server_pid_path="$pid_path/unicorn.pid"
