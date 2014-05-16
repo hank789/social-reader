@@ -14,7 +14,7 @@
 
 class Event < ActiveRecord::Base
   attr_accessible :project, :action, :user_id, :priority,
-                  :post_id, :service_id, :action, :author_id
+                  :post_id, :service_id, :action, :author_id, :favourite
 
   default_scope { where.not(user_id: nil) }
   validates_uniqueness_of :post_id, :scope => [:user_id, :priority]
@@ -91,5 +91,16 @@ class Event < ActiveRecord::Base
 
   def body?
     true
+  end
+
+  def favorite
+    return true if self.favourite == 1
+    self.update_attribute(:favourite, 1)
+    self.post.update_attribute(:favourite_count, self.post.favourite_count + 1)
+  end
+  def unfavorite
+    return true if self.favourite == 0
+    self.update_attribute(:favourite, 0)
+    self.post.update_attribute(:favourite_count, self.post.favourite_count - 1)
   end
 end

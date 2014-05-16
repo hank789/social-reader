@@ -89,10 +89,11 @@ module EventsHelper
 
   def icon_for_event
     {
-      EventFilter.todo     => "icon-upload-alt",
-      EventFilter.important   => "icon-check",
-      EventFilter.normal => "icon-comments",
-      EventFilter.low     => "icon-user",
+      EventFilter.todo     => "icon-fire",
+      EventFilter.important   => "icon-bell",
+      EventFilter.normal => "icon-coffee",
+      EventFilter.low     => "icon-beer",
+      EventFilter.favourite     => "icon-star",
     }
   end
 
@@ -102,9 +103,15 @@ module EventsHelper
     sanitize(markdown(text), tags: %w(a img b pre p))
   end
 
-  def event_commit_title(message)
-    escape_once(truncate(message.split("\n").first, length: 70))
-  rescue
-    "--broken encoding"
+  def favorite_tag(event)
+    return "" if current_user.blank?
+    icon = content_tag(:i, "", :class => "icon-star-empty")
+    link_title = "star"
+    if event.favourite == 1
+      icon = content_tag(:i, "", :class => "icon-star")
+      link_title = "unstar"
+    end
+    favorite_label = raw "#{icon}"
+    raw "#{link_to(favorite_label, "#", :onclick => "return Events.favorite(this);", 'data-id' => event.id, :title => link_title, :rel => "twipsy")}"
   end
 end

@@ -30,6 +30,7 @@ class InitSchema < ActiveRecord::Migration
       t.integer  "action"
       t.integer  "user_id"
       t.integer  "author_id"
+      t.integer  "favourite", default: 0
     end
 
     add_index "events", ["action"], name: "index_events_on_action", using: :btree
@@ -39,6 +40,7 @@ class InitSchema < ActiveRecord::Migration
     add_index "events", ["service_id"], name: "index_events_on_service_id", using: :btree
     add_index "events", ["post_id"], name: "index_events_on_post_id", using: :btree
     add_index "events", ["author_id"], name: "index_events_on_author_id", using: :btree
+    add_index "events", ["favourite"], name: "index_events_on_favourite", using: :btree
 
     create_table "posts", force: true do |t|
       t.string   "title"
@@ -50,6 +52,7 @@ class InitSchema < ActiveRecord::Migration
       t.text     "description"
       t.string   "guid"
       t.string   "link"
+      t.integer  "favourite_count", default: 0
       t.text     "data"
     end
     execute %{ALTER TABLE posts MODIFY title varchar(255) COLLATE utf8mb4_general_ci NOT NULL}

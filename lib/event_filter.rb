@@ -21,6 +21,9 @@ class EventFilter
     def low
       'low'
     end
+    def favourite
+      'favourite'
+    end
   end
 
   def initialize params
@@ -42,7 +45,15 @@ class EventFilter
     actions << Event::NORMAL if filter.include? 'normal'
     actions << Event::LOW if filter.include? 'low'
 
-    events = events.where(priority: actions)
+    if filter.include? 'favourite'
+      if actions.present?
+        events = events.where("priority in (?) OR favourite = ?", actions, 1)
+      else
+        events = events.where(favourite: 1)
+      end
+    else
+      events = events.where(priority: actions)
+    end
   end
 
   def options key

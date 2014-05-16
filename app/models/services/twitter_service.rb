@@ -32,6 +32,7 @@ class TwitterService < Service
     post.guid = tweet.id
     post.provider = self.provider
     post.link = tweet.uri.to_s
+    post.favourite_count = 0
     post.created_at = tweet.created_at
     post.updated_at = tweet.created_at
     post.data = tweet
@@ -67,6 +68,7 @@ class TwitterService < Service
     event.user_id = self.user_id
     event.action = Event::UNREAD
     event.author_id = author.id
+    event.favourite = 0
     event.created_at = tweet.created_at
     event.updated_at = tweet.created_at
     event.save

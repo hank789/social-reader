@@ -37,7 +37,7 @@ class Post < ActiveRecord::Base
   has_many :photos
   belongs_to :author
 
-  attr_accessible :title, :author_id, :position, :description, :guid, :provider, :data,
+  attr_accessible :title, :author_id, :position, :description, :guid, :provider, :data, :favourite_count,
                   :label_list
 
   acts_as_taggable_on :labels

@@ -1,6 +1,7 @@
 - if event.proper?
   .event-item{class: "#{event.body? ? "event-block" : "event-inline" }"}
     %span.cgray.pull-right
+      = favorite_tag(event)
       #{time_ago_with_tooltip(event.created_at)}
       %span.event_label{class: event.action_name}= event_action_name(event)
 

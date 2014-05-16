@@ -66,7 +66,6 @@ Gitlab::Application.routes.draw do
   #
   resource :profile, only: [:show, :update] do
     member do
-      get :history
       get :design
 
       put :reset_private_token
@@ -97,10 +96,15 @@ Gitlab::Application.routes.draw do
   resource :dashboard, controller: "dashboard", only: [:show] do
     member do
       get :services
-      get :posts
     end
   end
 
+  resources :events do
+    member do
+      post :favorite
+      post :unfavorite
+    end
+  end
   #resources :projects, constraints: { id: /[^\/]+/ }, only: [:new, :create]
 
   devise_for :users, controllers: { omniauth_callbacks: :omniauth_callbacks, registrations: :registrations , passwords: :passwords}
