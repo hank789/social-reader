@@ -10,11 +10,6 @@
       Application theme
     .themes_opts
       = label_tag do
-        .prev.default
-        = f.radio_button :theme_id, 1
-        Default
-
-      = label_tag do
         .prev.classic
         = f.radio_button :theme_id, 2
         Classic
@@ -35,14 +30,3 @@
         Violet
     %br
     .clearfix
-
-  %fieldset.code-preview-theme
-    %legend
-      Code preview theme
-    .code_highlight_opts
-      - color_schemes.each do |color_scheme_id, color_scheme|
-        = label_tag do
-          .prev
-            = image_tag "#{color_scheme}-scheme-preview.png"
-          = f.radio_button :color_scheme_id, color_scheme_id
-          = color_scheme.gsub(/[-_]+/, ' ').humanize
