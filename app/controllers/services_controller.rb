@@ -6,6 +6,7 @@ class ServicesController < ApplicationController
   before_action :authenticate_user!
   before_action :abort_if_already_authorized, :abort_if_read_only_access, :only => :create
   before_action :check_service_active, :only => [:edit , :update]
+  before_filter :set_title, only: [:index, :new, :create, :edit, :update]
 
   respond_to :html
 
@@ -128,5 +129,9 @@ class ServicesController < ApplicationController
       flash[:alert] =  'Invalid request'
       redirect_to new_service_url
     end
+  end
+
+  def set_title
+    @title = 'Service'
   end
 end

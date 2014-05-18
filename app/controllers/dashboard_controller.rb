@@ -4,6 +4,7 @@ class DashboardController < ApplicationController
   before_filter :load_services
   before_filter :event_filter, only: :show
   before_filter :check_last_events
+  before_filter :set_title
 
 
   def show
@@ -44,5 +45,9 @@ class DashboardController < ApplicationController
         end
       end
     end
+  end
+
+  def set_title
+    @title = 'Dashboard'
   end
 end
