@@ -24,7 +24,7 @@ class Notify < ActionMailer::Base
   # The default email address to send emails from
   def default_sender_address
     address = Mail::Address.new(Gitlab.config.gitlab.email_from)
-    address.display_name = "Poqbod"
+    address.display_name = "poqbod"
     address
   end
 
