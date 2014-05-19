@@ -6,10 +6,6 @@ class EventFilter
       %w{ push posts merge_requests team}
     end
 
-    def todo
-      'todo'
-    end
-
     def important
       'important'
     end
@@ -40,7 +36,6 @@ class EventFilter
     filter = params.dup
 
     actions = []
-    actions << Event::TODO if filter.include? 'todo'
     actions << Event::IMPORTANT if filter.include? 'important'
     actions << Event::NORMAL if filter.include? 'normal'
     actions << Event::LOW if filter.include? 'low'

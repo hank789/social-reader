@@ -70,7 +70,7 @@ class Service < ActiveRecord::Base
           provider:      auth['provider'],
           info:          auth['info'],
           service_name: "#{auth['provider'].camelize}Service",
-          priority:     Event::TODO,
+          priority:     Event::IMPORTANT,
           active:       1,
           visibility_level:       Gitlab::VisibilityLevel::PRIVATE
       }

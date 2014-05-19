@@ -89,8 +89,7 @@ module EventsHelper
 
   def icon_for_event
     {
-      EventFilter.todo     => "icon-fire",
-      EventFilter.important   => "icon-bell",
+      EventFilter.important     => "icon-fire",
       EventFilter.normal => "icon-coffee",
       EventFilter.low     => "icon-beer",
       EventFilter.favourite     => "icon-star",

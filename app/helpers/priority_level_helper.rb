@@ -1,10 +1,8 @@
 module PriorityLevelHelper
   def priority_level_color(level)
     case level
-      when Event::TODO
-      'cgreen'
       when Event::IMPORTANT
-      'cblue'
+      'cgreen'
       when Event::NORMAL
       'cblue'
       when Event::LOW
@@ -16,8 +14,6 @@ module PriorityLevelHelper
     capture_haml do
       haml_tag :span do
         case level
-        when Event::TODO
-          haml_concat "To Do"
         when Event::IMPORTANT
           haml_concat "Important"
         when Event::NORMAL
@@ -31,10 +27,8 @@ module PriorityLevelHelper
 
   def priority_level_icon(level)
     case level
-    when Event::TODO
-      private_icon
     when Event::IMPORTANT
-      public_icon
+      private_icon
     when Event::NORMAL
       public_icon
     when Event::LOW

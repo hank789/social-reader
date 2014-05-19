@@ -19,10 +19,9 @@ class Event < ActiveRecord::Base
   default_scope { where.not(user_id: nil) }
   validates_uniqueness_of :post_id, :scope => [:user_id, :priority]
 
-  TODO      = 1
-  IMPORTANT = 2
-  NORMAL    = 3
-  LOW       = 4
+  IMPORTANT = 1
+  NORMAL    = 2
+  LOW       = 3
 
   UNREAD  = 10
   READ = 11
@@ -34,12 +33,11 @@ class Event < ActiveRecord::Base
   # Scopes
   scope :recent, -> { order("created_at DESC") }
   scope :load_events, ->(user_ids) { where(user_id: user_ids).recent }
-  scope :priority_todo, -> { where(priority: TODO) }
+  scope :priority_todo, -> { where(priority: IMPORTANT) }
 
   class << self
     def priority_options
       {
-          'To-Do'  => TODO,
           'Important' => IMPORTANT,
           'Normal'   => NORMAL,
           'Low' => LOW
@@ -48,7 +46,7 @@ class Event < ActiveRecord::Base
   end
 
   def proper?
-    if todo? || important? || normal? || low?
+    if important? || normal? || low?
       true
     end
   end
@@ -58,10 +56,6 @@ class Event < ActiveRecord::Base
 
       target.title
     end
-  end
-
-  def todo?
-    priority == self.class::TODO
   end
 
   def important?
