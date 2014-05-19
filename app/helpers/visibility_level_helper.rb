@@ -13,10 +13,9 @@ module VisibilityLevelHelper
       haml_tag :span do
         case level
         when Gitlab::VisibilityLevel::PRIVATE
-          haml_concat "Service access must be granted explicitly for each user."
+          haml_concat "Private content is only visible with your account, do not appear in any open space."
         when Gitlab::VisibilityLevel::PUBLIC
-          haml_concat "The service can be visited by"
-          haml_concat "any logged in user."
+          haml_concat "Public content can be visible to anyone, and will appear in your homepage."
         end
       end
     end

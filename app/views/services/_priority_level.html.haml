@@ -10,12 +10,9 @@
             = priority_level_icon(level)
             .option-title
               = priority_level_label(level)
-            .option-descr
-              = priority_level_description(level)
     - else
       .col-sm-10
         %span.info
           = priority_level_icon(priority_level)
           %strong
             = priority_level_label(priority_level)
-          .light= priority_level_description(priority_level)

@@ -28,11 +28,11 @@ module PriorityLevelHelper
   def priority_level_icon(level)
     case level
     when Event::IMPORTANT
-      private_icon
+      content_tag :i, nil, class: 'icon-fire'
     when Event::NORMAL
-      public_icon
+      content_tag :i, nil, class: 'icon-coffee'
     when Event::LOW
-      public_icon
+      content_tag :i, nil, class: 'icon-beer'
     end
   end
 
