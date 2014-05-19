@@ -79,4 +79,14 @@ class EventFilter
   def active? key
     params.include? key
   end
+
+  def include_key? key
+    return true unless params.present?
+    filter = params.dup
+    actions = []
+    actions << Event::IMPORTANT if filter.include? 'important'
+    actions << Event::NORMAL if filter.include? 'normal'
+    actions << Event::LOW if filter.include? 'low'
+    actions.include? key
+  end
 end

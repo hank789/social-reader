@@ -8,6 +8,7 @@ class ServicePullWorker
     last_item = items.first
     if last_item && last_item.id
       service.since_id = last_item.id
+      service.last_unread_count += items.count
       service.save
     end
     # items = items.reverse

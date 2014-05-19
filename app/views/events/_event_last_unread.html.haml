@@ -1,0 +1,8 @@
+- if @last_unread_count >= 1
+  .no-ssh-key-message
+    .container
+    - @last_unread_message.each do |item|
+      = raw item[1]['message'] + item[1]['since'] + " in " + item[1]['priority'] + "<br>" unless item[1]['message'].length == 0
+
+
+  %hr

@@ -149,6 +149,8 @@ class InitSchema < ActiveRecord::Migration
       t.integer  "visibility_level",     default: 0, null: false
       t.datetime "last_activity_at"
       t.string   "since_id"
+      t.datetime "last_read_time"
+      t.integer  "last_unread_count", default: 0
     end
 
     add_index "services", ["user_id"], name: "index_services_on_user_id", using: :btree

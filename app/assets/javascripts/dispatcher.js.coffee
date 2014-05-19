@@ -24,7 +24,6 @@ class Dispatcher
       when 'projects:posts:new', 'projects:merge_requests:new'
         GitLab.GfmAutoComplete.setup()
       when 'dashboard:show'
-        new Dashboard()
         new Activities()
       when 'projects:commit:show'
         new Commit()

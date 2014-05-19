@@ -37,9 +37,24 @@ class DashboardController < ApplicationController
 
   def check_last_events
     if current_user
+      @last_unread_message = {
+          Event::IMPORTANT => {'priority'=> 'IMPORTANT', 'since'=>'','message'=>''},
+          Event::NORMAL   => {'priority'=> 'NORMAL', 'since'=>'','message'=>''},
+          Event::LOW => {'priority'=> 'LOW', 'since'=>'','message'=>''}
+      }
+      @last_unread_count = 0
       current_user.services.each do |service|
+        @last_unread_message[service.priority]['message'] += "#{service.last_unread_count}(#{service.provider}) unread "
+        @last_unread_message[service.priority]['since'] = "since #{service.last_read_time.stamp('Aug 21, 2011 9:23pm')}"
+        @last_unread_count += service.last_unread_count
         if (service.last_activity_at && Time.now.to_i - service.last_activity_at.to_time.to_i >= 90) || !service.last_activity_at
           service.last_activity_at = Time.now
+          if params[:offset].nil?
+            if @event_filter.include_key?(service.priority)
+              service.last_unread_count = 0
+              service.last_read_time = Time.now
+            end
+          end
           service.save
           ServicePullWorker.perform_async(service.id)
         end

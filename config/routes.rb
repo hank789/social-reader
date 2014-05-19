@@ -94,9 +94,7 @@ Gitlab::Application.routes.draw do
   # Dashboard Area
   #
   resource :dashboard, controller: "dashboard", only: [:show] do
-    member do
-      get :services
-    end
+
   end
 
   resources :events do
