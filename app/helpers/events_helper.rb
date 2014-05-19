@@ -1,7 +1,7 @@
 module EventsHelper
   def link_to_author(event)
     author = event.post.author
-    link_to author.name, author.profile_url
+    link_to author.name, author.profile_url, :target => "_blank"
   end
 
   def event_action_name(event)
