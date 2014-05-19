@@ -3,7 +3,7 @@ class EventFilter
 
   class << self
     def default_filter
-      %w{ push posts merge_requests team}
+      %w{ important}
     end
 
     def important
@@ -26,8 +26,21 @@ class EventFilter
     @params = if params
                 params.dup
               else
-                []#EventFilter.default_filter
+                EventFilter.default_filter
               end
+  end
+
+  def show_filter
+    return events unless params.present?
+
+    filter = params.dup
+
+    actions = ''
+    actions += 'important ' if filter.include? 'important'
+    actions += 'normal ' if filter.include? 'normal'
+    actions += 'low ' if filter.include? 'low'
+    actions += 'favourite ' if filter.include? 'favourite'
+    actions
   end
 
   def apply_filter events

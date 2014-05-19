@@ -3,6 +3,8 @@
 - if @events.any?
   .content_list
 - else
-  .nothing-here-block Service activity will be displayed here
+  .nothing-here-block
+    No service activity currently at
+    = @event_filter.show_filter
 
 = spinner
