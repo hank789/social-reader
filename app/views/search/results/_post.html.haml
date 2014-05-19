@@ -1,0 +1,7 @@
+%li
+  post:
+  = link_to post.link, :target => "_blank" do
+    %strong.term= post.title
+  - if post.description.present?
+    &ndash;
+    %span.light.term= post.description

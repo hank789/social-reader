@@ -42,10 +42,19 @@ class Post < ActiveRecord::Base
 
   acts_as_taggable_on :labels
 
-  def search query
-    joins(:event).where("posts.title LIKE :query OR posts.description LIKE :query", query: "%#{query}%")
-  end
+  class << self
+    def search query
+      where("posts.title LIKE :query OR posts.description LIKE :query", query: "%#{query}%")
+    end
 
+    def search_by_title query
+      where("LOWER(posts.title) LIKE :query", query: "%#{query.downcase}%")
+    end
+
+    def publicish(user)
+      joins('LEFT JOIN events ON posts.id = events.post_id').where('events.user_id = ?', user.id)
+    end
+  end
   # Reset issue events cache
   #
   # Since we do cache @event we need to reset cache in special cases:

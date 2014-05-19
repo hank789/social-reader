@@ -178,13 +178,7 @@ module ApplicationHelper
   end
 
   def search_placeholder
-    if @project && @project.persisted?
-      "Search in this project"
-    elsif @group && @group.persisted?
-      "Search in this group"
-    else
-      "Search"
-    end
+    "Search"
   end
 
   def first_line(str)

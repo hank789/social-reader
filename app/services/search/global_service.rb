@@ -11,7 +11,7 @@ module Search
       query = Shellwords.shellescape(query) if query.present?
       return result unless query.present?
 
-      result[:posts] = Post.search(query).order('updated_at DESC').limit(20)
+      result[:posts] = Post.publicish(current_user).search(query).order('updated_at DESC').limit(20)
       result[:total_results] = %w(posts).sum { |items| result[items.to_sym].size }
       result
     end

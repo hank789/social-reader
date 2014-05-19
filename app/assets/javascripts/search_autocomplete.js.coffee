@@ -1,8 +1,7 @@
 class SearchAutocomplete
-  constructor: (search_autocomplete_path, project_id, project_ref) ->
-    project_id = '' unless project_id
-    project_ref = '' unless project_ref
-    query = "?project_id=" + project_id + "&project_ref=" + project_ref
+  constructor: (search_autocomplete_path, post_id) ->
+    post_id = '' unless post_id
+    query = "?post_id=" + post_id
 
     $("#search").autocomplete
       source: search_autocomplete_path + query

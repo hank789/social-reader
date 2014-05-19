@@ -55,7 +55,7 @@ class EventFilter
 
     if filter.include? 'favourite'
       if actions.present?
-        events = events.where("priority in (?) OR favourite = ?", actions, 1)
+        events = events.where(priority: actions).where(favourite: 1)
       else
         events = events.where(favourite: 1)
       end
