@@ -11,8 +11,8 @@
 
           .form-actions
             = f.submit 'Save service', class: "btn btn-create project-submit", tabindex: 4
-            = link_to 'Disconnect', service_path(@service), class: "btn btn-remove", :data => { :confirm => "Disconnect #{@service.provider}?" }, :method => :delete
+            = link_to "Disconnect #{@service.info.name}", service_path(@service), class: "btn btn-remove", :data => { :confirm => "Disconnect #{@service.provider}?" }, :method => :delete
         .col-md-2
-          = render "services/item/#{@service.provider}"
+          = render "services/item/#{@service.provider}", service: @service
 
 

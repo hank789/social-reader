@@ -9,5 +9,5 @@
   - for service in @services
     = render "services/item/#{service.provider}", service: service
 - Gitlab.config.services.each do |service|
-  - unless @services.any?{|x| x.provider == service[0].to_s} || service[1]["enable"] == false
-    = render "services/item/#{service[0].to_s}"
+  - unless service[1]["enable"] == false
+    = render "services/item/#{service[0].to_s}", service: nil

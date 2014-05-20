@@ -66,8 +66,8 @@ class ServicesController < ApplicationController
   private
 
   def abort_if_already_authorized
-    if service = Service.where(uid: omniauth_hash['uid'], active: 1).first
-      flash[:alert] =  'services.create.already_authorized'
+    if service = Service.where(uid: omniauth_hash['uid'], active: 1, provider: omniauth_hash['provider']).first
+      flash[:alert] =  'Service has been already authorized,please try to use another account.'
       redirect_to_origin
     end
   end
