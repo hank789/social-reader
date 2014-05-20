@@ -1,11 +1,11 @@
 module PriorityLevelHelper
   def priority_level_color(level)
     case level
-      when Event::IMPORTANT
+      when Service::IMPORTANT
       'cgreen'
-      when Event::NORMAL
+      when Service::NORMAL
       'cblue'
-      when Event::LOW
+      when Service::LOW
       'cblue'
     end
   end
@@ -14,11 +14,11 @@ module PriorityLevelHelper
     capture_haml do
       haml_tag :span do
         case level
-        when Event::IMPORTANT
+        when Service::IMPORTANT
           haml_concat "Important"
-        when Event::NORMAL
+        when Service::NORMAL
           haml_concat "Normal"
-        when Event::LOW
+        when Service::LOW
           haml_concat "Low"
         end
       end
@@ -27,17 +27,17 @@ module PriorityLevelHelper
 
   def priority_level_icon(level)
     case level
-    when Event::IMPORTANT
+    when Service::IMPORTANT
       content_tag :i, nil, class: 'icon-fire'
-    when Event::NORMAL
+    when Service::NORMAL
       content_tag :i, nil, class: 'icon-coffee'
-    when Event::LOW
+    when Service::LOW
       content_tag :i, nil, class: 'icon-beer'
     end
   end
 
   def priority_level_label(level)
-    Event.priority_options.key(level)
+    Service.priority_options.key(level)
   end
 
 end

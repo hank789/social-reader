@@ -13,15 +13,10 @@
 #
 
 class Event < ActiveRecord::Base
-  attr_accessible :project, :action, :user_id, :priority,
+  attr_accessible :project, :action, :user_id,
                   :post_id, :service_id, :action, :author_id, :favourite
 
-  default_scope { where.not(user_id: nil) }
-  validates_uniqueness_of :post_id, :scope => [:user_id, :priority]
-
-  IMPORTANT = 1
-  NORMAL    = 2
-  LOW       = 3
+  validates_uniqueness_of :post_id, :scope => :user_id
 
   UNREAD  = 10
   READ = 11
@@ -34,41 +29,6 @@ class Event < ActiveRecord::Base
   scope :recent, -> { order("created_at DESC") }
   scope :load_events, ->(user_ids) { where(user_id: user_ids).recent }
   scope :load_star_events, ->(user_ids) { where(user_id: user_ids, favourite: 1).recent }
-
-  class << self
-    def priority_options
-      {
-          'Important' => IMPORTANT,
-          'Normal'   => NORMAL,
-          'Low' => LOW
-      }
-    end
-  end
-
-  def proper?
-    if important? || normal? || low?
-      true
-    end
-  end
-
-  def target_title
-    if self.target_type && self.target_id
-
-      target.title
-    end
-  end
-
-  def important?
-    priority == self.class::IMPORTANT
-  end
-
-  def normal?
-    priority == self.class::NORMAL
-  end
-
-  def low?
-    priority == self.class::LOW
-  end
 
   def read?
     action == READ

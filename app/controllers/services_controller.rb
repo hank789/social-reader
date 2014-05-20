@@ -21,15 +21,16 @@ class ServicesController < ApplicationController
     exist_service = Service.where(uid: service.uid, active: 0).first
     if exist_service
       exist_service.active = 1
+      exist_service.last_activity_at = Time.now
       exist_service.save
+      ServicePullWorker.perform_async(exist_service.id)
       redirect_to edit_service_path(exist_service)
-    else if current_user.services << service
+    elsif current_user.services << service
+      ServicePullWorker.perform_async(service.id)
       redirect_to edit_service_path(service)
     else
       flash[:alert] = 'there was an error connecting that service'
       redirect_to_origin
-    end
-
     end
   end
 
@@ -38,32 +39,13 @@ class ServicesController < ApplicationController
   end
 
   def update
-    origin_priority = @service.priority
-    new_priority = params[:"#{@service.provider}_service"][:priority_level]
-    @service.priority = new_priority
+    @service.priority = params[:"#{@service.provider}_service"][:priority_level]
     @service.visibility_level = params[:"#{@service.provider}_service"][:visibility_level]
+    @service.last_activity_at = Time.now
     if @service.save
-      if origin_priority != new_priority
-        Event.where(service_id: @service.id).update_all(priority: new_priority)
-      end
       flash[:notice] = 'Service was successfully saved.'
     end
     redirect_to edit_service_url(@service)
-  end
-
-  def get_tweets
-    service = Service.find_by_id(1)
-    tweets=service.get_home_timeline_items(service.since_id)
-    last_tweet = tweets.first
-    if last_tweet && last_tweet.id
-      service.since_id = last_tweet.id
-      service.save
-    end
-    tweets.reverse
-    tweets.each do |tweet|
-      service.post tweet
-    end
-
   end
 
   def failure

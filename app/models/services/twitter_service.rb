@@ -64,7 +64,6 @@ class TwitterService < Service
     event = Event.new
     event.post_id = post.id
     event.service_id = self.id
-    event.priority = self.priority
     event.user_id = self.user_id
     event.action = Event::UNREAD
     event.author_id = author.id

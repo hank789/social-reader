@@ -30,6 +30,10 @@ class Service < ActiveRecord::Base
   serialize :info
   default_scope { where(active: 1) }
 
+  IMPORTANT = 1
+  NORMAL    = 2
+  LOW       = 3
+
   def profile_photo_url
     nil
   end
@@ -39,7 +43,13 @@ class Service < ActiveRecord::Base
   end
 
   class << self
-
+    def priority_options
+      {
+          'Important' => IMPORTANT,
+          'Normal'   => NORMAL,
+          'Low' => LOW
+      }
+    end
     def titles(service_strings)
       service_strings.map {|s| "#{s.titleize}Service"}
     end
@@ -71,10 +81,11 @@ class Service < ActiveRecord::Base
           provider:      auth['provider'],
           info:          auth['info'],
           service_name: "#{auth['provider'].camelize}Service",
-          priority:     Event::IMPORTANT,
+          priority:     Service::IMPORTANT,
           active:       1,
           last_unread_count:  0,
           last_read_time: Time.now,
+          last_activity_at: Time.now,
           visibility_level:       Gitlab::VisibilityLevel::PRIVATE
       }
     end
@@ -84,5 +95,17 @@ class Service < ActiveRecord::Base
     end
 
     private :auth, :service_type, :options
+  end
+
+  def important?
+    priority == self.class::IMPORTANT
+  end
+
+  def normal?
+    priority == self.class::NORMAL
+  end
+
+  def low?
+    priority == self.class::LOW
   end
 end

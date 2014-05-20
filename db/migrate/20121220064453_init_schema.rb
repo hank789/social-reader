@@ -26,7 +26,6 @@ class InitSchema < ActiveRecord::Migration
       t.integer  "post_id"
       t.datetime "created_at"
       t.datetime "updated_at"
-      t.integer  "priority"
       t.integer  "action"
       t.integer  "user_id"
       t.integer  "author_id"
@@ -34,7 +33,6 @@ class InitSchema < ActiveRecord::Migration
     end
 
     add_index "events", ["action"], name: "index_events_on_action", using: :btree
-    add_index "events", ["priority"], name: "index_events_on_priority", using: :btree
     add_index "events", ["user_id"], name: "index_events_on_user_id", using: :btree
     add_index "events", ["created_at"], name: "index_events_on_created_at", using: :btree
     add_index "events", ["service_id"], name: "index_events_on_service_id", using: :btree

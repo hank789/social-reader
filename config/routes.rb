@@ -107,7 +107,6 @@ Gitlab::Application.routes.draw do
   #resources :projects, constraints: { id: /[^\/]+/ }, only: [:new, :create]
 
   devise_for :users, controllers: { omniauth_callbacks: :omniauth_callbacks, registrations: :registrations , passwords: :passwords}
-  get 'services/get_tweets' => "services#get_tweets"
   resources :services
   controller :services do
     scope "/users/auth", :as => "auth" do

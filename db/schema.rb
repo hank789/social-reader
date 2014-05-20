@@ -55,17 +55,17 @@ ActiveRecord::Schema.define(version: 20140515071535) do
     t.integer  "post_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "priority"
     t.integer  "action"
     t.integer  "user_id"
     t.integer  "author_id"
+    t.integer  "favourite",  default: 0
   end
 
   add_index "events", ["action"], name: "index_events_on_action", using: :btree
   add_index "events", ["author_id"], name: "index_events_on_author_id", using: :btree
   add_index "events", ["created_at"], name: "index_events_on_created_at", using: :btree
+  add_index "events", ["favourite"], name: "index_events_on_favourite", using: :btree
   add_index "events", ["post_id"], name: "index_events_on_post_id", using: :btree
-  add_index "events", ["priority"], name: "index_events_on_priority", using: :btree
   add_index "events", ["service_id"], name: "index_events_on_service_id", using: :btree
   add_index "events", ["user_id"], name: "index_events_on_user_id", using: :btree
 
@@ -82,15 +82,16 @@ ActiveRecord::Schema.define(version: 20140515071535) do
   add_index "photos", ["provider"], name: "index_photos_on_provider", using: :btree
 
   create_table "posts", force: true do |t|
-    t.string   "title",                   null: false
+    t.string   "title",                       null: false
     t.integer  "author_id"
     t.string   "provider"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "position",    default: 0
+    t.integer  "position",        default: 0
     t.string   "description"
     t.string   "guid"
     t.string   "link"
+    t.integer  "favourite_count", default: 0
     t.text     "data"
   end
 
@@ -105,15 +106,17 @@ ActiveRecord::Schema.define(version: 20140515071535) do
     t.string   "provider"
     t.text     "info"
     t.string   "nickname"
-    t.integer  "user_id",                          null: false
-    t.integer  "priority",                         null: false
+    t.integer  "user_id",                           null: false
+    t.integer  "priority",                          null: false
     t.datetime "created_at"
     t.datetime "updated_at"
     t.datetime "deleted_at"
-    t.boolean  "active",           default: false, null: false
-    t.integer  "visibility_level", default: 0,     null: false
+    t.boolean  "active",            default: false, null: false
+    t.integer  "visibility_level",  default: 0,     null: false
     t.datetime "last_activity_at"
     t.string   "since_id"
+    t.datetime "last_read_time"
+    t.integer  "last_unread_count", default: 0
   end
 
   add_index "services", ["active"], name: "index_services_on_active", using: :btree

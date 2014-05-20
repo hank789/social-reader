@@ -3,7 +3,7 @@
     Priority Level
   .col-sm-10
     - if can_change_priority_level
-      - Event.priority_options.values.each do |level|
+      - Service.priority_options.values.each do |level|
         .radio
           = f.radio_button :priority_level, level, checked: (priority_level == level)
           = label :service_priority_level, level do

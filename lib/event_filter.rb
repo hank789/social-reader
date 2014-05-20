@@ -43,25 +43,18 @@ class EventFilter
     actions
   end
 
-  def apply_filter events
+  def apply_filter events,uid
     return events unless params.present?
 
     filter = params.dup
 
     actions = []
-    actions << Event::IMPORTANT if filter.include? 'important'
-    actions << Event::NORMAL if filter.include? 'normal'
-    actions << Event::LOW if filter.include? 'low'
+    actions << Service::IMPORTANT if filter.include? 'important'
+    actions << Service::NORMAL if filter.include? 'normal'
+    actions << Service::LOW if filter.include? 'low'
 
-    if filter.include? 'favourite'
-      if actions.present?
-        events = events.where(priority: actions).where(favourite: 1)
-      else
-        events = events.where(favourite: 1)
-      end
-    else
-      events = events.where(priority: actions)
-    end
+    services_ids = Service.where(priority: actions, user_id: uid).pluck(:id)
+    events = events.where(service_id: services_ids)
   end
 
   def options key
@@ -84,9 +77,9 @@ class EventFilter
     return true unless params.present?
     filter = params.dup
     actions = []
-    actions << Event::IMPORTANT if filter.include? 'important'
-    actions << Event::NORMAL if filter.include? 'normal'
-    actions << Event::LOW if filter.include? 'low'
+    actions << Service::IMPORTANT if filter.include? 'important'
+    actions << Service::NORMAL if filter.include? 'normal'
+    actions << Service::LOW if filter.include? 'low'
     actions.include? key
   end
 end
