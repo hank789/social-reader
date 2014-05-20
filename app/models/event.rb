@@ -33,7 +33,7 @@ class Event < ActiveRecord::Base
   # Scopes
   scope :recent, -> { order("created_at DESC") }
   scope :load_events, ->(user_ids) { where(user_id: user_ids).recent }
-  scope :priority_todo, -> { where(priority: IMPORTANT) }
+  scope :load_star_events, ->(user_ids) { where(user_id: user_ids, favourite: 1).recent }
 
   class << self
     def priority_options

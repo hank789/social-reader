@@ -1,0 +1,13 @@
+- if @has_authorized_services
+  .dashboard.row
+    .activities.col-md-12
+      - if @events.any?
+        .content_list
+      - else
+        .nothing-here-block
+          No star items
+
+      = spinner
+
+- else
+  = render "zero_authorized_projects"

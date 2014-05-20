@@ -96,6 +96,7 @@ Gitlab::Application.routes.draw do
   resource :dashboard, controller: "dashboard", only: [:show] do
 
   end
+  get 'dashboard/stars' => "dashboard#stars"
 
   resources :events do
     member do

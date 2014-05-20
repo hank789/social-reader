@@ -3,15 +3,14 @@ class DashboardController < ApplicationController
 
   before_filter :load_services
   before_filter :event_filter, only: :show
-  before_filter :check_last_events
-  before_filter :set_title
+  before_filter :check_last_events, only: :show
 
 
   def show
     # Fetch only 30 services.
     # If user needs more - point to Dashboard#services page
     @services_limit = 30
-
+    @title = 'Dashboard'
     @has_authorized_services = @services.count > 0
     @services_count = @services.count
     @services = @services.limit(@services_limit)
@@ -25,7 +24,23 @@ class DashboardController < ApplicationController
     respond_to do |format|
       format.html
       format.json { pager_json("events/_events", @events.count) }
-      format.atom { render layout: false }
+    end
+  end
+
+  def stars
+    @services_limit = 30
+    @title = 'Dashboard'
+    @has_authorized_services = @services.count > 0
+    @services_count = @services.count
+    @services = @services.limit(@services_limit)
+
+    @publicish_service_count = 1
+
+    @events = Event.load_star_events(current_user.id)
+    @events = @events.limit(50).offset(params[:offset] || 0)
+    respond_to do |format|
+      format.html
+      format.json { pager_json("events/_events", @events.count) }
     end
   end
 
@@ -60,9 +75,5 @@ class DashboardController < ApplicationController
         end
       end
     end
-  end
-
-  def set_title
-    @title = 'Dashboard'
   end
 end
