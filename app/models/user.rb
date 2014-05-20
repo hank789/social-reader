@@ -84,12 +84,9 @@ class User < ActiveRecord::Base
   has_many :emails, dependent: :destroy
 
   # Projects
+  has_many :snippets,                 dependent: :destroy, foreign_key: :user_id, class_name: "Snippet"
   # has_many :groups_projects,          through: :groups, source: :projects
   # has_many :personal_projects,        through: :namespace, source: :projects
-  has_many :projects,                 through: :users_projects
-  has_many :created_projects,         foreign_key: :creator_id, class_name: 'Project'
-
-  has_many :users_projects,           dependent: :destroy
   # has_many :posts,                   dependent: :destroy, foreign_key: :user_id
   has_many :events,                   dependent: :destroy, foreign_key: :user_id,   class_name: "Event"
   has_many :recent_events, -> { order "id DESC" }, foreign_key: :user_id,   class_name: "Event"

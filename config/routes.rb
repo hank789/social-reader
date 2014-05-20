@@ -20,6 +20,14 @@ Gitlab::Application.routes.draw do
     mount Sidekiq::Web, at: "/admin/sidekiq", as: :sidekiq
   end
 
+  #
+  # Global snippets
+  #
+  resources :snippets do
+    member do
+      get "raw"
+    end
+  end
   get "/s/:username" => "snippets#user_index", as: :user_snippets, constraints: { username: /.*/ }
 
   #

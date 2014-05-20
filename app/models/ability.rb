@@ -7,6 +7,7 @@ class Ability
 
       case subject.class.name
       when "Service" then service_abilities(user, subject)
+      when "PersonalSnippet" then personal_snippet_abilities(user, subject)
       when "Post" then issue_abilities(user, subject)
       else []
       end.concat(global_abilities(user))
@@ -169,7 +170,7 @@ class Ability
 
     [:issue, :note, :project_snippet, :personal_snippet, :merge_request].each do |name|
       define_method "#{name}_abilities" do |user, subject|
-        if subject.author == user
+        if subject.user == user
           [
             :"read_#{name}",
             :"write_#{name}",

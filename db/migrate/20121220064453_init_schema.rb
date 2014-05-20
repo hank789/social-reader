@@ -168,6 +168,21 @@ class InitSchema < ActiveRecord::Migration
     add_index "photos", ["post_id"], name: "index_photos_on_post_id", using: :btree
     add_index "photos", ["provider"], name: "index_photos_on_provider", using: :btree
 
+    create_table "snippets", force: true do |t|
+      t.string   "title"
+      t.text     "content",    limit: 2147483647
+      t.integer  "user_id",                                    null: false
+      t.datetime "created_at"
+      t.datetime "updated_at"
+      t.string   "file_name"
+      t.datetime "expires_at"
+      t.boolean  "private",                       default: true, null: false
+      t.string   "type"
+    end
+
+    add_index "snippets", ["user_id"], name: "index_snippets_on_user_id", using: :btree
+    add_index "snippets", ["created_at"], name: "index_snippets_on_created_at", using: :btree
+    add_index "snippets", ["expires_at"], name: "index_snippets_on_expires_at", using: :btree
   end
 
   def down

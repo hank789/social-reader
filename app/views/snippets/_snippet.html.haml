@@ -1,0 +1,19 @@
+%li
+  %h4.snippet-title
+    = link_to reliable_snippet_path(snippet) do
+      = truncate(snippet.title, length: 60)
+      - if snippet.private?
+        %span.label.label-gray
+          %i.icon-lock
+          private
+    %span.cgray.monospace.tiny.pull-right
+      = snippet.file_name
+
+  .snippet-info
+    = "##{snippet.id}"
+    %span
+      by
+      = link_to user_snippets_path(snippet.user) do
+        = image_tag avatar_icon(snippet.user_email), class: "avatar avatar-inline s16", alt: ''
+        = snippet.user_name
+      %span.light #{time_ago_with_tooltip(snippet.created_at)}
