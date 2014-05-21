@@ -76,7 +76,7 @@ gem "redcarpet",     "~> 2.2.2"
 gem "github-markup"
 
 # Diffs
-gem 'diffy', '~> 3.0.3'
+# gem 'diffy', '~> 3.0.3'
 
 # Asciidoc to HTML
 gem  "asciidoctor"
@@ -119,9 +119,6 @@ gem "redis-rails"
 
 # HipChat integration
 gem "hipchat", "~> 0.14.0"
-
-# Flowdock integration
-gem "gitlab-flowdock-git-hook", "~> 0.4.2"
 
 # Gemnasium integration
 gem "gemnasium-gitlab-service", "~> 0.2"

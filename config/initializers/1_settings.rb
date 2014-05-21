@@ -9,14 +9,6 @@ class Settings < Settingslogic
 
     private
 
-    def build_gitlab_shell_ssh_path_prefix
-      if gitlab_shell.ssh_port != 22
-        "ssh://#{gitlab_shell.ssh_user}@#{gitlab_shell.ssh_host}:#{gitlab_shell.ssh_port}/"
-      else
-        "#{gitlab_shell.ssh_user}@#{gitlab_shell.ssh_host}:"
-      end
-    end
-
     def build_gitlab_url
       custom_port = gitlab_on_standard_port? ? nil : ":#{gitlab.port}"
       [ gitlab.protocol,
@@ -113,34 +105,11 @@ Settings.gravatar['plain_url']  ||= 'http://www.gravatar.com/avatar/%{hash}?s=%{
 Settings.gravatar['ssl_url']    ||= 'https://secure.gravatar.com/avatar/%{hash}?s=%{size}&d=mm'
 
 #
-# GitLab Shell
-#
-Settings['gitlab_shell'] ||= Settingslogic.new({})
-Settings.gitlab_shell['path']         ||= Settings.gitlab['user_home'] + '/gitlab-shell/'
-Settings.gitlab_shell['hooks_path']   ||= Settings.gitlab['user_home'] + '/gitlab-shell/hooks/'
-Settings.gitlab_shell['receive_pack']   = true if Settings.gitlab_shell['receive_pack'].nil?
-Settings.gitlab_shell['upload_pack']    = true if Settings.gitlab_shell['upload_pack'].nil?
-Settings.gitlab_shell['repos_path']   ||= Settings.gitlab['user_home'] + '/repositories/'
-Settings.gitlab_shell['ssh_host']     ||= Settings.gitlab.ssh_host
-Settings.gitlab_shell['ssh_port']     ||= 22
-Settings.gitlab_shell['ssh_user']     ||= Settings.gitlab.user
-Settings.gitlab_shell['owner_group']  ||= Settings.gitlab.user
-Settings.gitlab_shell['ssh_path_prefix'] ||= Settings.send(:build_gitlab_shell_ssh_path_prefix)
-
-#
 # Backup
 #
 Settings['backup'] ||= Settingslogic.new({})
 Settings.backup['keep_time']  ||= 0
 Settings.backup['path']         = File.expand_path(Settings.backup['path'] || "tmp/backups/", Rails.root)
-
-#
-# Git
-#
-Settings['git'] ||= Settingslogic.new({})
-Settings.git['max_size']  ||= 5242880 # 5.megabytes
-Settings.git['bin_path']  ||= '/usr/bin/git'
-Settings.git['timeout']   ||= 10
 
 Settings['satellites'] ||= Settingslogic.new({})
 Settings.satellites['path'] = File.expand_path(Settings.satellites['path'] || "tmp/repo_satellites/", Rails.root)
