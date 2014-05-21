@@ -7,6 +7,7 @@ class DashboardController < ApplicationController
 
 
   def show
+    @title = 'Dashboard'
     @events = Event.load_events(current_user.id)
     @events = @event_filter.apply_filter(@events,current_user.id)
     @events = @events.limit(50).offset(params[:offset] || 0)
@@ -18,6 +19,7 @@ class DashboardController < ApplicationController
   end
 
   def stars
+    @title = 'Stars'
     @events = Event.load_star_events(current_user.id)
     @events = @events.limit(50).offset(params[:offset] || 0)
     respond_to do |format|
@@ -27,11 +29,11 @@ class DashboardController < ApplicationController
   end
 
   def analytics
-
+    @title = 'Analytics'
   end
 
   def discovery
-
+    @title = 'Discovery'
   end
 
   protected
@@ -42,7 +44,6 @@ class DashboardController < ApplicationController
     @services = current_user.services
 
     @services_limit = 30
-    @title = 'Dashboard'
     @has_authorized_services = @services.count > 0
     @services_count = @services.count
     @services = @services.limit(@services_limit)
