@@ -1,7 +1,13 @@
 %ul
   = nav_link(path: 'dashboard#show', html_options: {class: 'home'}) do
     = link_to root_path, title: "Home" do
-      %i.icon-home
-  = nav_link(path: 'dashboard#stars', html_options: {class: 'star'}) do
-    = link_to dashboard_stars_path, title: "star" do
+      %i.icon-anchor
+  = nav_link(path: 'dashboard#stars', html_options: {class: 'home'}) do
+    = link_to dashboard_stars_path, title: "Star" do
       %i.icon-star
+  = nav_link(path: 'dashboard#analytics', html_options: {class: 'home'}) do
+    = link_to dashboard_analytics_path, title: "Analytics" do
+      %i.icon-bar-chart
+  = nav_link(path: 'dashboard#discovery', html_options: {class: 'home'}) do
+    = link_to dashboard_discovery_path, title: "Discovery" do
+      %i.icon-th

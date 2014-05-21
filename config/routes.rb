@@ -105,6 +105,8 @@ Gitlab::Application.routes.draw do
 
   end
   get 'dashboard/stars' => "dashboard#stars"
+  get 'dashboard/analytics' => "dashboard#analytics"
+  get 'dashboard/discovery' => "dashboard#discovery"
 
   resources :events do
     member do

@@ -7,19 +7,9 @@ class DashboardController < ApplicationController
 
 
   def show
-    # Fetch only 30 services.
-    # If user needs more - point to Dashboard#services page
-    @services_limit = 30
-    @title = 'Dashboard'
-    @has_authorized_services = @services.count > 0
-    @services_count = @services.count
-    @services = @services.limit(@services_limit)
-
     @events = Event.load_events(current_user.id)
     @events = @event_filter.apply_filter(@events,current_user.id)
     @events = @events.limit(50).offset(params[:offset] || 0)
-
-    @publicish_service_count = 1
 
     respond_to do |format|
       format.html
@@ -28,14 +18,6 @@ class DashboardController < ApplicationController
   end
 
   def stars
-    @services_limit = 30
-    @title = 'Dashboard'
-    @has_authorized_services = @services.count > 0
-    @services_count = @services.count
-    @services = @services.limit(@services_limit)
-
-    @publicish_service_count = 1
-
     @events = Event.load_star_events(current_user.id)
     @events = @events.limit(50).offset(params[:offset] || 0)
     respond_to do |format|
@@ -44,10 +26,28 @@ class DashboardController < ApplicationController
     end
   end
 
+  def analytics
+
+  end
+
+  def discovery
+
+  end
+
   protected
 
   def load_services
+    # Fetch only 30 services.
+    # If user needs more - point to Dashboard#services page
     @services = current_user.services
+
+    @services_limit = 30
+    @title = 'Dashboard'
+    @has_authorized_services = @services.count > 0
+    @services_count = @services.count
+    @services = @services.limit(@services_limit)
+
+    @publicish_service_count = 1
   end
 
   def check_last_events
