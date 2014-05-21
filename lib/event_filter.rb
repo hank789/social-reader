@@ -3,7 +3,7 @@ class EventFilter
 
   class << self
     def default_filter
-      %w{ important}
+      %w{ important normal}
     end
 
     def important
