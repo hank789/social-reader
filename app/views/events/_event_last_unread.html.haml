@@ -1,8 +1,14 @@
-- if @last_unread_count >= 1
+- if @last_unread_count && @last_unread_count >= 1
   .no-ssh-key-message
     .container
-    - @last_unread_message.each do |item|
-      = raw item[1]['message'] + item[1]['since'] + " in " + item[1]['priority'] + "<br>" unless item[1]['message'].length == 0
+      - @last_unread_message.each do |item|
+        = raw item[1]['message'] + item[1]['since'] + " in " + item[1]['priority'] unless item[1]['count'] == 0
+      .pull-right.hidden-xs
+        = link_to "Don't show again", "#", method: :put, class: 'hide-no-ssh-message', remote: true
+        |
+        = link_to 'Remind later', '#', class: 'hide-no-ssh-message'
+      .links-xs.visible-xs
+        = link_to "Don't show again", "#", method: :put, class: 'hide-no-ssh-message', remote: true
+        |
+        = link_to 'Later', '#', class: 'hide-no-ssh-message'
 
-
-  %hr
