@@ -69,7 +69,7 @@ class FacebookService < Service
     end
     items = @graph.get_connections("me", "home", :since => since_id)
     next_items = items.next_page(:since => since_id)
-    unless next_items.empty?
+    unless next_items.nil? || next_items.empty?
       items.concat(next_items)
       next_items = next_items.next_page(:since => since_id)
     end
