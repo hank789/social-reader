@@ -61,7 +61,7 @@ class DashboardController < ApplicationController
       @last_unread_count = 0
       current_user.services.each do |service|
         if @last_unread_count >=1
-          @last_unread_message[service.priority]['message'] += "<br>#{service.last_unread_count}(#{service.provider}) unread "
+          @last_unread_message[service.priority]['message'] += " | #{service.last_unread_count}(#{service.provider}) unread "
         else
           @last_unread_message[service.priority]['message'] += "#{service.last_unread_count}(#{service.provider}) unread "
         end
