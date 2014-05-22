@@ -40,24 +40,24 @@ class TwitterService < Service
       post_exist = Post.find_last_by_provider_and_guid(self.provider, tweet.id)
       post.id = post_exist.id
       post.save
-    end
-
-    # to-do link & tag &mention
-    if tweet.media? && tweet.media[0].class == Twitter::Media::Photo
-      photo = Photo.new
-      photo.post_id = post.id
-      photo.remote_image_url = tweet.media[0].media_url.to_s
-      photo.provider = self.provider
-      photo.save
-    end
-    if tweet.hashtags?
-      tweet.hashtags.each do |entity|
-        author.tag( post, :with =>entity.text, :on => :author_post_tag )
+    else
+      # to-do link & tag &mention
+      if tweet.media? && tweet.media[0].class == Twitter::Media::Photo
+        photo = Photo.new
+        photo.post_id = post.id
+        photo.remote_image_url = tweet.media[0].media_url.to_s
+        photo.provider = self.provider
+        photo.save
       end
-    end
-    if tweet.user_mentions?
-      tweet.user_mentions.each do |entity|
-        author.tag( post, :with =>entity.screen_name, :on => :author_post_mention )
+      if tweet.hashtags?
+        tweet.hashtags.each do |entity|
+          author.tag( post, :with =>entity.text, :on => :author_post_tag )
+        end
+      end
+      if tweet.user_mentions?
+        tweet.user_mentions.each do |entity|
+          author.tag( post, :with =>entity.screen_name, :on => :author_post_mention )
+        end
       end
     end
 

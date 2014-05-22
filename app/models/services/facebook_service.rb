@@ -38,15 +38,15 @@ class FacebookService < Service
       post_exist = Post.find_last_by_provider_and_guid(self.provider, tweet['id'])
       post.id = post_exist.id
       post.save
-    end
-
-    # to-do link & tag &mention
-    if tweet['type'] == 'photo'
-      photo = Photo.new
-      photo.post_id = post.id
-      photo.remote_image_url = "https://graph.facebook.com/#{tweet['object_id']}/picture"
-      photo.provider = self.provider
-      photo.save
+    else
+      # to-do link & tag &mention
+      if tweet['type'] == 'photo'
+        photo = Photo.new
+        photo.post_id = post.id
+        photo.remote_image_url = "https://graph.facebook.com/#{tweet['object_id']}/picture"
+        photo.provider = self.provider
+        photo.save
+      end
     end
 
     event = Event.new
