@@ -8,7 +8,7 @@ class Admin::UsersController < Admin::ApplicationController
   end
 
   def show
-    @projects = user.authorized_projects
+    @services = user.services
   end
 
   def new

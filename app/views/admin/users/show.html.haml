@@ -106,48 +106,16 @@
         %p Deleting a user has the following effects:
         %ul
           %li All user content like authored posts, snippets, comments will be removed
-          - rp = @user.personal_projects.count
+          - rp = @user.services.count
           - unless rp.zero?
             %li #{pluralize rp, 'personal project'} will be removed and cannot be restored
-          - if @user.solo_owned_groups.present?
-            %li
-              Next groups with all content will be removed:
-              %strong #{@user.solo_owned_groups.map(&:name).join(', ')}
         %br
         = link_to 'Remove user', [:admin, @user], data: { confirm: "USER #{@user.name} WILL BE REMOVED! Are you sure?" }, method: :delete, class: "btn btn-remove"
 
-  .col-md-6
-    - if @user.users_groups.present?
-      .ui-box
-        .title Groups:
-        %ul.well-list
-          - @user.users_groups.each do |user_group|
-            - group = user_group.group
-            %li.users_group
-              %span{class: ("list-item-name" unless user_group.owner?)}
-                %strong= link_to group.name, admin_group_path(group)
-              .pull-right
-                %span.light= user_group.human_access
-                - unless user_group.owner?
-                  = link_to group_users_group_path(group, user_group), data: { confirm: remove_user_from_group_message(group, @user) }, method: :delete, remote: true, class: "btn-tiny btn btn-remove", title: 'Remove user from group' do
-                    %i.icon-remove.icon-white
-
     .ui-box
-      .title Projects (#{@projects.count})
+      .title Services (#{@services.count})
       %ul.well-list
-        - @projects.sort_by(&:name_with_namespace).each do |project|
-          - tm = project.team.find_tm(@user.id)
+        - @services.each do |project|
           %li.users_project
-            = link_to admin_project_path(project), class: dom_class(project) do
-              = project.name_with_namespace
-
-            - if tm
-              .pull-right
-                - if tm.owner?
-                  %span.light Owner
-                - else
-                  %span.light= tm.human_access
-
-                  - if tm.respond_to? :project
-                    = link_to project_team_member_path(project, @user), data: { confirm: remove_from_project_team_message(project, @user) }, remote: true, method: :delete, class: "btn-tiny btn btn-remove", title: 'Remove user from project' do
-                      %i.icon-remove
+            = link_to "#", class: dom_class(project) do
+              = project.provider

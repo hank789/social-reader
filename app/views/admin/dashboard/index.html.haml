@@ -22,7 +22,11 @@
           = link_to 'New User', new_admin_user_path, class: "btn btn-new"
     .col-sm-4
       .light-well
-        %h4 Groups
+        %h4 Posts
+        .data
+          = link_to '#' do
+            %h1= Post.count
+          %hr
 
   .row.prepend-top-10
     .col-md-4
@@ -44,10 +48,6 @@
           %span.light.pull-right
             #{time_ago_with_tooltip(user.created_at)}
 
-    .col-md-4
-      %h4 Latest groups
-      %hr
-
 
   %br
   .row
@@ -55,9 +55,9 @@
       %h4 Stats
       %hr
       %p
-        Posts
+        Monthly added posts
         %span.light.pull-right
-          = Post.count
+          = Post.where("created_at > ?", 30.days.ago).count
       %p
         Monthly active users
         %span.light.pull-right
