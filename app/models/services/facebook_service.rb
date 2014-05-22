@@ -8,43 +8,76 @@ class FacebookService < Service
     "facebook"
   end
 
-  def post(post, url='')
-    Rails.logger.debug("event=post_to_service type=facebook sender_id=#{self.user_id}")
-    response = post_to_facebook("https://graph.facebook.com/me/feed", create_post_params(post).to_param)
-    response = JSON.parse response.body
-    post.facebook_id = response["id"]
-    post.save
-  end
+  def post(tweet)
+    author = Author.new
+    author.provider = self.provider
+    author.name = tweet['from']['name']
+    author.guid = tweet['from']['id']
+    author.slug = tweet['from']['category']
+    author.remote_avatar_url = profile_photo_url(tweet['from']['id'])
+    author.profile_url = "https://www.facebook.com/#{tweet['from']['id']}"
 
-  def post_to_facebook(url, body)
-    Faraday.post(url, body)
-  end
-
-  def create_post_params(post)
-    message = post.message.plain_text_without_markdown
-    if post.photos.any?
-      message += " " + short_post_url(post, protocol: AppConfig.pod_uri.scheme,
-                                            host: AppConfig.pod_uri.authority)
+    if !author.save
+      author_exist = Author.find_last_by_provider_and_guid(self.provider,tweet['from']['id'])
+      author.id = author_exist.id
+      author.save
     end
 
-    {message: message,
-     access_token: access_token,
-     link: URI.extract(message, ['https', 'http']).first
-    }
-  end
 
-  def profile_photo_url
-   "https://graph.facebook.com/#{self.uid}/picture?type=large&access_token=#{URI.escape(self.access_token)}"
-  end
-
-  def delete_post(post)
-    if post.present? && post.facebook_id.present?
-      Rails.logger.debug("event=delete_from_service type=facebook sender_id=#{self.user_id}")
-      delete_from_facebook("https://graph.facebook.com/#{post.facebook_id}/", {:access_token => self.access_token})
+    post = Post.new
+    post.description = tweet['message']
+    post.author_id = author.id
+    post.guid = tweet['id']
+    post.provider = self.provider
+    post.link = "https://www.facebook.com/#{tweet['id'].gsub("_","/posts/")}"
+    post.favourite_count = 0
+    post.created_at = tweet['created_time']
+    post.updated_at = tweet['updated_time']
+    post.data = tweet
+    if !post.save
+      post_exist = Post.find_last_by_provider_and_guid(self.provider, tweet['id'])
+      post.id = post_exist.id
+      post.save
     end
+
+    # to-do link & tag &mention
+    if tweet['type'] == 'photo'
+      photo = Photo.new
+      photo.post_id = post.id
+      photo.remote_image_url = "https://graph.facebook.com/#{tweet['object_id']}/picture"
+      photo.provider = self.provider
+      photo.save
+    end
+
+    event = Event.new
+    event.post_id = post.id
+    event.service_id = self.id
+    event.user_id = self.user_id
+    event.action = Event::UNREAD
+    event.author_id = author.id
+    event.favourite = 0
+    event.created_at = tweet['created_time']
+    event.updated_at = tweet['created_time']
+    event.save
+
   end
 
-  def delete_from_facebook(url, body)
-    Faraday.delete(url, body)
+  def get_home_timeline_items(since_id)
+    @graph = Koala::Facebook::API.new(access_token)
+    if since_id.nil?
+      since_id = 1.year.ago.to_i
+    end
+    items = @graph.get_connections("me", "home", :since => since_id)
+    next_items = items.next_page(:since => since_id)
+    unless next_items.empty?
+      items.concat(next_items)
+      next_items = next_items.next_page(:since => since_id)
+    end
+    items
   end
+
+  def profile_photo_url(uuid)
+    "https://graph.facebook.com/#{uuid}/picture?type=large"
+  end
+
 end

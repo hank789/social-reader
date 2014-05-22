@@ -25,8 +25,9 @@ class Post < ActiveRecord::Base
   # For Hash only
   serialize :data
   validates :author, presence: true
-  validates :title, presence: true, length: { within: 0..255 }
   validates_uniqueness_of :guid, :scope => :provider
+
+  default_value_for :title, ''
 
   scope :authored, ->(user) { where(author_id: user) }
   scope :recent, -> { order("created_at DESC") }
@@ -47,8 +48,8 @@ class Post < ActiveRecord::Base
       where("posts.title LIKE :query OR posts.description LIKE :query", query: "%#{query}%")
     end
 
-    def search_by_title query
-      where("LOWER(posts.title) LIKE :query", query: "%#{query.downcase}%")
+    def search_by_description query
+      where("LOWER(posts.description) LIKE :query", query: "%#{query.downcase}%")
     end
 
     def publicish(user)

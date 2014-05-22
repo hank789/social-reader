@@ -240,6 +240,10 @@ GEM
       actionpack (>= 3.0.0)
       activesupport (>= 3.0.0)
     kgio (2.8.1)
+    koala (1.10.0rc)
+      addressable
+      faraday
+      multi_json
     launchy (2.4.2)
       addressable (~> 2.3)
     letter_opener (1.1.2)
@@ -281,6 +285,8 @@ GEM
     omniauth (1.2.1)
       hashie (>= 1.2, < 3)
       rack (~> 1.0)
+    omniauth-facebook (1.6.0)
+      omniauth-oauth2 (~> 1.1)
     omniauth-github (1.1.2)
       omniauth (~> 1.0)
       omniauth-oauth2 (~> 1.1)
@@ -582,12 +588,14 @@ DEPENDENCIES
   jquery-turbolinks
   jquery-ui-rails
   kaminari (~> 0.15.1)
+  koala (~> 1.10.0rc)
   launchy
   letter_opener
   minitest (~> 4.7.0)
   mysql2 (~> 0.3.15)
   nprogress-rails
   omniauth (~> 1.2.1)
+  omniauth-facebook (~> 1.6.0)
   omniauth-github
   omniauth-google-oauth2
   omniauth-twitter

@@ -54,7 +54,7 @@ class InitSchema < ActiveRecord::Migration
       t.text     "data"
     end
     execute %{ALTER TABLE posts MODIFY title varchar(255) COLLATE utf8mb4_general_ci NOT NULL}
-    execute %{ALTER TABLE posts MODIFY description varchar(255) COLLATE utf8mb4_general_ci}
+    execute %{ALTER TABLE posts MODIFY description text COLLATE utf8mb4_general_ci}
     execute %{ALTER TABLE posts MODIFY data text COLLATE utf8mb4_general_ci}
 
     add_index "posts", ["author_id"], name: "index_posts_on_author_id", using: :btree
@@ -166,6 +166,7 @@ class InitSchema < ActiveRecord::Migration
     end
 
     add_index "photos", ["post_id"], name: "index_photos_on_post_id", using: :btree
+    add_index "photos", ["post_id","image"], name: "index_photos_on_post_id_and_image", using: :btree
     add_index "photos", ["provider"], name: "index_photos_on_provider", using: :btree
 
     create_table "snippets", force: true do |t|

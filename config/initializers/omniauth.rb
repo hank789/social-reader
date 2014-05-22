@@ -13,14 +13,8 @@ Rails.application.config.middleware.use OmniAuth::Builder do
   
   if Gitlab.config.services.facebook['enable']
     provider :facebook, Gitlab.config.services.facebook['app_id'], Gitlab.config.services.facebook['secret'], {
-      display: 'popup',
-      scope: 'publish_actions,publish_stream,offline_access',
-      client_options: {
-        ssl: {
-          ca_file: Gitlab.config.environment.certificate_authorities
-        }
-      }
-    }  
+        scope: 'user_likes,publish_actions,publish_stream,public_profile,user_friends,email,user_birthday,user_events,user_photos,user_videos,read_stream,read_friendlists,user_activities'
+    }
   end
   
   if Gitlab.config.services.wordpress['enable']

@@ -27,6 +27,7 @@ gem 'omniauth', "~> 1.2.1"
 gem 'omniauth-google-oauth2'
 gem 'omniauth-twitter'
 gem 'omniauth-github'
+gem 'omniauth-facebook', '~> 1.6.0'
 
 # Extracting information from a git repository
 
@@ -162,6 +163,7 @@ gem 'nprogress-rails'
 
 # service
 gem 'twitter', '~> 5.8.0'
+gem "koala", "~> 1.10.0rc"
 
 group :development do
   gem "annotate", "~> 2.6.0.beta2"

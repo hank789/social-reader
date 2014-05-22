@@ -27,7 +27,7 @@ class TwitterService < Service
 
 
     post = Post.new
-    post.title = tweet.full_text
+    post.description = tweet.full_text
     post.author_id = author.id
     post.guid = tweet.id
     post.provider = self.provider

@@ -78,6 +78,7 @@ ActiveRecord::Schema.define(version: 20140515071535) do
     t.datetime "deleted_at"
   end
 
+  add_index "photos", ["post_id", "image"], name: "index_photos_on_post_id_and_image", using: :btree
   add_index "photos", ["post_id"], name: "index_photos_on_post_id", using: :btree
   add_index "photos", ["provider"], name: "index_photos_on_provider", using: :btree
 
@@ -88,7 +89,7 @@ ActiveRecord::Schema.define(version: 20140515071535) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "position",        default: 0
-    t.string   "description"
+    t.text     "description"
     t.string   "guid"
     t.string   "link"
     t.integer  "favourite_count", default: 0
@@ -123,6 +124,22 @@ ActiveRecord::Schema.define(version: 20140515071535) do
   add_index "services", ["priority"], name: "index_services_on_priority", using: :btree
   add_index "services", ["uid", "service_name"], name: "index_services_on_uid_and_service_name", using: :btree
   add_index "services", ["user_id"], name: "index_services_on_user_id", using: :btree
+
+  create_table "snippets", force: true do |t|
+    t.string   "title"
+    t.text     "content",    limit: 2147483647
+    t.integer  "user_id",                                      null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "file_name"
+    t.datetime "expires_at"
+    t.boolean  "private",                       default: true, null: false
+    t.string   "type"
+  end
+
+  add_index "snippets", ["created_at"], name: "index_snippets_on_created_at", using: :btree
+  add_index "snippets", ["expires_at"], name: "index_snippets_on_expires_at", using: :btree
+  add_index "snippets", ["user_id"], name: "index_snippets_on_user_id", using: :btree
 
   create_table "taggings", force: true do |t|
     t.integer  "tag_id"
