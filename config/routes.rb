@@ -54,10 +54,6 @@ Gitlab::Application.routes.draw do
       end
     end
 
-    resources :hooks, only: [:index, :create, :destroy] do
-      get :test
-    end
-
     resources :broadcast_messages, only: [:index, :create, :destroy]
     resource :logs, only: [:show]
     resource :background_jobs, controller: 'background_jobs', only: [:show]

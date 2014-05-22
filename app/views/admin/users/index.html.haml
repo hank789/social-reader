@@ -16,8 +16,8 @@
             %small.pull-right= User.blocked.count
         %li{class: "#{'active' if params[:filter] == "wop"}"}
           = link_to admin_users_path(filter: "wop") do
-            Without projects
-            %small.pull-right= User.without_projects.count
+            Without services
+            %small.pull-right= User.without_services.count
       %hr
       = form_tag admin_users_path, method: :get, class: 'form-inline' do
         .form-group

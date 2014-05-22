@@ -154,7 +154,7 @@ class User < ActiveRecord::Base
   scope :blocked, -> { with_state(:blocked) }
   scope :active, -> { with_state(:active) }
   scope :alphabetically, -> { order('name ASC') }
-  scope :without_projects, -> { where('id NOT IN (SELECT DISTINCT(user_id) FROM users_projects)') }
+  scope :without_services, -> { where('id NOT IN (SELECT DISTINCT(user_id) FROM services)') }
   scope :ldap, -> { where(provider:  'ldap') }
 
   #
@@ -182,7 +182,7 @@ class User < ActiveRecord::Base
       case filter_name
       when "admins"; self.admins
       when "blocked"; self.blocked
-      when "wop"; self.without_projects
+      when "wop"; self.without_services
       else
         self.active
       end
