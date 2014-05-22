@@ -4,10 +4,16 @@
   poqbod.com is most useful when you can see everything network information that you care about.<br>
   Integrations let you automatically pull information and activity from outside tools into poqbod.com in a way that's timely, relevant, and searchable. Or, make your own!
 %hr
-
+.row
+  - Gitlab.config.services.each do |service|
+    - unless service[1]["enable"] == false
+      = render "services/item/#{service[0].to_s}", service: nil
 - if @services.count > 0
-  - for service in @services
-    = render "services/item/#{service.provider}", service: service
-- Gitlab.config.services.each do |service|
-  - unless service[1]["enable"] == false
-    = render "services/item/#{service[0].to_s}", service: nil
+  %br
+  %br
+  %h3.page-title
+    Existing Service Integrations
+  %hr
+  .row
+    - for service in @services
+      = render "services/item/#{service.provider}", service: service
