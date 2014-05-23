@@ -1,14 +1,17 @@
 .form-service
   = image_tag image_path("services/twitter.png"), class: "icon"
-  %h4 Twitter
+  %h4
+    - if !service.nil? && current_user.services.any?{|service| service.provider == "twitter"}
+      = connected_title(service)
+    - else
+      Twitter
   %p.light Social networking and microblogging service.
   %br
   - if !service.nil? && current_user.services.any?{|service| service.provider == "twitter"}
     - if params[:action] == 'new'
       = link_to edit_service_path(service), class: "btn btn-new" do
         %i.icon-pencil{:style=>"margin-right: 0.25rem;"}
-        Connected to
-        = service.info.name
+        Twitter
   - else
     = link_to "/users/auth/twitter", class: "btn btn-new", :disable_with => "Certification requesting..." do
       %i.icon-plus{:style=>"margin-right: 0.25rem;"}
