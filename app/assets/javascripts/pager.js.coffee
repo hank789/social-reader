@@ -27,8 +27,6 @@
     $(".content_list").append html
     if count > 0
       @offset += count
-    else
-      @disable = true
 
   initLoadMore: ->
     $(document).unbind('scroll')
