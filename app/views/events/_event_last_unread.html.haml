@@ -1,14 +1,4 @@
 - if @last_unread_count && @last_unread_count >= 1
   .no-ssh-key-message
     .container
-      - @last_unread_message.each do |item|
-        = raw item[1]['message'] + item[1]['since'] + " in " + item[1]['priority'] unless item[1]['count'] == 0
-      .pull-right.hidden-xs
-        = link_to "JUMP", "#", method: :put, class: 'hide-no-ssh-message', remote: true
-        |
-        = link_to 'MARK AS READ', '#', class: 'hide-no-ssh-message'
-      .links-xs.visible-xs
-        = link_to "JUMP", "#", method: :put, class: 'hide-no-ssh-message', remote: true
-        |
-        = link_to 'MARK AS READ', '#', class: 'hide-no-ssh-message'
-
+      = raw "#{@last_unread_count} new messages since #{@last_read_time.stamp('05/14/2014 12:13PM')}"

@@ -59,13 +59,11 @@ class DashboardController < ApplicationController
           Service::LOW => {'priority'=> 'LOW', 'since'=>'','message'=>'','count'=>0}
       }
       @last_unread_count = 0
+      @last_read_time = Time.now
       current_user.services.each do |service|
-        if @last_unread_count >=1
-          @last_unread_message[service.priority]['message'] += " | #{service.last_unread_count}(#{service.provider}) unread "
-        else
-          @last_unread_message[service.priority]['message'] += "#{service.last_unread_count}(#{service.provider}) unread "
+        if @last_read_time > service.last_read_time
+          @last_read_time = service.last_read_time
         end
-        @last_unread_message[service.priority]['count'] += service.last_unread_count
         @last_unread_message[service.priority]['since'] = "since #{service.last_read_time.stamp('Aug 21, 2011 9:23pm')}"
         @last_unread_count += service.last_unread_count
         if service.last_activity_at && Time.now.to_i - service.last_activity_at.to_time.to_i >= 90
