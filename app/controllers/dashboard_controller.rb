@@ -34,6 +34,14 @@ class DashboardController < ApplicationController
 
   def discovery
     @title = 'Discovery'
+    services_ids = Service.where(visibility_level: Gitlab::VisibilityLevel::PUBLIC).where.not(user_id: current_user.id).pluck(:id)
+    @events = Event.load_events_for_service(services_ids)
+    @events = @events.limit(50).offset(params[:offset] || 0)
+
+    respond_to do |format|
+      format.html
+      format.json { pager_json("events/_events", @events.count) }
+    end
   end
 
   protected

@@ -29,6 +29,7 @@ class Event < ActiveRecord::Base
   scope :recent, -> { order("created_at DESC") }
   scope :load_events, ->(user_ids) { where(user_id: user_ids).recent }
   scope :load_star_events, ->(user_ids) { where(user_id: user_ids).where.not(stars_at: nil).recent }
+  scope :load_events_for_service, ->(services_ids) { where(service_id: services_ids).recent }
 
   def read?
     action == READ
