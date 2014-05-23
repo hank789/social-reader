@@ -1,12 +1,14 @@
 %h3.page-title
   Add Service Integrations
+%div
   .pull-right
     = link_to "mailto:369Lab@gmail.com?subject=New suggestion to poqbod by #{current_user.name}", class: "btn btn-primary", title: "New suggestion to poqbod" do
       %i.icon-bullhorn
       Feedback
-%p.light
-  poqbod.com is most useful when you can see everything network information that you care about.<br>
-  Integrations let you automatically pull information and activity from outside tools into poqbod.com in a way that's timely, relevant, and searchable. Or, make your own!
+    &nbsp;
+  %p.light
+    poqbod.com is most useful when you can see everything network information that you care about.<br>
+    Integrations let you automatically pull information and activity from outside tools into poqbod.com in a way that's timely, relevant, and searchable. Or, make your own!
 %hr
 .row
   - Gitlab.config.services.each do |service|
