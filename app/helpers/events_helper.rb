@@ -26,6 +26,21 @@ module EventsHelper
     end
   end
 
+  def event_star_filter_link key, tooltip
+    key = key.to_s
+    inactive = if @event_filter.active? key
+                 nil
+               else
+                 'inactive'
+               end
+
+    content_tag :div, class: "filter_icon #{inactive}" do
+      link_to request.path, class: 'has_tooltip event_star_filter_link', id: "#{key}_event_filter", 'data-original-title' => tooltip do
+        content_tag :i, nil, class: icon_for_event[key]
+      end
+    end
+  end
+
   def event_title(event)
     case event.post.provider
       when "twitter"
@@ -95,6 +110,8 @@ module EventsHelper
       EventFilter.normal => "icon-coffee",
       EventFilter.low     => "icon-beer",
       EventFilter.favourite     => "icon-star",
+      EventStarFilter.posttime     => "icon-star",
+      EventStarFilter.startime     => "icon-star",
     }
   end
 

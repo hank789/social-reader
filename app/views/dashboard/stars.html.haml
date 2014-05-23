@@ -1,6 +1,7 @@
 - if @has_authorized_services
   .dashboard.row
     .activities.col-md-12
+      = render 'shared/event_star_filter'
       - if @events.any?
         .content_list
       - else

@@ -6,6 +6,10 @@ class Activities
       event.preventDefault()
       @toggleFilter($(event.currentTarget))
       @reloadActivities()
+    $(".event_star_filter_link").bind "click", (event) =>
+      event.preventDefault()
+      @toggleStarFilter($(event.currentTarget))
+      @reloadActivities()
 
   reloadActivities: ->
     $(".content_list").html ''
@@ -28,6 +32,28 @@ class Activities
       event_filters.splice index, 1
 
     $.cookie "event_filter", event_filters.join(","), { path: '/' }
+
+  toggleStarFilter: (sender) ->
+    event_filters = $.cookie("event_star_filter")
+    filter = sender.attr("id").split("_")[0]
+    if event_filters
+      event_filters = event_filters.split(",")
+    else
+      event_filters = new Array()
+
+    index = event_filters.indexOf(filter)
+    filter_s= if filter == "posttime" then "startime" else "posttime"
+    index_s = event_filters.indexOf(filter_s)
+    $("#"+filter_s+"_event_filter").parent().addClass "inactive"
+    sender.parent().removeClass "inactive"
+    if index is -1
+      event_filters.push filter
+      if index_s >= 0
+        event_filters.splice index_s, 1
+    else
+      if index_s >= 0
+        event_filters.splice index_s, 1
+    $.cookie "event_star_filter", event_filters.join(","), { path: '/' }
 
   go_to_top: ->
     # Go Top

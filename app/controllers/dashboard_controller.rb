@@ -19,8 +19,11 @@ class DashboardController < ApplicationController
   end
 
   def stars
+    filters = cookies['event_star_filter'].split(',') if cookies['event_star_filter'].present?
+    @event_filter ||= EventStarFilter.new(filters)
     @title = 'Stars'
     @events = Event.load_star_events(current_user.id)
+    @events = @event_filter.apply_star_filter(@events)
     @events = @events.limit(50).offset(params[:offset] || 0)
     respond_to do |format|
       format.html
