@@ -1,15 +1,14 @@
-.col-sm-3
-  .form-service
-    = image_tag image_path("services/twitter_128.png"), class: "icon"
-    %h3 Twitter
-    %p Social networking and microblogging service.
-    - if !service.nil? && current_user.services.any?{|service| service.provider == "twitter"}
-      - if params[:action] == 'new'
-        = link_to edit_service_path(service), class: "btn btn-new" do
-          %i.icon-pencil{:style=>"margin-right: 0.25rem;"}
-          Connected to
-          = service.info.name
-    - else
-      = link_to "/users/auth/twitter", class: "btn btn-new", :disable_with => "Certification requesting..." do
-        %i.icon-plus{:style=>"margin-right: 0.25rem;"}
-        Twitter
+.form-service
+  = image_tag image_path("services/twitter.png"), class: "icon"
+  %h3 Twitter
+  %br
+  - if !service.nil? && current_user.services.any?{|service| service.provider == "twitter"}
+    - if params[:action] == 'new'
+      = link_to edit_service_path(service), class: "btn btn-new" do
+        %i.icon-pencil{:style=>"margin-right: 0.25rem;"}
+        Connected to
+        = service.info.name
+  - else
+    = link_to "/users/auth/twitter", class: "btn btn-new", :disable_with => "Certification requesting..." do
+      %i.icon-plus{:style=>"margin-right: 0.25rem;"}
+      Twitter

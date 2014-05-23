@@ -1,15 +1,14 @@
-.col-sm-3
-  .form-service
-    = image_tag image_path("services/facebook.png"), class: "icon"
-    %h3 Facebook
-    %p Facebook is a social utility that connects people with friends and others who work, study and live around them.
-    - if !service.nil? && current_user.services.any?{|service| service.provider == "facebook"}
-      - if params[:action] == 'new'
-        = link_to edit_service_path(service), class: "btn btn-new" do
-          %i.icon-pencil{:style=>"margin-right: 0.25rem;"}
-          Connected to
-          = service.info.name
-    - else
-      = link_to "/users/auth/facebook", class: "btn btn-new", :disable_with => "Certification requesting..." do
-        %i.icon-plus{:style=>"margin-right: 0.25rem;"}
-        Facebook
+.form-service
+  = image_tag image_path("services/facebook.png"), class: "icon"
+  %h3 Facebook
+  %br
+  - if !service.nil? && current_user.services.any?{|service| service.provider == "facebook"}
+    - if params[:action] == 'new'
+      = link_to edit_service_path(service), class: "btn btn-new" do
+        %i.icon-pencil{:style=>"margin-right: 0.25rem;"}
+        Connected to
+        = service.info.name
+  - else
+    = link_to "/users/auth/facebook", class: "btn btn-new", :disable_with => "Certification requesting..." do
+      %i.icon-plus{:style=>"margin-right: 0.25rem;"}
+      Facebook
