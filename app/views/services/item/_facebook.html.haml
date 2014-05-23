@@ -5,14 +5,13 @@
       = connected_title(service)
     - else
       Facebook
-  %p.light Social utility that connects people with friends and others.
   %br
   - if !service.nil? && current_user.services.any?{|service| service.provider == "facebook"}
     - if params[:action] == 'new'
       = link_to edit_service_path(service), class: "btn btn-new" do
         %i.icon-pencil{:style=>"margin-right: 0.25rem;"}
-        Facebook
+        Edit
   - else
     = link_to "/users/auth/facebook", class: "btn btn-new", :disable_with => "Certification requesting..." do
       %i.icon-plus{:style=>"margin-right: 0.25rem;"}
-      Facebook
+      Add

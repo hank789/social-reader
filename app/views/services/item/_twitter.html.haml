@@ -5,14 +5,13 @@
       = connected_title(service)
     - else
       Twitter
-  %p.light Social networking and microblogging service.
   %br
   - if !service.nil? && current_user.services.any?{|service| service.provider == "twitter"}
     - if params[:action] == 'new'
       = link_to edit_service_path(service), class: "btn btn-new" do
         %i.icon-pencil{:style=>"margin-right: 0.25rem;"}
-        Twitter
+        Edit
   - else
     = link_to "/users/auth/twitter", class: "btn btn-new", :disable_with => "Certification requesting..." do
       %i.icon-plus{:style=>"margin-right: 0.25rem;"}
-      Twitter
+      Add
