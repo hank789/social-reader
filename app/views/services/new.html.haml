@@ -7,8 +7,7 @@
 .row
   - Gitlab.config.services.each do |service|
     - unless service[1]["enable"] == false
-      .col-sm-3
-        = render "services/item/#{service[0].to_s}", service: nil
+      = render "services/item/#{service[0].to_s}", service: nil
 - if @services.count > 0
   %br
   %br
@@ -17,5 +16,4 @@
   %hr
   .row
     - for service in @services
-      .col-sm-3
-        = render "services/item/#{service.provider}", service: service
+      = render "services/item/#{service.provider}", service: service

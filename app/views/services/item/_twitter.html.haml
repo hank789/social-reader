@@ -1,6 +1,7 @@
 .form-service
   = image_tag image_path("services/twitter.png"), class: "icon"
-  %h3 Twitter
+  %h4 Twitter
+  %p.light Social networking and microblogging service.
   %br
   - if !service.nil? && current_user.services.any?{|service| service.provider == "twitter"}
     - if params[:action] == 'new'

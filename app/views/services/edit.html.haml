@@ -7,7 +7,7 @@
         .col-md-12
           %h3.page-title
             = image_tag image_path("services/#{@service.provider}.png"), class: "avatar s32"
-            = @service.provider.capitalize!
+            = connected_info(@service)
           %hr
           = render "priority_level", f: f, priority_level: @service.priority, can_change_priority_level: true
           %hr
