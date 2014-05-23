@@ -55,7 +55,6 @@ class FacebookService < Service
     event.user_id = self.user_id
     event.action = Event::UNREAD
     event.author_id = author.id
-    event.favourite = 0
     event.created_at = tweet['created_time']
     event.updated_at = tweet['created_time']
     event.save

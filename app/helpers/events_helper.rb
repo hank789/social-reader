@@ -108,7 +108,7 @@ module EventsHelper
     return "" if current_user.blank?
     icon = content_tag(:i, "", :class => "icon-star-empty")
     link_title = "star"
-    if event.favourite == 1
+    if event.stars_at
       icon = content_tag(:i, "", :class => "icon-star")
       link_title = "unstar"
     end

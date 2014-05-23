@@ -14,7 +14,7 @@
 
 class Event < ActiveRecord::Base
   attr_accessible :project, :action, :user_id,
-                  :post_id, :service_id, :action, :author_id, :favourite
+                  :post_id, :service_id, :action, :author_id, :stars_at
 
   validates_uniqueness_of :post_id, :scope => :user_id
 
@@ -28,7 +28,7 @@ class Event < ActiveRecord::Base
   # Scopes
   scope :recent, -> { order("created_at DESC") }
   scope :load_events, ->(user_ids) { where(user_id: user_ids).recent }
-  scope :load_star_events, ->(user_ids) { where(user_id: user_ids, favourite: 1).recent }
+  scope :load_star_events, ->(user_ids) { where(user_id: user_ids).where.not(stars_at: nil).recent }
 
   def read?
     action == READ
@@ -48,13 +48,13 @@ class Event < ActiveRecord::Base
   end
 
   def favorite
-    return true if self.favourite == 1
-    self.update_attribute(:favourite, 1)
+    return true if self.stars_at
+    self.update_attribute(:stars_at, Time.now)
     self.post.update_attribute(:favourite_count, self.post.favourite_count + 1)
   end
   def unfavorite
-    return true if self.favourite == 0
-    self.update_attribute(:favourite, 0)
+    return true if self.stars_at.nil?
+    self.update_attribute(:stars_at, nil)
     self.post.update_attribute(:favourite_count, self.post.favourite_count - 1)
   end
 end

@@ -29,7 +29,7 @@ class InitSchema < ActiveRecord::Migration
       t.integer  "action"
       t.integer  "user_id"
       t.integer  "author_id"
-      t.integer  "favourite", default: 0
+      t.datetime  "stars_at"
     end
 
     add_index "events", ["action"], name: "index_events_on_action", using: :btree
@@ -38,7 +38,7 @@ class InitSchema < ActiveRecord::Migration
     add_index "events", ["service_id"], name: "index_events_on_service_id", using: :btree
     add_index "events", ["post_id"], name: "index_events_on_post_id", using: :btree
     add_index "events", ["author_id"], name: "index_events_on_author_id", using: :btree
-    add_index "events", ["favourite"], name: "index_events_on_favourite", using: :btree
+    add_index "events", ["stars_at"], name: "index_events_on_stars_at", using: :btree
 
     create_table "posts", force: true do |t|
       t.string   "title"
