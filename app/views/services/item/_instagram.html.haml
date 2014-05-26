@@ -1,0 +1,17 @@
+.form-service
+  = image_tag image_path("services/instagram.png"), class: "icon"
+  %h4
+    - if !service.nil? && current_user.services.any?{|service| service.provider == "instagram"}
+      = connected_title(service)
+    - else
+      Instagram
+  %br
+  - if !service.nil? && current_user.services.any?{|service| service.provider == "instagram"}
+    - if params[:action] == 'new'
+      = link_to edit_service_path(service), class: "btn btn-new" do
+        %i.icon-pencil{:style=>"margin-right: 0.25rem;"}
+        Edit
+  - else
+    = link_to "/users/auth/instagram", class: "btn btn-new", :disable_with => "Certification requesting..." do
+      %i.icon-plus{:style=>"margin-right: 0.25rem;"}
+      Add

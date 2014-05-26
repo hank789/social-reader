@@ -5,10 +5,12 @@ module EventsHelper
   end
 
   def event_action_name(event)
-    #target = 'project'
-
-    #[event.action_name, target].join(" ")
-    raw "via <a href='#{event.post.link}' target='_blank'>#{event.service.provider}</a> base <a href='#{event.service.info.urls[event.service.provider.capitalize!]}' target='_blank'>#{event.service.info.name}</a>"
+    case event.service.provider
+      when 'instagram'
+        return raw "via <a href='#{event.post.link}' target='_blank'>#{event.service.provider}</a> base <a href='http://instagram.com/#{event.service.info.nickname}' target='_blank'>#{event.service.info.name}</a>"
+      else
+        return raw "via <a href='#{event.post.link}' target='_blank'>#{event.service.provider}</a> base <a href='#{event.service.info.urls[event.service.provider.capitalize!]}' target='_blank'>#{event.service.info.name}</a>"
+    end
   end
 
   def event_filter_link key, tooltip
@@ -45,7 +47,7 @@ module EventsHelper
     case event.post.provider
       when "twitter"
         twitter_title(event.post.data)
-      when "facebook"
+      else
         event.post.description
     end
   end

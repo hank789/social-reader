@@ -8,15 +8,15 @@ class ServicePullWorker
     last_item = items.first
     if last_item && last_item['id']
       case service.provider
-        when 'twitter'
-          service.since_id = last_item['id']
         when 'facebook'
           service.since_id = last_item['created_time'].to_datetime.to_i
+        else
+          service.since_id = last_item['id']
       end
       service.last_unread_count += items.count
       service.save
     end
-    # items = items.reverse
+    items = items.reverse
     items.each do |item|
       service.post item
     end

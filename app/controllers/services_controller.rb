@@ -63,6 +63,16 @@ class ServicesController < ApplicationController
     redirect_to new_service_url
   end
 
+  def test
+    service = Service.find_by_id(4)
+    items=service.get_home_timeline_items(service.since_id)
+    last_item = items.first
+    items = items.reverse
+    items.each do |item|
+      service.post item
+    end
+  end
+
   private
 
   def abort_if_already_authorized
