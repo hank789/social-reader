@@ -22,6 +22,10 @@ class ServicesController < ApplicationController
     if exist_service
       exist_service.active = 1
       exist_service.last_activity_at = Time.now
+      exist_service.uid = service.uid
+      exist_service.access_token = service.access_token
+      exist_service.access_secret = service.access_secret
+      exist_service.info = service.info
       exist_service.save
       ServicePullWorker.perform_async(exist_service.id)
       redirect_to edit_service_path(exist_service)
@@ -61,16 +65,6 @@ class ServicesController < ApplicationController
     @service.save
     flash[:notice] = 'Successfully deleted authentication.'
     redirect_to new_service_url
-  end
-
-  def test
-    service = Service.find_by_id(4)
-    items=service.get_home_timeline_items(service.since_id)
-    last_item = items.first
-    items = items.reverse
-    items.each do |item|
-      service.post item
-    end
   end
 
   private

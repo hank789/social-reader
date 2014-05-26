@@ -130,6 +130,9 @@ class InitSchema < ActiveRecord::Migration
     add_index "authors", ["slug"], name: "index_authors_on_slug", using: :btree
     add_index "authors", ["guid","provider"], name: "index_authors_on_guid_and_provider", using: :btree
 
+    execute %{ALTER TABLE authors MODIFY name varchar(255) COLLATE utf8mb4_general_ci}
+    execute %{ALTER TABLE authors MODIFY data text COLLATE utf8mb4_general_ci}
+
     create_table "services", force: true do |t|
       t.string   "service_name"
       t.string   "uid"

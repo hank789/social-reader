@@ -112,7 +112,7 @@ module EventsHelper
       EventFilter.normal => "icon-coffee",
       EventFilter.low     => "icon-beer",
       EventFilter.favourite     => "icon-star",
-      EventStarFilter.posttime     => "icon-star",
+      EventStarFilter.posttime     => "icon-rss",
       EventStarFilter.startime     => "icon-star",
     }
   end
