@@ -167,6 +167,10 @@ gem 'twitter', '~> 5.8.0'
 gem "koala", "~> 1.10.0rc"
 gem 'instagram', '~> 1.0.0'
 
+# rss
+gem "feedbag", "~> 0.9.2"
+gem "feedjira", "~> 1.3.0"
+
 group :development do
   gem "annotate", "~> 2.6.0.beta2"
   gem "letter_opener"

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140515071535) do
+ActiveRecord::Schema.define(version: 20140527224769) do
 
   create_table "authors", force: true do |t|
     t.datetime "created_at"
@@ -58,15 +58,15 @@ ActiveRecord::Schema.define(version: 20140515071535) do
     t.integer  "action"
     t.integer  "user_id"
     t.integer  "author_id"
-    t.integer  "favourite",  default: 0
+    t.datetime "stars_at"
   end
 
   add_index "events", ["action"], name: "index_events_on_action", using: :btree
   add_index "events", ["author_id"], name: "index_events_on_author_id", using: :btree
   add_index "events", ["created_at"], name: "index_events_on_created_at", using: :btree
-  add_index "events", ["favourite"], name: "index_events_on_favourite", using: :btree
   add_index "events", ["post_id"], name: "index_events_on_post_id", using: :btree
   add_index "events", ["service_id"], name: "index_events_on_service_id", using: :btree
+  add_index "events", ["stars_at"], name: "index_events_on_stars_at", using: :btree
   add_index "events", ["user_id"], name: "index_events_on_user_id", using: :btree
 
   create_table "photos", force: true do |t|
@@ -98,6 +98,40 @@ ActiveRecord::Schema.define(version: 20140515071535) do
 
   add_index "posts", ["author_id"], name: "index_posts_on_author_id", using: :btree
   add_index "posts", ["guid", "provider"], name: "index_posts_on_guid_and_provider", unique: true, using: :btree
+
+  create_table "rss_categories", force: true do |t|
+    t.string   "name"
+    t.integer  "parent_id"
+    t.string   "description"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "status"
+  end
+
+  add_index "rss_categories", ["parent_id"], name: "index_rss_categories_on_parent_id", using: :btree
+
+  create_table "rss_feeds", force: true do |t|
+    t.string   "name"
+    t.string   "url"
+    t.datetime "last_fetched"
+    t.string   "last_fetched_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "status"
+  end
+
+  add_index "rss_feeds", ["name"], name: "index_rss_feeds_on_name", unique: true, using: :btree
+  add_index "rss_feeds", ["url"], name: "index_rss_feeds_on_url", unique: true, using: :btree
+
+  create_table "rss_feeds_rss_categories", force: true do |t|
+    t.integer  "rss_feed_id"
+    t.integer  "rss_category_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "rss_feeds_rss_categories", ["rss_category_id"], name: "index_rss_feeds_rss_categories_on_rss_category_id", using: :btree
+  add_index "rss_feeds_rss_categories", ["rss_feed_id"], name: "index_rss_feeds_rss_categories_on_rss_feed_id", using: :btree
 
   create_table "services", force: true do |t|
     t.string   "service_name"

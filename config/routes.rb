@@ -57,7 +57,7 @@ Gitlab::Application.routes.draw do
     resources :broadcast_messages, only: [:index, :create, :destroy]
     resource :logs, only: [:show]
     resource :background_jobs, controller: 'background_jobs', only: [:show]
-
+    resources :rss_feeds
     resources :services, constraints: { id: /[a-zA-Z.\/0-9_\-]+/ }, only: [:index, :show] do
 
     end
@@ -114,6 +114,7 @@ Gitlab::Application.routes.draw do
 
   devise_for :users, controllers: { omniauth_callbacks: :omniauth_callbacks, registrations: :registrations , passwords: :passwords}
   get 'services/test' => "services#test"
+  get 'services/rssfeed/:id' => "services#add_rss_feed"
   resources :services
   controller :services do
     scope "/users/auth", :as => "auth" do

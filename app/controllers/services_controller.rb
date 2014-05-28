@@ -6,7 +6,7 @@ class ServicesController < ApplicationController
   before_action :authenticate_user!
   before_action :abort_if_already_authorized, :abort_if_read_only_access, :only => :create
   before_action :check_service_active, :only => [:edit , :update]
-  before_filter :set_title, only: [:index, :new, :create, :edit, :update]
+  before_filter :set_title, only: [:index, :new, :create, :edit, :update, :add_rss_feed]
 
   respond_to :html
 
@@ -15,6 +15,17 @@ class ServicesController < ApplicationController
   end
   def new
     @services = current_user.services
+    @feeds = RssFeed.list
+    @rss_categories = RssCategory.parent_category
+  end
+
+  def add_rss_feed
+    @rss_category = RssCategory.find(params[:id])
+    @rss_child_categories = RssCategory.child_category(params[:id])
+    @service = Service.new
+    @service.nickname = 5
+    @service.priority = Service::IMPORTANT
+
   end
   def create
     service = Service.initialize_from_omniauth( omniauth_hash )
@@ -65,6 +76,11 @@ class ServicesController < ApplicationController
     @service.save
     flash[:notice] = 'Successfully deleted authentication.'
     redirect_to new_service_url
+  end
+
+  def test
+
+
   end
 
   private

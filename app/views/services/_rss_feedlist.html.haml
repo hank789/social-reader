@@ -1,0 +1,10 @@
+.form-group.project-visibility-level-holder
+  = f.label :feeds, class: 'control-label' do
+    RSS Source
+  .col-sm-10
+    - rss_category.rss_feeds.each do |level|
+      .radio
+        = label :feed, level.id do
+          = content_tag :i, nil, class: 'icon-rss'
+          .option-title
+            = level.name

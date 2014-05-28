@@ -1,0 +1,20 @@
+.row
+  .col-md-12
+    .ui-box
+      .title
+        Feeds (#{@feeds.count})
+        .pull-right
+          = link_to 'New Feed', new_admin_rss_feed_path, class: "btn btn-new"
+      %ul.well-list
+        - @rss_feeds_rss_categories.each do |feed|
+          %li
+            .list-item-name
+              = feed.rss_feed.name
+            .pull-right
+              %span.light
+                = feed.rss_category.name
+              &nbsp;
+              - if feed.rss_feed.status == 0
+                = link_to 'Unblock', "#", method: :put, class: "btn btn-small success"
+              - else
+                = link_to 'Block', "#", data: {confirm: 'USER WILL BE BLOCKED! Are you sure?'}, method: :put, class: "btn btn-small btn-remove"

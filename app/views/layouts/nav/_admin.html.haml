@@ -6,6 +6,8 @@
     = link_to "Service", admin_services_path
   = nav_link(controller: :users) do
     = link_to "Users", admin_users_path
+  = nav_link(controller: :rss_feeds) do
+    = link_to "RSS", admin_rss_feeds_path
   = nav_link(controller: :logs) do
     = link_to "Logs", admin_logs_path
   = nav_link(controller: :broadcast_messages) do
