@@ -114,8 +114,15 @@ Gitlab::Application.routes.draw do
 
   devise_for :users, controllers: { omniauth_callbacks: :omniauth_callbacks, registrations: :registrations , passwords: :passwords}
   get 'services/test' => "services#test"
-  get 'services/rssfeed/:id' => "services#add_rss_feed"
-  resources :services
+  get 'services/rssfeeds/:id' => "rssfeeds#add_rss_feed"
+  resources :services do
+
+  end
+  scope 'services' do
+    resources :rssfeeds, only: [:update] do
+
+    end
+  end
   controller :services do
     scope "/users/auth", :as => "auth" do
       get ':provider/callback' => :create

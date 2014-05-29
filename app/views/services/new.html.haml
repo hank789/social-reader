@@ -15,7 +15,7 @@
     - unless service[1]["enable"] == false
       = render "services/item/#{service[0].to_s}", service: nil
   - @rss_categories.each do |category|
-    - unless current_user.services.any?{|service| service.provider.include? category.id.to_s + "_"}
+    - unless current_user.services.any?{|service| service.provider == category.id.to_s}
       = render "services/item/rss_feed", category: category
 
 - if @services.count > 0
@@ -28,7 +28,7 @@
   %hr
   .row
     - for service in @services
-      = render "services/item/#{service.provider}", service: service
+      = render "services/item/#{service.provider}", service: service unless service.service_name == 'RssFeedService'
     - @rss_categories.each do |category|
-      - if current_user.services.any?{|service| service.provider.include? category.id.to_s + "_"}
-        = render "services/item/rss_feed}", category: category
+      - if current_user.services.any?{|service| service.provider == category.id.to_s}
+        = render "services/item/rss_feed", category: category

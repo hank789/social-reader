@@ -4,7 +4,7 @@
   .col-sm-10
     - rss_child_categories.each do |level|
       .radio
-        = f.radio_button :select_feed, level.id, checked: (select_feed == level.id)
+        = f.radio_button :select_feed, level.id, checked: (select_feed == level.id.to_s)
         = label :select_feed, level.id do
           = content_tag :i, nil, class: 'icon-rss'
           .option-title

@@ -2,7 +2,7 @@
   .project-edit-errors
     = render 'services/errors'
   .project-edit-content
-    = form_for @service, url: service_path, html: { class: 'form-horizontal' } do |f|
+    = form_for @service, url: rssfeed_path,:method => :put, html: { class: 'form-horizontal' } do |f|
       .row
         .col-md-12
           %h3.page-title
@@ -14,10 +14,10 @@
             - else
               = render "rss_feedlist", f: f, rss_child_categories: @rss_child_categories, rss_category: @rss_category
           %hr
-          = render "priority_level", f: f, priority_level: @service.priority, can_change_priority_level: true
+          = render "services/priority_level", f: f, priority_level: @service.priority, can_change_priority_level: true
           %hr
 
           .form-actions
             = f.submit 'Save service', class: "btn btn-create project-submit", tabindex: 4
             - if @service.id
-              = link_to "Disconnect #{@rss_category.name}", service_path(@service), class: "btn btn-remove", :data => { :confirm => "Disconnect #{@service.provider}?" }, :method => :delete
+              = link_to "Disconnect #{@rss_category.name}", rssfeed_path(@service), class: "btn btn-remove", :data => { :confirm => "Disconnect #{@rss_category.name}?" }, :method => :delete

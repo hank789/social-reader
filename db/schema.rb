@@ -106,6 +106,7 @@ ActiveRecord::Schema.define(version: 20140527224769) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "status"
+    t.integer  "select_type", default: 0
   end
 
   add_index "rss_categories", ["parent_id"], name: "index_rss_categories_on_parent_id", using: :btree

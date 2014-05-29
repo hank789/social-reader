@@ -10,8 +10,12 @@ class ServicePullWorker
       case service.provider
         when 'facebook'
           service.since_id = last_item['created_time'].to_datetime.to_i
-        else
+        when 'twitter'
           service.since_id = last_item['id']
+        when 'instagram'
+          service.since_id = last_item['id']
+        else
+          service.since_id = last_item['created_at'].to_datetime
       end
       service.last_unread_count += items.count
       service.save

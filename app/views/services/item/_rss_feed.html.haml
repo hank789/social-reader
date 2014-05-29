@@ -3,12 +3,12 @@
   %h4
     = category.name
   %br
-  - if current_user.services.any?{|service| service.provider.include? category.id.to_s + "_"}
+  - if current_user.services.any?{|service| service.provider == category.id.to_s}
     - if params[:action] == 'new'
-      = link_to edit_service_path(service), class: "btn btn-new" do
+      = link_to "/services/rssfeeds/#{category.id}", class: "btn btn-new" do
         %i.icon-pencil{:style=>"margin-right: 0.25rem;"}
         Edit
   - else
-    = link_to "/services/rssfeed/#{category.id}", class: "btn btn-new", :disable_with => "Certification requesting..." do
+    = link_to "/services/rssfeeds/#{category.id}", class: "btn btn-new", :disable_with => "Certification requesting..." do
       %i.icon-plus{:style=>"margin-right: 0.25rem;"}
       Add

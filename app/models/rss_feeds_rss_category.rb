@@ -15,6 +15,8 @@ class RssFeedsRssCategory < ActiveRecord::Base
   validates :rss_category_id, presence: true
   validates :rss_feed_id, uniqueness: { scope: [:rss_category_id], message: "already exists in group" }
 
+  scope :get_rss_feeds_by_cid, ->(cid) { where(rss_category_id: cid) }
+
   def self.list
     RssFeedsRssCategory.order('rss_category_id DESC')
   end

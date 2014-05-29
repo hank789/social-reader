@@ -5,8 +5,10 @@ module EventsHelper
   end
 
   def event_action_name(event)
-    case event.service.provider
-      when 'instagram'
+    case event.service.service_name
+      when 'RssFeedService'
+        return raw "via <a href='#{event.post.link}' target='_blank'>#{event.service.provider}</a> base <a href='http://instagram.com/#{event.service.nickname}' target='_blank'>#{event.service.service_name}</a>"
+      when 'InstagramService'
         return raw "via <a href='#{event.post.link}' target='_blank'>#{event.service.provider}</a> base <a href='http://instagram.com/#{event.service.info.nickname}' target='_blank'>#{event.service.info.name}</a>"
       else
         return raw "via <a href='#{event.post.link}' target='_blank'>#{event.service.provider}</a> base <a href='#{event.service.info.urls[event.service.provider.capitalize!]}' target='_blank'>#{event.service.info.name}</a>"

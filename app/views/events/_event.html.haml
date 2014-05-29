@@ -7,5 +7,8 @@
   = cache event do
     .event-avatar
       = image_tag event.post.author.avatar, class: "avatar s32", alt:''
-    = render "events/event/common", event: event
+    - if event.service.service_name == 'RssFeedService'
+      = render "events/event/rss", event: event
+    -else
+      = render "events/event/common", event: event
 

@@ -2,11 +2,26 @@ class FetchFeedWorker
   include Sidekiq::Worker
   sidekiq_options :retry => false
 
-  def perform(feed_id)
+  def perform(feed_id=nil)
+    if feed_id
+      fetch_feed(feed_id)
+    else
+      feeds = RssFeed.all
+      feeds.each do |feed|
+        fetch_feed(feed.id)
+      end
+    end
+  end
+
+  def log(message)
+    Gitlab::GitLogger.error("FetchFeedWorker: #{message}")
+  end
+
+  def fetch_feed(feed_id)
     feed = RssFeed.find(feed_id)
-    raw_feed = Feedjira::Feed.fetch_and_parse(feed.url, if_modified_since: feed.last_fetched)
+    raw_feed = Feedjira::Feed.fetch_and_parse(feed.url, if_modified_since: feed.last_fetched, timeout: 60, max_redirects: 2)
     count = 0
-    if raw_feed == 304
+    if raw_feed == 304 || raw_feed == 0
       log("#{feed.url} has not been modified since last fetch")
     else
       new_entries_from(raw_feed,feed).each do |entry|
@@ -16,11 +31,6 @@ class FetchFeedWorker
       end
       RssFeed.update_last_fetched(feed, raw_feed.last_modified)
     end
-
-  end
-
-  def log(message)
-    Gitlab::GitLogger.error("FetchFeedWorker: #{message}")
   end
 
   private
@@ -30,8 +40,7 @@ class FetchFeedWorker
 
     stories = []
     raw_feed.entries.each do |story|
-      break if feed.last_fetched_id && story.id == feed.last_fetched_id
-
+      #break if feed.last_fetched_id && story.id == feed.last_fetched_id
       stories << story unless story.published &&
           story.published < feed.last_fetched
     end

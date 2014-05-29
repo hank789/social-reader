@@ -63,7 +63,7 @@ class Post < ActiveRecord::Base
       author.guid = feed.url
       author.slug = feed.url
       # author.remote_avatar_url = profile_photo_url(tweet['from']['id'])
-      author.profile_url = feed.url.split('/')[2]
+      author.profile_url = "http://" + feed.url.split('/')[2]
 
       if !author.save
         author_exist = Author.find_last_by_provider_and_guid(feed.id,feed.url)
