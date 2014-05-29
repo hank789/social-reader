@@ -34,8 +34,13 @@
       %hr
       - @services.each do |service|
         %p
-          = service.provider
+          - if service.service_name == 'RssFeedService'
+            - @rss_feeds.each do |rss_feed|
+              = rss_feed.name unless rss_feed.id != service.access_token.to_i
+          - else
+            = service.service_name
           %span.light.pull-right
+            = service.user.name
             #{time_ago_with_tooltip(service.created_at)}
 
     .col-md-4
