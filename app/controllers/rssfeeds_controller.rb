@@ -53,6 +53,7 @@ class RssfeedsController < ApplicationController
     @service = Service.new
     if current_user.services.any?{|service_item| service_item.provider == @rss_category.id.to_s}
       service_item = Service.where(user_id: current_user.id, provider: params[:id]).first
+      @service.id = params[:id]
       @service.nickname = service_item.nickname
       @service.priority = service_item.priority
     else
@@ -60,6 +61,12 @@ class RssfeedsController < ApplicationController
       @service.priority = Service::IMPORTANT
     end
 
+  end
+
+  def destroy
+    Service.where(user_id: current_user.id, provider: params[:id]).update_all(active: 0)
+    flash[:notice] = 'Successfully removed service.'
+    redirect_to new_service_url
   end
 
   private

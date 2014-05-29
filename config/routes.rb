@@ -120,7 +120,7 @@ Gitlab::Application.routes.draw do
 
   end
   scope 'services' do
-    resources :rssfeeds, only: [:update] do
+    resources :rssfeeds, only: [:update, :destroy] do
 
     end
   end
