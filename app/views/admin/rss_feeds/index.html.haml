@@ -4,7 +4,7 @@
       .title
         Feeds (#{@feeds.count})
         .pull-right
-          = link_to 'New Feed', new_admin_rss_feed_path, class: "btn btn-new"
+          = link_to 'New Feed', "#", class: "btn btn-new"
       %ul.well-list
         - @rss_feeds_rss_categories.each do |feed|
           %li

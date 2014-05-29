@@ -57,6 +57,7 @@ Gitlab::Application.routes.draw do
     resources :broadcast_messages, only: [:index, :create, :destroy]
     resource :logs, only: [:show]
     resource :background_jobs, controller: 'background_jobs', only: [:show]
+    get "rss_feeds/fetch_posts" => "rss_feeds#fetch_posts"
     resources :rss_feeds
     resources :services, constraints: { id: /[a-zA-Z.\/0-9_\-]+/ }, only: [:index, :show] do
 

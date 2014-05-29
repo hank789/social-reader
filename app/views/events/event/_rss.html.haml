@@ -1,10 +1,7 @@
 .event-title
-  %span.author_name= link_to_author event
+  %span.event_label
+    = link_to_rss event
 .event-body
-  %strong= raw event_title(event)
-
-- if event.post.photos.count >= 1
-  .event-body
-    .event-note
-      - event.post.photos.each do |photo|
-        = image_tag photo.image.url
+  .event-note
+    .md.rss_body
+      = event_note(event.post.description)

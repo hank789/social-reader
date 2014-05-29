@@ -39,6 +39,7 @@ class InitSchema < ActiveRecord::Migration
     add_index "events", ["post_id"], name: "index_events_on_post_id", using: :btree
     add_index "events", ["author_id"], name: "index_events_on_author_id", using: :btree
     add_index "events", ["stars_at"], name: "index_events_on_stars_at", using: :btree
+    add_index "events", ["post_id","user_id"], name: "index_events_on_post_id_and_user_id", unique: true, using: :btree
 
     create_table "posts", force: true do |t|
       t.string   "title"
@@ -128,7 +129,7 @@ class InitSchema < ActiveRecord::Migration
     end
 
     add_index "authors", ["slug"], name: "index_authors_on_slug", using: :btree
-    add_index "authors", ["guid","provider"], name: "index_authors_on_guid_and_provider", using: :btree
+    add_index "authors", ["guid","provider"], name: "index_authors_on_guid_and_provider", unique: true, using: :btree
 
     execute %{ALTER TABLE authors MODIFY name varchar(255) COLLATE utf8mb4_general_ci}
     execute %{ALTER TABLE authors MODIFY data text COLLATE utf8mb4_general_ci}
@@ -157,7 +158,7 @@ class InitSchema < ActiveRecord::Migration
     add_index "services", ["user_id"], name: "index_services_on_user_id", using: :btree
     add_index "services", ["priority"], name: "index_services_on_priority", using: :btree
     add_index "services", ["active"], name: "index_services_on_active", using: :btree
-    add_index "services", ["uid","service_name"], name: "index_services_on_uid_and_service_name", using: :btree
+    add_index "services", ["uid","service_name"], name: "index_services_on_uid_and_service_name", unique: true, using: :btree
 
     create_table "photos", force: true do |t|
       t.string   "image"
@@ -169,7 +170,7 @@ class InitSchema < ActiveRecord::Migration
     end
 
     add_index "photos", ["post_id"], name: "index_photos_on_post_id", using: :btree
-    add_index "photos", ["post_id","image"], name: "index_photos_on_post_id_and_image", using: :btree
+    add_index "photos", ["post_id","image"], name: "index_photos_on_post_id_and_image", unique: true, using: :btree
     add_index "photos", ["provider"], name: "index_photos_on_provider", using: :btree
 
     create_table "snippets", force: true do |t|

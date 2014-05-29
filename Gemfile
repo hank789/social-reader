@@ -98,7 +98,7 @@ gem "acts-as-taggable-on", '~> 3.2.1'
 # Background jobs
 gem 'slim'
 gem 'sinatra', require: nil
-gem 'sidekiq', '~> 3.0.2'
+gem 'sidekiq', '~> 3.1.2'
 
 # HTTP requests
 gem "httparty"
@@ -170,6 +170,8 @@ gem 'instagram', '~> 1.0.0'
 # rss
 gem "feedbag", "~> 0.9.2"
 gem "feedjira", "~> 1.3.0"
+
+gem 'truncate_html', '~> 0.9.2'
 
 group :development do
   gem "annotate", "~> 2.6.0.beta2"

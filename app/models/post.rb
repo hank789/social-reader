@@ -62,7 +62,7 @@ class Post < ActiveRecord::Base
       author.name = feed.name
       author.guid = feed.url
       author.slug = feed.url
-      # author.remote_avatar_url = profile_photo_url(tweet['from']['id'])
+      author.remote_avatar_url = "https://plus.google.com/_/favicon?domain=#{feed.url.split('/')[2]}"
       author.profile_url = "http://" + feed.url.split('/')[2]
 
       if !author.save

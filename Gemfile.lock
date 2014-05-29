@@ -453,7 +453,7 @@ GEM
     sexp_processor (4.4.0)
     shoulda-matchers (2.1.0)
       activesupport (>= 3.0.0)
-    sidekiq (3.0.2)
+    sidekiq (3.1.2)
       celluloid (>= 0.15.2)
       connection_pool (>= 2.0.0)
       json
@@ -517,6 +517,7 @@ GEM
     treetop (1.4.15)
       polyglot
       polyglot (>= 0.3.1)
+    truncate_html (0.9.2)
     turbolinks (2.0.0)
       coffee-rails
     twitter (5.8.0)
@@ -648,7 +649,7 @@ DEPENDENCIES
   select2-rails
   settingslogic
   shoulda-matchers (~> 2.1.0)
-  sidekiq (~> 3.0.2)
+  sidekiq (~> 3.1.2)
   simplecov
   sinatra
   six
@@ -663,6 +664,7 @@ DEPENDENCIES
   test_after_commit
   therubyracer
   thin
+  truncate_html (~> 0.9.2)
   turbolinks
   twitter (~> 5.8.0)
   uglifier

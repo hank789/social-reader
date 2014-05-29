@@ -15,9 +15,9 @@ class RssFeedService < Service
 
   def get_home_timeline_items(since_id)
     if since_id.nil?
-      posts = Post.where(provider: self.access_token)
+      posts = Post.where(provider: self.access_token).order("created_at DESC")
     else
-      posts = Post.where(provider: self.access_token).where("created_at > ?", since_id)
+      posts = Post.where(provider: self.access_token).where("created_at > ?", since_id).order("created_at DESC")
     end
     posts
   end

@@ -70,12 +70,6 @@ class ServicesController < ApplicationController
     redirect_to new_service_url
   end
 
-  def test
-     item = FetchFeedWorker.new
-     item.perform
-
-  end
-
   private
 
   def abort_if_already_authorized

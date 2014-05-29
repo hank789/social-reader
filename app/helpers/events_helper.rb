@@ -4,10 +4,19 @@ module EventsHelper
     link_to author.name, author.profile_url, :target => "_blank"
   end
 
+  def author_avatar(event)
+    case event.service.service_name
+      when 'RssFeedService'
+        return image_tag "https://plus.google.com/_/favicon?domain=#{event.post.author.profile_url.split('/')[2]}", class: "avatar s32", alt:''
+      else
+        return image_tag event.post.author.avatar, class: "avatar s32", alt:''
+    end
+  end
+
   def event_action_name(event)
     case event.service.service_name
       when 'RssFeedService'
-        return raw "via <a href='#{event.post.link}' target='_blank'>#{event.service.provider}</a> base <a href='http://instagram.com/#{event.service.nickname}' target='_blank'>#{event.service.service_name}</a>"
+        return raw "via <a href='#{event.post.author.profile_url}' target='_blank'>#{event.post.author.name}</a>"
       when 'InstagramService'
         return raw "via <a href='#{event.post.link}' target='_blank'>#{event.service.provider}</a> base <a href='http://instagram.com/#{event.service.info.nickname}' target='_blank'>#{event.service.info.name}</a>"
       else
@@ -120,9 +129,14 @@ module EventsHelper
   end
 
   def event_note(text)
-    text = first_line(text)
-    text = truncate(text, length: 150)
-    sanitize(markdown(text), tags: %w(a img b pre p))
+    #text = first_line(text)
+    #text = text.gsub! '<br>', ''
+    #text = truncate(text, length: 360)
+    sanitize(truncate_html(text, length: 250, omission: '...'))
+  end
+
+  def link_to_rss(event)
+    raw "<a href='#{event.post.link}' target='_blank'>#{event.post.title}</a>"
   end
 
   def favorite_tag(event)

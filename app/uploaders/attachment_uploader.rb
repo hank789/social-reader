@@ -10,7 +10,7 @@ class AttachmentUploader < CarrierWave::Uploader::Base
   end
 
   def image?
-    img_ext = %w(png jpg jpeg gif bmp tiff)
+    img_ext = %w(png jpg jpeg gif bmp tiff ico)
     if file.respond_to?(:extension)
       img_ext.include?(file.extension.downcase)
     else

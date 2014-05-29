@@ -18,7 +18,7 @@ class RssFeed < ActiveRecord::Base
   MIN_YEAR = 1970
 
   def self.list
-    RssFeed.where(status: 1)
+    RssFeed.all
   end
 
   def self.fetch(id)

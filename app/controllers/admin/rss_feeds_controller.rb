@@ -15,4 +15,9 @@ class Admin::RssFeedsController < Admin::ApplicationController
 
   end
 
+  def fetch_posts
+    FetchFeedWorker.perform_async
+    redirect_to admin_rss_feeds_path
+  end
+
 end

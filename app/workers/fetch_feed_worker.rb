@@ -11,6 +11,7 @@ class FetchFeedWorker
         fetch_feed(feed.id)
       end
     end
+    FetchFeedWorker.perform_in(3.hours)
   end
 
   def log(message)
@@ -35,6 +36,7 @@ class FetchFeedWorker
 
   private
   def new_entries_from(raw_feed,feed)
+    return [] if raw_feed.is_a? Integer
     return [] if raw_feed.last_modified &&
         raw_feed.last_modified < feed.last_fetched
 
