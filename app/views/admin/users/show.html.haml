@@ -104,14 +104,17 @@
           %li All user content like authored posts, snippets, comments will be removed
           - rp = @user.services.count
           - unless rp.zero?
-            %li #{pluralize rp, 'personal project'} will be removed and cannot be restored
+            %li #{pluralize rp, 'personal service'} will be removed and cannot be restored
         %br
         = link_to 'Remove user', [:admin, @user], data: { confirm: "USER #{@user.name} WILL BE REMOVED! Are you sure?" }, method: :delete, class: "btn btn-remove"
 
     .ui-box
       .title Services (#{@services.count})
       %ul.well-list
-        - @services.each do |project|
+        - @services.each do |service|
           %li.users_project
-            = link_to "#", class: dom_class(project) do
-              = project.provider
+            - if service.service_name == 'RssFeedService'
+              - @rss_feeds.each do |rss_feed|
+                = rss_feed.name unless rss_feed.id != service.access_token.to_i
+            - else
+              = service.service_name

@@ -1,9 +1,9 @@
 class Admin::ServicesController < Admin::ApplicationController
 
   def index
-    @services = Service.order("created_at DESC").limit(10)
-    @users = User.order("created_at DESC").limit(10)
-    #@groups = Group.order("created_at DESC").limit(10)
+    @services = Service.filter(params[:filter])
+    @services = @services.by_user.page(params[:page])
+    @rss_feeds = RssFeed.all
   end
 
 end

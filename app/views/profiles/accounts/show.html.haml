@@ -70,8 +70,4 @@
           - rp = current_user.services.count
           - unless rp.zero?
             %li #{pluralize rp, 'service'} will be removed and cannot be restored
-          - if current_user.services.present?
-            %li
-              The following service will be abandoned. You should transfer or remove them:
-              %strong #{current_user.services.map(&:provider).join(', ')}
         = link_to 'Delete account', user_registration_path, data: { confirm: "REMOVE #{current_user.name}? Are you sure?" }, method: :delete, class: "btn btn-remove"

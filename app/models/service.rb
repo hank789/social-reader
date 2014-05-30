@@ -29,6 +29,10 @@ class Service < ActiveRecord::Base
   # For Hash only
   serialize :info
   default_scope { where(active: 1) }
+  scope :is_active, -> { where(active: 1) }
+  scope :inactive, -> { where(active: 0) }
+  scope :all_with_inactive, -> { where(active: [0,1]) }
+  scope :by_user, -> { order('user_id ASC') }
 
   IMPORTANT = 1
   NORMAL    = 2
@@ -90,6 +94,16 @@ class Service < ActiveRecord::Base
       }
     end
 
+    def filter filter_name
+      case filter_name
+        when "active"; self.is_active
+        when "inactive"; self.inactive
+        else
+          self.is_active
+      end
+    end
+
+
     def visibility_levels
       Gitlab::VisibilityLevel.options
     end
@@ -107,5 +121,13 @@ class Service < ActiveRecord::Base
 
   def low?
     priority == self.class::LOW
+  end
+
+  def active?
+    active
+  end
+
+  def post_count
+    Event.where(service_id: id, user_id: user_id).count
   end
 end

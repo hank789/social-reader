@@ -1,1 +1,36 @@
+.row
+  .col-md-3
+    .admin-filter
+      %ul.nav.nav-pills.nav-stacked
+        %li{class: "#{'active' unless params[:filter]}"}
+          = link_to admin_services_path do
+            Active
+            %small.pull-right= Service.is_active.count
+        %li{class: "#{'active' if params[:filter] == "inactive"}"}
+          = link_to admin_services_path(filter: "inactive") do
+            Inactive
+            %small.pull-right= Service.inactive.count
 
+  .col-md-9
+    .ui-box
+      .title
+        Services (#{Service.all_with_inactive.count})
+        .pull-right
+          User | Post Count | Priority | Visibility Level | Last Read Time
+      %ul.well-list
+        - @services.each do |service|
+          %li
+            .list-item-name
+              - if service.active?
+                %i.icon-check.cgreen
+              - else
+                %i.icon-lock.cred
+              - if service.service_name == 'RssFeedService'
+                - @rss_feeds.each do |rss_feed|
+                  = rss_feed.name unless rss_feed.id != service.access_token.to_i
+              - else
+                = raw service.service_name + "&nbsp;&nbsp;[#{service.nickname}]"
+            .pull-right
+              %span.light
+                = service.user.name + " | " + service.post_count.to_s + " | " + priority_level_label(service.priority) + " | " + visibility_level_label(service.visibility_level) + " | " + service.last_read_time.stamp('05/14/2014 12:13PM')
+    = paginate @services, theme: "gitlab"

@@ -9,6 +9,7 @@ class Admin::UsersController < Admin::ApplicationController
 
   def show
     @services = user.services
+    @rss_feeds = RssFeed.all
   end
 
   def new
