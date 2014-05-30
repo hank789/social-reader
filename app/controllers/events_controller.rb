@@ -3,12 +3,12 @@ class EventsController < ApplicationController
   before_action :load_event
 
   def favorite
-    @event.favorite
+    @event.favorite(current_user.id)
     render :text => "1"
   end
 
   def unfavorite
-    @event.unfavorite
+    @event.unfavorite(current_user.id)
     render :text => "1"
   end
 

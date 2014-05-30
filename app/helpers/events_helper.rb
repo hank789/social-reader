@@ -143,7 +143,12 @@ module EventsHelper
     return "" if current_user.blank?
     icon = content_tag(:i, "", :class => "icon-star-empty")
     link_title = "star"
-    if event.stars_at
+    if current_user.id != event.user_id
+      c_event = Event.where(user_id: current_user.id, post_id: event.post.id).first
+    else
+      c_event = nil
+    end
+    if (event.stars_at && current_user.id == event.user_id) || (c_event && c_event.stars_at)
       icon = content_tag(:i, "", :class => "icon-star")
       link_title = "unstar"
     end
