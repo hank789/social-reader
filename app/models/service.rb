@@ -31,6 +31,8 @@ class Service < ActiveRecord::Base
   default_scope { where(active: 1) }
   scope :is_active, -> { where(active: 1) }
   scope :inactive, -> { where(active: 0) }
+  scope :rss_type, -> { where(service_name: "RssFeedService") }
+  scope :social_type, -> { where.not(service_name: "RssFeedService") }
   scope :all_with_inactive, -> { where(active: [0,1]) }
   scope :by_user, -> { order('user_id ASC') }
 
@@ -98,6 +100,8 @@ class Service < ActiveRecord::Base
       case filter_name
         when "active"; self.is_active
         when "inactive"; self.inactive
+        when "rss"; self.rss_type
+        when "social"; self.social_type
         else
           self.is_active
       end

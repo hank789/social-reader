@@ -10,6 +10,14 @@
           = link_to admin_services_path(filter: "inactive") do
             Inactive
             %small.pull-right= Service.inactive.count
+        %li{class: "#{'active' if params[:filter] == "rss"}"}
+          = link_to admin_services_path(filter: "rss") do
+            RSS
+            %small.pull-right= Service.rss_type.count
+        %li{class: "#{'active' if params[:filter] == "social"}"}
+          = link_to admin_services_path(filter: "social") do
+            Social
+            %small.pull-right= Service.social_type.count
 
   .col-md-9
     .ui-box
