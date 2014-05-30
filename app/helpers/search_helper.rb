@@ -33,7 +33,7 @@ module SearchHelper
   def posts_autocomplete(term, limit = 5)
     Post.publicish(current_user).search_by_description(term).limit(limit).map do |p|
       {
-        label: "post: #{search_result_sanitize(p.description)}",
+        label: "#{search_result_sanitize(p.description)}",
         url: p.link
       }
     end
