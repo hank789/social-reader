@@ -47,12 +47,8 @@
     %fieldset
       %legend Access
       .form-group
-        = f.label :projects_limit, class: 'control-label'
+        = f.label :services_limit, class: 'control-label'
         .col-sm-10= f.number_field :projects_limit, class: 'form-control'
-
-      .form-group
-        = f.label :can_create_group, class: 'control-label'
-        .col-sm-10= f.check_box :can_create_group
 
       .form-group
         = f.label :admin, class: 'control-label'
