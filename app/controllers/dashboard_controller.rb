@@ -71,22 +71,22 @@ class DashboardController < ApplicationController
       }
       @last_unread_count = 0
       @last_read_time = Time.now
-      current_user.services.each do |service|
-        if @last_read_time > service.last_read_time
-          @last_read_time = service.last_read_time
-        end
-        @last_unread_message[service.priority]['since'] = "since #{service.last_read_time.stamp('Aug 21, 2011 9:23pm')}"
-        @last_unread_count += service.last_unread_count
-        if service.last_activity_at && Time.now.to_i - service.last_activity_at.to_time.to_i >= 90
-          service.last_activity_at = Time.now
-          if params[:offset].nil?
+      if params[:offset].nil?
+        current_user.services.each do |service|
+          if @last_read_time > service.last_read_time
+            @last_read_time = service.last_read_time
+          end
+          @last_unread_message[service.priority]['since'] = "since #{service.last_read_time.stamp('Aug 21, 2011 9:23pm')}"
+          @last_unread_count += service.last_unread_count
+          if service.last_activity_at && Time.now.to_i - service.last_activity_at.to_time.to_i >= 90
+            service.last_activity_at = Time.now
             if @event_filter.include_key?(service.priority)
               service.last_unread_count = 0
               service.last_read_time = Time.now
             end
+            service.save
+            ServicePullWorker.perform_async(service.id)
           end
-          service.save
-          ServicePullWorker.perform_async(service.id)
         end
       end
     end

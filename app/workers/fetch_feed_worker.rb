@@ -15,7 +15,7 @@ class FetchFeedWorker
   end
 
   def log(message)
-    Gitlab::GitLogger.error("FetchFeedWorker: #{message}")
+    Gitlab::GitLogger.info("FetchFeedWorker: #{message}")
   end
 
   def fetch_feed(feed_id)
