@@ -6,6 +6,10 @@
           = link_to admin_users_path do
             Active
             %small.pull-right= User.active.count
+        %li{class: "#{'active' if params[:filter] == "inactive"}"}
+          = link_to admin_users_path(filter: "inactive") do
+            Inactive
+            %small.pull-right= User.inactive.count
         %li{class: "#{'active' if params[:filter] == "admins"}"}
           = link_to admin_users_path(filter: "admins") do
             Admins

@@ -153,6 +153,7 @@ class User < ActiveRecord::Base
   scope :admins, -> { where(admin:  true) }
   scope :blocked, -> { with_state(:blocked) }
   scope :active, -> { with_state(:active) }
+  scope :inactive, -> { where(sign_in_count: 0) }
   scope :alphabetically, -> { order('name ASC') }
   scope :without_services, -> { where('id NOT IN (SELECT DISTINCT(user_id) FROM services)') }
   scope :with_services, -> { where('id IN (SELECT DISTINCT(user_id) FROM services)') }
@@ -185,6 +186,7 @@ class User < ActiveRecord::Base
       when "blocked"; self.blocked
       when "wop"; self.without_services
       when "op"; self.with_services
+      when "inactive"; self.inactive
       else
         self.active
       end
