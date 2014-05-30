@@ -2,9 +2,9 @@
   .col-md-12
     .ui-box
       .title
-        Feeds (#{@feeds.count})
+        Feeds (#{@feeds.count}) Posts (#{Post.rss_count})
         .pull-right
-          = link_to 'New Feed', "#", class: "btn btn-new"
+          Category | Subscribers | Posts | Last Fetch Time
       %ul.well-list
         - @rss_feeds_rss_categories.each do |feed|
           %li
@@ -12,9 +12,4 @@
               = feed.rss_feed.name
             .pull-right
               %span.light
-                = feed.rss_category.name
-              &nbsp;
-              - if feed.rss_feed.status == 0
-                = link_to 'Unblock', "#", method: :put, class: "btn btn-small success"
-              - else
-                = link_to 'Block', "#", data: {confirm: 'USER WILL BE BLOCKED! Are you sure?'}, method: :put, class: "btn btn-small btn-remove"
+                = feed.rss_category.name + " | " + feed.rss_feed.user_count.to_s + " | " + feed.rss_feed.post_count.to_s + " | " + feed.rss_feed.last_fetched.stamp('05/14/2014 12:13PM')

@@ -67,6 +67,14 @@ class RssFeed < ActiveRecord::Base
     unread_stories.any?
   end
 
+  def post_count
+    Post.where(provider: id).count
+  end
+
+  def user_count
+    Service.where(access_token: id).count
+  end
+
   private
 
   def self.valid_timestamp?(new_timestamp, current_timestamp)

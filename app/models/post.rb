@@ -116,6 +116,10 @@ class Post < ActiveRecord::Base
 
       doc.to_html
     end
+
+    def rss_count
+      Post.where("provider >= 1").count
+    end
   end
   # Reset issue events cache
   #
@@ -130,4 +134,5 @@ class Post < ActiveRecord::Base
       order('id DESC').limit(100).
       update_all(updated_at: Time.now)
   end
+
 end
