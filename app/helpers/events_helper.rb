@@ -130,7 +130,7 @@ module EventsHelper
 
   def event_note(text)
     #text = first_line(text)
-    #text = text.gsub! '<br>', ''
+    text.gsub! '<br><br>', ''
     #text = truncate(text, length: 360)
     sanitize(truncate_html(text, length: 250, omission: '...'))
   end
