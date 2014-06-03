@@ -3,10 +3,11 @@
     = favorite_tag(event)
     #{time_ago_with_tooltip(event.created_at)}
     %span.event_label{class: event.action_name}= event_action_name(event)
-    .event-actions
-      = link_to "/events/mark_above_as_read/#{event.id}", method: :put,  class: "btn btn-small btn-grouped", remote: true do
-        %i.icon-arrow-up
-        Mark all above as read
+    - if params[:action] == 'show'
+      .event-actions
+        = link_to "/events/mark_above_as_read/#{event.id}", method: :put,  class: "btn btn-small btn-grouped", remote: true do
+          %i.icon-arrow-up
+          Mark all above as read
   = cache event do
     .event-avatar
       = image_tag event.post.author.avatar, class: "avatar s32", alt:''
