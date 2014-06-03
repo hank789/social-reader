@@ -61,7 +61,7 @@ gem "kaminari", "~> 0.15.1"
 gem "haml-rails"
 
 # Files attachments
-gem "carrierwave"
+gem "carrierwave", '~> 0.10.0'
 
 # for aws storage
 gem "fog", "~> 1.14", group: :aws
