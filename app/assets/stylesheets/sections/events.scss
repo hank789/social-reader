@@ -41,6 +41,17 @@
       top: -2px;
     }
   }
+  .event-actions {
+    display: none;
+    position: absolute;
+    right: 15px;
+  }
+
+  &:hover {
+    .event-actions {
+      display: block;
+    }
+  }
 
   padding: 12px 0px;
   border-bottom: 1px solid #eee;
@@ -70,8 +81,8 @@
         font-size: 13px;
       }
       img {
-        max-height: 50%;
-        max-width: 50%;
+        max-height: 250px;
+        max-width: 250px;
         margin-top: 4px;
         margin-left: 0px;
         float: none;

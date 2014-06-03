@@ -12,6 +12,10 @@ class DashboardController < ApplicationController
     @events = @event_filter.apply_filter(@events,current_user.id)
     @events = @events.limit(50).offset(params[:offset] || 0)
 
+    if params[:offset].nil? && @events.first
+      cookies['lasted_event_id'] = @events.first.id
+    end
+
     respond_to do |format|
       format.html
       format.json { pager_json("events/_events", @events.count) }

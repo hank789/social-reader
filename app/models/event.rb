@@ -27,7 +27,7 @@ class Event < ActiveRecord::Base
 
   # Scopes
   scope :recent, -> { order("created_at DESC") }
-  scope :load_events, ->(user_ids) { where(user_id: user_ids).recent }
+  scope :load_events, ->(user_ids) { where(user_id: user_ids, action: Event::UNREAD).recent }
   scope :load_star_events, ->(user_ids) { where(user_id: user_ids).where.not(stars_at: nil) }
   scope :load_events_for_service, ->(services_ids) { where(service_id: services_ids).recent }
 
