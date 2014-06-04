@@ -202,7 +202,11 @@ class ApplicationController < ActionController::Base
   end
 
   def event_filter
-    filters = cookies['event_filter'].split(',') if cookies['event_filter'].present?
+    if cookies['event_filter'].present?
+      filters = cookies['event_filter'].split(',')
+    else
+      cookies['event_filter'] = EventFilter.default_filter.join(",")
+    end
     @event_filter ||= EventFilter.new(filters)
   end
 

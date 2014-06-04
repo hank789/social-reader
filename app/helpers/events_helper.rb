@@ -131,8 +131,17 @@ module EventsHelper
   def event_note(text)
     #text = first_line(text)
     text.gsub! '<br>', ''
-    #text = truncate(text, length: 360)
-    sanitize(truncate_html(text, length: 250, omission: '...'))
+    t_length = text.length
+    if t_length >= 251
+      short_text = truncate_html(text, length: 250, omission: '<a class="text-expander js-toggle-button">...</a>')
+      short_text2 = short_text.clone
+      short_text2.gsub! '<a class="text-expander js-toggle-button">...</a></p>', ''
+      long_text = truncate_html(text, length: t_length + 100 , omission: '')
+      long_text.gsub! short_text2, ''
+      return sanitize(short_text) + sanitize("<div class='js-toggle-content'>#{long_text}</div>")
+    else
+      return sanitize(text)
+    end
   end
 
   def link_to_rss(event)

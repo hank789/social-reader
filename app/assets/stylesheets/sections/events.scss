@@ -46,6 +46,19 @@
     position: absolute;
     right: 15px;
   }
+  .text-expander {
+    background: #eee;
+    color: #555;
+    padding: 0 5px;
+    cursor: pointer;
+    margin-left: 4px;
+    &:hover {
+      background-color: #ddd;
+    }
+  }
+  .js-toggle-content {
+    display: none;
+  }
 
   &:hover {
     .event-actions {
