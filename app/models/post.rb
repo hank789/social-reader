@@ -109,7 +109,9 @@ class Post < ActiveRecord::Base
         doc.css("#{tag}[#{attr}]").each do |node|
           url = node.get_attribute(attr)
           unless url =~ abs_re
-            node.set_attribute(attr, URI.join(base_url, url).to_s)
+            unless base_url =~ abs_re
+              node.set_attribute(attr, URI.join(base_url, url).to_s)
+            end
           end
         end
       end
