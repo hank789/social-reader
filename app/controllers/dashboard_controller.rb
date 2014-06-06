@@ -12,7 +12,7 @@ class DashboardController < ApplicationController
     @events = @event_filter.apply_filter(@events,current_user.id)
     @events = @events.limit(50).offset(params[:offset] || 0)
 
-    if params[:offset].nil? && @events.first
+    if params[:offset] == "0" && @events.first
       cookies['lasted_event_id'] = @events.first.id
     end
 
@@ -75,7 +75,7 @@ class DashboardController < ApplicationController
       }
       @last_unread_count = 0
       @last_read_time = Time.now
-      if params[:offset].nil?
+      if params[:offset] == "0"
         current_user.services.each do |service|
           if @last_read_time > service.last_read_time
             @last_read_time = service.last_read_time

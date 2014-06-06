@@ -61,10 +61,15 @@ class Activities
 
   toggleServiceFilter: (sender) ->
     filter = sender.attr("id").split("_")[0]
-
+    event_filters_origin = $.cookie("event_filter")
+    if event_filters_origin
+      event_filters_origin = event_filters_origin.split(",")
+    else
+      event_filters_origin = new Array()
     event_filters = new Array()
     event_filters.push filter
-
+    for item in event_filters_origin
+      $("#"+item+"_event_filter").parent().addClass "inactive"
     $.cookie "event_filter", event_filters.join(","), { path: '/' }
 
   go_to_top: ->
