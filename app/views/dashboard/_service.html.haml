@@ -1,0 +1,10 @@
+= link_to "#", class: "event_service_filter_link", id: "#{service.id}_event_filter" do
+  .dash-project-access-icon
+    = visibility_level_icon(service.visibility_level)
+  %span.str-truncated
+    %span.namespace-name
+      - if service.service_name != 'RssFeedService'
+        = service.info.name
+        \/
+    %span.project-name.filter-title
+      = service_name(service)

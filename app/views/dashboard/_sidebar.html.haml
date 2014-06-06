@@ -1,0 +1,9 @@
+%ul.nav.nav-tabs.dash-sidebar-tabs
+  %li.active
+    = link_to '#services', 'data-toggle' => 'tab', id: 'sidebar-services-tab' do
+      Services
+      %span.badge= @services.count
+
+.tab-content
+  .tab-pane.active#services
+    = render "services", services: @services

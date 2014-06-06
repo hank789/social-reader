@@ -53,7 +53,11 @@ class EventFilter
     actions << Service::NORMAL if filter.include? 'normal'
     actions << Service::LOW if filter.include? 'low'
 
-    services_ids = Service.where(priority: actions, user_id: uid).pluck(:id)
+    if actions.empty?
+      services_ids = filter[0].to_i
+    else
+      services_ids = Service.where(priority: actions, user_id: uid).pluck(:id)
+    end
     events = events.where(service_id: services_ids)
   end
 

@@ -17,6 +17,7 @@ class Dispatcher
 
     switch page
       when 'dashboard:show', 'dashboard:stars', 'dashboard:discovery'
+        new Dashboard()
         new Activities()
 
     switch path.first()

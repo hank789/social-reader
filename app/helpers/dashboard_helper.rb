@@ -35,4 +35,14 @@ module DashboardHelper
     path << "?#{options.to_param}"
     path
   end
+
+  def service_name(service)
+    case service.service_name
+      when 'RssFeedService'
+        feed = RssFeed.find(service.access_token)
+        return feed.name
+      else
+        return service.provider
+    end
+  end
 end

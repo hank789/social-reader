@@ -1,0 +1,17 @@
+.panel.panel-default.ui-box
+  .panel-heading.title.clearfix
+    = search_field_tag :filter_services, nil, placeholder: 'Filter by name', class: 'dash-filter form-control'
+    - if current_user.can_create_project?
+      %span.pull-right
+        = link_to new_service_path, class: "btn btn-new" do
+          %i.icon-plus
+          New service
+
+  %ul.well-list.dash-list
+    - services.each do |service|
+      %li.project-row
+        = render "service", service: service
+
+    - if services.blank?
+      %li
+        .nothing-here-block There are no services here.
