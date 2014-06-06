@@ -2,13 +2,29 @@ class DashboardController < ApplicationController
   respond_to :html
 
   before_filter :load_services
-  before_filter :event_filter, only: :show
+  before_filter :event_filter, only: [:show, :archive]
   before_filter :check_last_events, only: :show
 
 
   def show
     @title = 'Dashboard'
     @events = Event.load_events(current_user.id)
+    @events = @event_filter.apply_filter(@events,current_user.id)
+    @events = @events.limit(50).offset(params[:offset] || 0)
+
+    if params[:offset] == "0" && @events.first
+      cookies['lasted_event_id'] = @events.first.id
+    end
+
+    respond_to do |format|
+      format.html
+      format.json { pager_json("events/_events", @events.count) }
+    end
+  end
+
+  def archive
+    @title = 'Archive'
+    @events = Event.load_archive_events(current_user.id)
     @events = @event_filter.apply_filter(@events,current_user.id)
     @events = @events.limit(50).offset(params[:offset] || 0)
 
