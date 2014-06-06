@@ -84,11 +84,15 @@
 
 
     .event-info {
-      color: #666;
+      color: #333332;
     }
     .event-note {
-      color: #666;
+      color: #333332;
       margin-top: 5px;
+      letter-spacing: 0.8px;
+      text-rendering: optimizeLegibility;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
 
       .md {
         font-size: 13px;
@@ -99,6 +103,13 @@
         margin-top: 4px;
         margin-left: 0px;
         float: none;
+        display: block;
+        margin-bottom: 18px;
+        background-color: white;
+        border: 1px solid #dddddd;
+        border-radius: 4px;
+        -webkit-transition: all 0.2s ease-in-out;
+        transition: all 0.2s ease-in-out;
       }
 
       pre {
