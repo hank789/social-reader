@@ -128,8 +128,9 @@ module EventsHelper
     }
   end
 
-  def event_note(text)
+  def event_note(event)
     #text = first_line(text)
+    text = event.post.description
     text.gsub! '<br>', ''
     t_length = text.length
     if t_length >= 251
@@ -138,9 +139,9 @@ module EventsHelper
       short_text2.gsub! '<a class="text-expander js-toggle-button">...</a></p>', ''
       long_text = truncate_html(text, length: t_length + 100 , omission: '')
       long_text.gsub! short_text2, ''
-      return sanitize(short_text) + sanitize("<div class='js-toggle-content'>#{long_text}</div>")
+      return short_text.html_safe + "<div class='js-toggle-content'>#{long_text}#{favorite_tag(event)}</div>".html_safe
     else
-      return sanitize(text)
+      return text.html_safe
     end
   end
 

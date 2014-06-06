@@ -6,4 +6,5 @@
       = raw event_title(event)
       - if event.post.photos.count >= 1
         - event.post.photos.each do |photo|
+          %br
           = image_tag photo.image.url

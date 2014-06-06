@@ -91,8 +91,6 @@
       margin-top: 5px;
       letter-spacing: 0.6px;
       text-rendering: optimizeLegibility;
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
 
       .md {
         font-size: 13px;
@@ -103,7 +101,6 @@
         margin-top: 4px;
         margin-left: 0px;
         float: none;
-        display: block;
         margin-bottom: 18px;
         background-color: white;
         border: 1px solid #dddddd;
