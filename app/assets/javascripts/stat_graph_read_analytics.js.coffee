@@ -1,7 +1,7 @@
 class window.ReadAnalyticsStatGraph
   init: (log) ->
     if $("#read-analytics").length
-      Morris.Area
+      Morris.Line
         element: "read-analytics"
         data: JSON.parse(log)
         xkey: "period"
