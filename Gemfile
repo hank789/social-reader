@@ -64,8 +64,8 @@ gem "haml-rails"
 gem "carrierwave", '~> 0.10.0'
 
 # for aws storage
-gem "fog", "~> 1.14", group: :aws
-gem "unf", group: :aws
+# gem "fog", "~> 1.14", group: :aws
+# gem "unf", group: :aws
 
 # Authorization
 gem "six"
@@ -120,16 +120,16 @@ gem "redis-rails"
 # gem 'tinder', '~> 1.9.2'
 
 # HipChat integration
-gem "hipchat", "~> 0.14.0"
+# gem "hipchat", "~> 0.14.0"
 
 # Gemnasium integration
 gem "gemnasium-gitlab-service", "~> 0.2"
 
 # Slack integration
-gem "slack-notifier", "~> 0.3.2"
+# gem "slack-notifier", "~> 0.3.2"
 
 # d3
-gem "d3_rails", "~> 3.1.4"
+gem "d3_rails", "~> 3.4.8"
 
 # underscore-rails
 gem "underscore-rails", "~> 1.4.4"

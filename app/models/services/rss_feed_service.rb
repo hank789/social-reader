@@ -10,6 +10,7 @@ class RssFeedService < Service
     event.author_id = post.author_id
     event.created_at = post.created_at
     event.updated_at = post.created_at
+    event.book_at = Time.now
     event.save
   end
 

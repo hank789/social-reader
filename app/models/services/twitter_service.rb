@@ -69,6 +69,7 @@ class TwitterService < Service
     event.author_id = author.id
     event.created_at = tweet.created_at
     event.updated_at = tweet.created_at
+    event.book_at = Time.now
     event.save
 
   end

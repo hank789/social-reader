@@ -14,7 +14,7 @@
 
 class Event < ActiveRecord::Base
   attr_accessible :project, :action, :user_id,
-                  :post_id, :service_id, :action, :author_id, :stars_at
+                  :post_id, :service_id, :action, :author_id, :stars_at, :read_at, :book_at
 
   validates_uniqueness_of :post_id, :scope => :user_id
 
@@ -56,26 +56,27 @@ class Event < ActiveRecord::Base
         return true if c_event.stars_at
         c_event.stars_at = Time.now
         c_event.save
-        self.post.update_attribute(:favourite_count, self.post.favourite_count + 1)
+        self.post.update_attribute(favourite_count: self.post.favourite_count + 1)
       else
         c_event = Event.new
         c_event.post_id = self.post.id
         c_event.service_id = self.service.id
         c_event.user_id = uid
-        c_event.action = Event::UNREAD
+        c_event.action = Event::READ
         c_event.author_id = self.author_id
         c_event.created_at = self.post.created_at
         c_event.updated_at = self.post.created_at
         c_event.stars_at = Time.now
+        c_event.read_at = Time.now
         c_event.save
-        self.post.update_attribute(:favourite_count, self.post.favourite_count + 1)
+        self.post.update_attribute(favourite_count: self.post.favourite_count + 1)
       end
       return true
     end
 
     return true if self.stars_at
-    self.update_attribute(:stars_at, Time.now)
-    self.post.update_attribute(:favourite_count, self.post.favourite_count + 1)
+    self.update_attribute(stars_at: Time.now, action: Event::READ, read_at: Time.now)
+    self.post.update_attribute(favourite_count: self.post.favourite_count + 1)
   end
   def unfavorite(uid)
     if self.user_id != uid
@@ -86,13 +87,13 @@ class Event < ActiveRecord::Base
           return true
         end
         c_event.destroy
-        self.post.update_attribute(:favourite_count, self.post.favourite_count - 1)
+        self.post.update_attribute(favourite_count: self.post.favourite_count - 1)
       end
       return true
     end
 
     return true if self.stars_at.nil?
-    self.update_attribute(:stars_at, nil)
-    self.post.update_attribute(:favourite_count, self.post.favourite_count - 1)
+    self.update_attribute(stars_at: nil)
+    self.post.update_attribute(favourite_count: self.post.favourite_count - 1)
   end
 end

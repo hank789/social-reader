@@ -53,6 +53,7 @@ class InstagramService < Service
     event.author_id = author.id
     event.created_at = tweet.created_time
     event.updated_at = tweet.created_time
+    event.book_at = Time.now
     event.save
   end
 

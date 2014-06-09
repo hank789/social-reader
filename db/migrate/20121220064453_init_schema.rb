@@ -30,6 +30,8 @@ class InitSchema < ActiveRecord::Migration
       t.integer  "user_id"
       t.integer  "author_id"
       t.datetime  "stars_at"
+      t.datetime  "read_at"
+      t.datetime  "book_at"
     end
 
     add_index "events", ["action"], name: "index_events_on_action", using: :btree
