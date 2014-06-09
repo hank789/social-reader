@@ -1,7 +1,7 @@
 class window.ReadAnalyticsStatGraph
   init: (log) ->
     if $("#read-analytics").length
-      Morris.Line
+      Morris.Area
         element: "read-analytics"
         data: JSON.parse(log)
         xkey: "period"
@@ -17,6 +17,7 @@ class window.ReadAnalyticsStatGraph
         ]
         pointSize: 2
         hideHover: "auto"
+        behaveLikeLine: true
 
     @change_date_header()
     return
