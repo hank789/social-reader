@@ -128,8 +128,7 @@ gem "gemnasium-gitlab-service", "~> 0.2"
 # Slack integration
 # gem "slack-notifier", "~> 0.3.2"
 
-# d3
-gem "d3_rails", "~> 3.4.8"
+gem 'morrisjs-rails'
 
 # underscore-rails
 gem "underscore-rails", "~> 1.4.4"

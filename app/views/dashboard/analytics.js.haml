@@ -1,0 +1,6 @@
+- if @success
+  :plain
+    $('#brush_change').val(JSON.stringify(#{@log}))
+- else
+  :plain
+    $('.stat-graph').replaceWith('<div class="alert alert-danger">Failed to load graph</div>')

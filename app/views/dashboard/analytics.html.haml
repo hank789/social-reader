@@ -1,8 +1,35 @@
 - if @has_authorized_services
-  .dashboard.row
-    .activities.col-md-12
-      .nothing-here-block
-        Coming soon
+  .loading-graph
+    %center
+      %h3.page-title
+        %i.icon-spinner.icon-spin
+        Building analytics graph.
+      %p Please wait a moment, this page will automatically refresh when ready.
+
+  .stat-graph
+    .header.clearfix
+      %h3#date_header.page-title
+      %p.light
+        a basic graph
+      %input#brush_change{:type => "hidden"}
+    .graphs
+      #read-analytics
+
+  :javascript
+    $(".stat-graph").hide();
+
+    $.ajax({
+      type: "GET",
+      url: location.href,
+      complete: function() {
+        $(".stat-graph").show();
+        $(".loading-graph").hide();
+
+        controller = new ReadAnalyticsStatGraph();
+        controller.init($('#brush_change').val());
+      },
+      dataType: "script"
+    });
 
 - else
   = render "zero_authorized_projects"

@@ -53,6 +53,17 @@ class DashboardController < ApplicationController
 
   def analytics
     @title = 'Analytics'
+    respond_to do |format|
+      format.html
+      format.js do
+        fetch_graph
+      end
+    end
+  end
+  def fetch_graph
+    @log = Event.graph_log(current_user.id).to_json
+    @success = true
+
   end
 
   def discovery

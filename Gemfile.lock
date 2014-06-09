@@ -89,8 +89,6 @@ GEM
     crack (0.4.1)
       safe_yaml (~> 0.9.0)
     curb (0.8.5)
-    d3_rails (3.4.8)
-      railties (>= 3.1.0)
     daemons (1.1.9)
     database_cleaner (1.2.0)
     debug_inspector (0.0.2)
@@ -260,6 +258,8 @@ GEM
     mime-types (1.25.1)
     mini_portile (0.5.3)
     minitest (4.7.5)
+    morrisjs-rails (0.5.0)
+      railties (> 3.1, < 5)
     multi_json (1.10.0)
     multi_xml (0.5.5)
     multipart-post (2.0.0)
@@ -550,7 +550,6 @@ DEPENDENCIES
   coffee-rails
   colored
   coveralls
-  d3_rails (~> 3.4.8)
   database_cleaner
   default_value_for (~> 3.0.0)
   devise (= 3.0.4)
@@ -589,6 +588,7 @@ DEPENDENCIES
   launchy
   letter_opener
   minitest (~> 4.7.0)
+  morrisjs-rails
   mysql2 (~> 0.3.15)
   nprogress-rails
   omniauth (~> 1.2.1)

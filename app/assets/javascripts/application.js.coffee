@@ -22,13 +22,12 @@
 #= require raphael
 #= require g.raphael-min
 #= require g.bar-min
-#= require branch-graph
 #= require highlightjs.min
 #= require ace/ace
-#= require d3
 #= require underscore
 #= require nprogress
 #= require nprogress-turbolinks
+#= require morris
 #= require_tree .
 
 window.slugify = (text) ->

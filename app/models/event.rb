@@ -56,7 +56,7 @@ class Event < ActiveRecord::Base
         return true if c_event.stars_at
         c_event.stars_at = Time.now
         c_event.save
-        self.post.update_attribute(favourite_count: self.post.favourite_count + 1)
+        self.post.update_attributes(favourite_count: self.post.favourite_count + 1)
       else
         c_event = Event.new
         c_event.post_id = self.post.id
@@ -69,14 +69,14 @@ class Event < ActiveRecord::Base
         c_event.stars_at = Time.now
         c_event.read_at = Time.now
         c_event.save
-        self.post.update_attribute(favourite_count: self.post.favourite_count + 1)
+        self.post.update_attributes(favourite_count: self.post.favourite_count + 1)
       end
       return true
     end
 
     return true if self.stars_at
-    self.update_attribute(stars_at: Time.now, action: Event::READ, read_at: Time.now)
-    self.post.update_attribute(favourite_count: self.post.favourite_count + 1)
+    self.update_attributes(stars_at: Time.now, action: Event::READ, read_at: Time.now)
+    self.post.update_attributes(favourite_count: self.post.favourite_count + 1)
   end
   def unfavorite(uid)
     if self.user_id != uid
@@ -87,13 +87,44 @@ class Event < ActiveRecord::Base
           return true
         end
         c_event.destroy
-        self.post.update_attribute(favourite_count: self.post.favourite_count - 1)
+        self.post.update_attributes(favourite_count: self.post.favourite_count - 1)
       end
       return true
     end
 
     return true if self.stars_at.nil?
-    self.update_attribute(stars_at: nil)
-    self.post.update_attribute(favourite_count: self.post.favourite_count - 1)
+    self.update_attributes(stars_at: nil)
+    self.post.update_attributes(favourite_count: self.post.favourite_count - 1)
   end
+
+  class << self
+    # Cached in redis
+    def expire_cache
+      Rails.cache.delete(cache_key(:graph_log))
+    end
+
+    def graph_log(uid)
+      Rails.cache.fetch(cache_key(:graph_log)) do
+        from_date = 14.days.ago.strftime("%Y-%m-%d").to_time
+        to_date = Time.now.strftime("%Y-%m-%d").to_time
+        date_diff = 14
+        log_info = []
+        while date_diff >=0
+          from_next = from_date + 86400
+          book_count = Event.where(user_id: uid, book_at: from_date..from_next).count
+          read_count = Event.where(user_id: uid, read_at: from_date..from_next).count
+          star_count = Event.where(user_id: uid, stars_at: from_date..from_next).count
+          log_info.push({:period => from_date.strftime("%Y-%m-%d"),:book => book_count, :read => read_count, :star => star_count})
+          date_diff -= 1
+          from_date = from_next
+        end
+        return log_info
+      end
+    end
+
+    def cache_key(type)
+      "#{type}"
+    end
+  end
+
 end
