@@ -5,8 +5,9 @@ class ServicesController < ApplicationController
   skip_before_action :verify_authenticity_token, :only => :create
   before_action :authenticate_user!
   before_action :abort_if_already_authorized, :abort_if_read_only_access, :only => :create
-  before_action :check_service_active, :only => [:edit , :update]
-  before_filter :set_title, only: [:index, :new, :create, :edit, :update]
+  before_action :check_service_active, :only => [:show]
+  before_filter :set_title, only: [:index, :new, :create, :show]
+  before_action :pull_service_events, :only => [:show]
 
   respond_to :html
 
@@ -31,28 +32,28 @@ class ServicesController < ApplicationController
       exist_service.info = service.info
       exist_service.save
       ServicePullWorker.perform_async(exist_service.id)
-      redirect_to edit_service_path(exist_service)
+      redirect_to service_path(exist_service)
     elsif current_user.services << service
       ServicePullWorker.perform_async(service.id)
-      redirect_to edit_service_path(service)
+      redirect_to service_path(service)
     else
       flash[:alert] = 'there was an error connecting that service'
       redirect_to_origin
     end
   end
 
-  def edit
+  def show
+    @events = Event.load_events(current_user.id)
+    @events = @events.where(service_id: @service.id).limit(50).offset(params[:offset] || 0)
 
-  end
-
-  def update
-    @service.priority = params[:"#{@service.provider}_service"][:priority_level]
-    @service.visibility_level = params[:"#{@service.provider}_service"][:visibility_level]
-    @service.last_activity_at = Time.now
-    if @service.save
-      flash[:notice] = 'Service was successfully saved.'
+    if params[:offset] == "0" && @events.first
+      cookies['lasted_event_id'] = @events.first.id
     end
-    redirect_to edit_service_url(@service)
+
+    respond_to do |format|
+      format.html
+      format.json { pager_json("events/_events", @events.count) }
+    end
   end
 
   def failure
@@ -122,5 +123,17 @@ class ServicesController < ApplicationController
 
   def set_title
     @title = 'Service'
+  end
+
+  def pull_service_events
+    if params[:offset] == "0" && @service.last_activity_at && Time.now.to_i - @service.last_activity_at.to_time.to_i >= 90
+      @service.last_activity_at = Time.now
+
+      @service.last_unread_count = 0
+      @service.last_read_time = Time.now
+
+      @service.save
+      ServicePullWorker.perform_async(@service.id)
+    end
   end
 end

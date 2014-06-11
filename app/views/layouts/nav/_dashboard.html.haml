@@ -1,16 +1,14 @@
 %ul
   = nav_link(path: 'dashboard#show', html_options: {class: 'home'}) do
-    = link_to root_path, title: "Home", class: 'has_bottom_tooltip', 'data-original-title' => 'Home' do
+    = link_to root_path, title: "Unread", class: 'has_bottom_tooltip', 'data-original-title' => 'Unread' do
       %i.icon-anchor
+      %span.count= current_user.events.where(action: Event::UNREAD).count
   = nav_link(path: 'dashboard#stars', html_options: {class: 'home'}) do
     = link_to dashboard_stars_path, title: "Star", class: 'has_bottom_tooltip', 'data-original-title' => 'Star' do
       %i.icon-star
   = nav_link(path: 'dashboard#archive', html_options: {class: 'home'}) do
-    = link_to dashboard_archive_path, title: "Already read", class: 'has_bottom_tooltip', 'data-original-title' => 'Already read' do
+    = link_to dashboard_archive_path, title: "Archive", class: 'has_bottom_tooltip', 'data-original-title' => 'Archive' do
       %i.icon-archive
   = nav_link(path: 'dashboard#analytics', html_options: {class: 'home'}) do
     = link_to dashboard_analytics_path, title: "Analytics", class: 'has_bottom_tooltip', 'data-original-title' => 'Analytics' do
       %i.icon-bar-chart
-  = nav_link(path: 'dashboard#discovery', html_options: {class: 'home'}) do
-    = link_to dashboard_discovery_path, title: "Discovery", class: 'has_bottom_tooltip', 'data-original-title' => 'Discovery' do
-      %i.icon-th

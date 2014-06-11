@@ -26,7 +26,7 @@ class EventFilter
     @params = if params
                 params.dup
               else
-                EventFilter.default_filter
+                [] #EventFilter.default_filter
               end
   end
 
@@ -48,15 +48,9 @@ class EventFilter
 
     filter = params.dup
 
-    actions = []
-    actions << Service::IMPORTANT if filter.include? 'important'
-    actions << Service::NORMAL if filter.include? 'normal'
-    actions << Service::LOW if filter.include? 'low'
-
-    if actions.empty?
+    services_ids = nil
+    if !filter.empty?
       services_ids = filter[0].to_i
-    else
-      services_ids = Service.where(priority: actions, user_id: uid).pluck(:id)
     end
     events = events.where(service_id: services_ids)
   end

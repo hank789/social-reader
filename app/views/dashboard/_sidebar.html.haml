@@ -7,3 +7,9 @@
 .tab-content
   .tab-pane.active#services
     = render "services", services: @services
+
+.prepend-top-20
+  %span
+    = link_to "#", class: "cgray", id: 'sidebar-clear-filter' do
+      %i.icon-remove
+      %strong Clear filter

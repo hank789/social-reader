@@ -33,12 +33,12 @@ class RssfeedsController < ApplicationController
       if params[:service][:select_feed]
         Service.where(user_id: current_user.id, active: [0,1], provider: params[:id]).update_all(active: 0)
         if current_user_services.any?{|service| service.nickname == params[:service][:select_feed].to_s}
-          Service.where(user_id: current_user.id, active: [0,1], nickname: params[:service][:select_feed]).update_all(active: 1, priority: params[:service][:priority_level])
+          Service.where(user_id: current_user.id, active: [0,1], nickname: params[:service][:select_feed]).update_all(active: 1)
         else
           save_service(rss_feeds)
         end
       else
-        Service.where(user_id: current_user.id, active: [0,1], provider: params[:id]).update_all(active: 1, priority: params[:service][:priority_level])
+        Service.where(user_id: current_user.id, active: [0,1], provider: params[:id]).update_all(active: 1)
       end
     else
       save_service(rss_feeds)
@@ -55,10 +55,8 @@ class RssfeedsController < ApplicationController
       service_item = Service.where(user_id: current_user.id, provider: params[:id]).first
       @service.id = params[:id]
       @service.nickname = service_item.nickname
-      @service.priority = service_item.priority
     else
       @service.nickname = "5"
-      @service.priority = Service::IMPORTANT
     end
 
   end
@@ -85,9 +83,7 @@ class RssfeedsController < ApplicationController
         service.nickname = params[:service][:select_feed]
       end
       service.user = current_user
-      service.priority = params[:service][:priority_level]
       service.active = 1
-      service.visibility_level = Gitlab::VisibilityLevel::PRIVATE
       service.last_activity_at = Time.now
       service.last_read_time = Time.now
       service.last_unread_count = 0

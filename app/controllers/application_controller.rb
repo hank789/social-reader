@@ -70,56 +70,12 @@ class ApplicationController < ActionController::Base
     abilities.allowed?(object, action, subject)
   end
 
-  def project
-    id = params[:project_id] || params[:id]
-
-    # Redirect from
-    #   localhost/group/project.git
-    # to
-    #   localhost/group/project
-    #
-    if id =~ /\.git\Z/
-      redirect_to request.original_url.gsub(/\.git\Z/, '') and return
-    end
-
-    @project = Project.find_with_namespace(id)
-
-    if @project and can?(current_user, :read_project, @project)
-      @project
-    elsif current_user.nil?
-      @project = nil
-      authenticate_user!
-    else
-      @project = nil
-      render_404 and return
-    end
-  end
-
-  def repository
-    @repository ||= project.repository
-  rescue Grit::NoSuchPathError
-    nil
-  end
-
   def add_abilities
     abilities << Ability
   end
 
   def authorize_project!(action)
     return access_denied! unless can?(current_user, action, project)
-  end
-
-  def authorize_code_access!
-    return access_denied! unless can?(current_user, :download_code, project)
-  end
-
-  def authorize_push!
-    return access_denied! unless can?(current_user, :push_code, project)
-  end
-
-  def authorize_labels!
-    # Labels should be accessible for issues and/or merge requests
-    authorize_read_issue! || authorize_read_merge_request!
   end
 
   def access_denied!
@@ -204,8 +160,7 @@ class ApplicationController < ActionController::Base
   def event_filter
     if cookies['event_filter'].present?
       filters = cookies['event_filter'].split(',')
-    else
-      cookies['event_filter'] = EventFilter.default_filter.join(",")
+      #cookies['event_filter'] = EventFilter.default_filter.join(",")
     end
     @event_filter ||= EventFilter.new(filters)
   end

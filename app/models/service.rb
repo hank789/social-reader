@@ -20,8 +20,8 @@
 # To add new service you should build a class inherited from Service
 # and implement a set of methods
 class Service < ActiveRecord::Base
-  attr_accessible :provider, :info, :nickname, :uid, :access_token, :access_secret, :priority, :active,
-                  :visibility_level, :service_name, :since_id, :last_activity_at, :last_unread_count, :last_read_time
+  attr_accessible :provider, :info, :nickname, :uid, :access_token, :access_secret, :active,
+                  :service_name, :since_id, :last_activity_at, :last_unread_count, :last_read_time
   self.inheritance_column = :service_name
   belongs_to :user
   has_many :events
@@ -49,17 +49,6 @@ class Service < ActiveRecord::Base
   end
 
   class << self
-    def priority_options
-      {
-          'Important' => IMPORTANT,
-          'Normal'   => NORMAL,
-          'Low' => LOW
-      }
-    end
-    def titles(service_strings)
-      service_strings.map {|s| "#{s.titleize}Service"}
-    end
-
     def first_from_omniauth( auth_hash )
       @@auth = auth_hash
       where( type: service_type, uid: options[:uid] ).first
@@ -87,12 +76,10 @@ class Service < ActiveRecord::Base
           provider:      auth['provider'],
           info:          auth['info'],
           service_name: "#{auth['provider'].camelize}Service",
-          priority:     Service::IMPORTANT,
           active:       1,
           last_unread_count:  0,
           last_read_time: Time.now,
-          last_activity_at: Time.now,
-          visibility_level:       Gitlab::VisibilityLevel::PRIVATE
+          last_activity_at: Time.now
       }
     end
 
@@ -107,24 +94,7 @@ class Service < ActiveRecord::Base
       end
     end
 
-
-    def visibility_levels
-      Gitlab::VisibilityLevel.options
-    end
-
     private :auth, :service_type, :options
-  end
-
-  def important?
-    priority == self.class::IMPORTANT
-  end
-
-  def normal?
-    priority == self.class::NORMAL
-  end
-
-  def low?
-    priority == self.class::LOW
   end
 
   def active?

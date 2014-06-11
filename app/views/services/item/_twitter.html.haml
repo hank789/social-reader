@@ -8,7 +8,7 @@
   %br
   - if !service.nil? && current_user.services.any?{|service| service.provider == "twitter"}
     - if params[:action] == 'new'
-      = link_to edit_service_path(service), class: "btn btn-new" do
+      = link_to service_path(service), class: "btn btn-new" do
         %i.icon-pencil{:style=>"margin-right: 0.25rem;"}
         Edit
   - else

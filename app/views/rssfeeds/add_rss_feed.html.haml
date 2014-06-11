@@ -14,10 +14,9 @@
             - else
               = render "rss_feedlist", f: f, rss_child_categories: @rss_child_categories, rss_category: @rss_category
           %hr
-          = render "services/priority_level", f: f, priority_level: @service.priority, can_change_priority_level: true
-          %hr
 
           .form-actions
-            = f.submit 'Save service', class: "btn btn-create project-submit", tabindex: 4
+            - if @rss_category.select_type == 1
+              = f.submit 'Save service', class: "btn btn-create project-submit", tabindex: 4
             - if @service.id
               = link_to "Disconnect #{@rss_category.name}", rssfeed_path(@service.id), class: "btn btn-remove", :data => { :confirm => "Disconnect #{@rss_category.name}?" }, :method => :delete

@@ -103,10 +103,9 @@ Gitlab::Application.routes.draw do
   end
   get 'dashboard/stars' => "dashboard#stars"
   get 'dashboard/analytics' => "dashboard#analytics"
-  get 'dashboard/discovery' => "dashboard#discovery"
   get 'dashboard/archive' => "dashboard#archive"
 
-  match 'events/mark_above_as_read/:id' => "events#mark_above_as_read", via: :put
+  match 'events/mark_above_as_read/:id' => "events#mark_above_as_read", as: :events_mark_above_as_read, via: :put
   resources :events do
     member do
       post :favorite

@@ -5,7 +5,7 @@
     %span.event_label{class: event.action_name}= event_action_name(event)
     - if params[:action] == 'show'
       .event-actions
-        = link_to "/events/mark_above_as_read/#{event.id}", method: :put,  class: "btn btn-small btn-grouped", remote: true do
+        = link_to events_mark_above_as_read_path(id: event.id, service: params[:id]), method: :put,  class: "btn btn-small btn-grouped", remote: true do
           %i.icon-arrow-up
           Mark all above as read
   = cache event do

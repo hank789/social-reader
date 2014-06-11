@@ -25,6 +25,11 @@ class Dashboard
     $('.dash-sidebar-tabs a').on 'click', (e) ->
       $.cookie(key, $(e.target).attr('id'))
 
+    $('#sidebar-clear-filter').on 'click', (e) ->
+      $.cookie("event_filter", null)
+      $(".content_list").html ''
+      Pager.init 50, true
+
     # show tab from cookie
     sidebar_filter = $.cookie(key)
     $("#" + sidebar_filter).tab('show') if sidebar_filter

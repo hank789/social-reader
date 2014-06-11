@@ -66,18 +66,6 @@ class DashboardController < ApplicationController
 
   end
 
-  def discovery
-    @title = 'Discovery'
-    services_ids = Service.where(visibility_level: Gitlab::VisibilityLevel::PUBLIC).where.not(user_id: current_user.id).pluck(:id)
-    @events = Event.load_events_for_service(services_ids)
-    @events = @events.limit(50).offset(params[:offset] || 0)
-
-    respond_to do |format|
-      format.html
-      format.json { pager_json("events/_events", @events.count) }
-    end
-  end
-
   protected
 
   def load_services
@@ -95,11 +83,6 @@ class DashboardController < ApplicationController
 
   def check_last_events
     if current_user
-      @last_unread_message = {
-          Service::IMPORTANT => {'priority'=> 'IMPORTANT', 'since'=>'','message'=>'','count'=>0},
-          Service::NORMAL   => {'priority'=> 'NORMAL', 'since'=>'','message'=>'','count'=>0},
-          Service::LOW => {'priority'=> 'LOW', 'since'=>'','message'=>'','count'=>0}
-      }
       @last_unread_count = 0
       @last_read_time = Time.now
       if params[:offset] == "0"
@@ -107,14 +90,13 @@ class DashboardController < ApplicationController
           if @last_read_time > service.last_read_time
             @last_read_time = service.last_read_time
           end
-          @last_unread_message[service.priority]['since'] = "since #{service.last_read_time.stamp('Aug 21, 2011 9:23pm')}"
           @last_unread_count += service.last_unread_count
           if service.last_activity_at && Time.now.to_i - service.last_activity_at.to_time.to_i >= 90
             service.last_activity_at = Time.now
-            if @event_filter.include_key?(service.priority)
-              service.last_unread_count = 0
-              service.last_read_time = Time.now
-            end
+
+            service.last_unread_count = 0
+            service.last_read_time = Time.now
+
             service.save
             ServicePullWorker.perform_async(service.id)
           end

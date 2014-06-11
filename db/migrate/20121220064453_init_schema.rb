@@ -145,12 +145,10 @@ class InitSchema < ActiveRecord::Migration
       t.text     "info"
       t.string   "nickname"
       t.integer  "user_id",                        null: false
-      t.integer  "priority",                       null: false
       t.datetime "created_at"
       t.datetime "updated_at"
       t.datetime "deleted_at"
       t.boolean  "active",      default: false, null: false
-      t.integer  "visibility_level",     default: 0, null: false
       t.datetime "last_activity_at"
       t.string   "since_id"
       t.datetime "last_read_time"
@@ -158,7 +156,6 @@ class InitSchema < ActiveRecord::Migration
     end
 
     add_index "services", ["user_id"], name: "index_services_on_user_id", using: :btree
-    add_index "services", ["priority"], name: "index_services_on_priority", using: :btree
     add_index "services", ["active"], name: "index_services_on_active", using: :btree
     add_index "services", ["uid","service_name"], name: "index_services_on_uid_and_service_name", unique: true, using: :btree
 

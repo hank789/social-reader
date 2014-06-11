@@ -8,11 +8,6 @@
           %h3.page-title
             = image_tag image_path("services/#{@service.provider}.png"), class: "avatar s32"
             = connected_info(@service)
+            .pull-right
+              = link_to "Disconnect #{@service.info.name}", service_path(@service), class: "btn btn-remove", :data => { :confirm => "Disconnect #{@service.provider}?" }, :method => :delete
           %hr
-          = render "priority_level", f: f, priority_level: @service.priority, can_change_priority_level: true
-          %hr
-          = render "visibility_level", f: f, visibility_level: @service.visibility_level, can_change_visibility_level: true
-
-          .form-actions
-            = f.submit 'Save service', class: "btn btn-create project-submit", tabindex: 4
-            = link_to "Disconnect #{@service.info.name}", service_path(@service), class: "btn btn-remove", :data => { :confirm => "Disconnect #{@service.provider}?" }, :method => :delete

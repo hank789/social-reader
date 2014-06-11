@@ -16,7 +16,7 @@ class Dispatcher
     path = page.split(':')
 
     switch page
-      when 'dashboard:stars', 'dashboard:discovery'
+      when 'dashboard:stars', 'services:show'
         new Activities()
       when 'dashboard:show', 'dashboard:archive'
         new Dashboard()

@@ -45,4 +45,14 @@ module DashboardHelper
         return service.provider
     end
   end
+
+  def service_avatar(service)
+    case service.service_name
+      when 'RssFeedService'
+        author = Author.where(provider: service.access_token).first
+        return author.avatar
+      else
+        return image_path("services/#{service.provider}.png")
+    end
+  end
 end

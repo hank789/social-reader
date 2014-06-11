@@ -17,18 +17,20 @@ class EventsController < ApplicationController
     if cookies['event_filter'].present?
       filter = cookies['event_filter'].split(',')
     end
-    actions = []
-    actions << Service::IMPORTANT if filter.include? 'important'
-    actions << Service::NORMAL if filter.include? 'normal'
-    actions << Service::LOW if filter.include? 'low'
 
-    if actions.empty?
-      services_ids = filter[0].to_i
-    else
-      services_ids = Service.where(priority: actions, user_id: current_user.id).pluck(:id)
-    end
     lasted_event = Event.find(cookies['lasted_event_id'])
-    Event.where(service_id: services_ids, user_id: current_user.id, created_at: @event.created_at..lasted_event.created_at).update_all(action: Event::READ, read_at: Time.now)
+    services_ids = nil
+    if params[:service].present?
+      services_ids = params[:service]
+    elsif !filter.empty?
+      services_ids = filter[0].to_i
+    end
+    if services_ids.nil?
+      Event.where(user_id: current_user.id, created_at: @event.created_at..lasted_event.created_at).update_all(action: Event::READ, read_at: Time.now)
+    else
+      Event.where(service_id: services_ids, user_id: current_user.id, created_at: @event.created_at..lasted_event.created_at).update_all(action: Event::READ, read_at: Time.now)
+    end
+
     respond_to do |format|
       format.js {render inline: "$('.content_list').html('');Pager.init(50, true);" }
     end
