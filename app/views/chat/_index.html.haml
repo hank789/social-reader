@@ -1,5 +1,5 @@
 %div.wall-page
-  %div#chat{"data-uri" => "#{request.host}:3001/websocket", "data-username" => "#{current_user.name}" }
+  %div#chat{"data-uri" => "#{request.host}/websocket", "data-username" => "#{current_user.name}" }
     %ul.notes
 
   .note-form-holder
