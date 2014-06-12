@@ -53,7 +53,7 @@ Gitlab::Application.configure do
                else
                  "redis://localhost:6379"
                end
-  config.cache_store = :redis_store, resque_url, {namespace: 'cache:gitlab'}
+  config.cache_store = :redis_store, resque_url, {namespace: 'cache:gitlab', :driver => :hiredis}
 
   # Enable serving of images, stylesheets, and JavaScripts from an asset server
   # config.action_controller.asset_host = "http://assets.example.com"
