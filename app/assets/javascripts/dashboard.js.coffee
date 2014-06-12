@@ -1,6 +1,7 @@
 class Dashboard
   constructor: ->
     @initSidebarTab()
+    @initChatTab()
 
     $(".dash-filter").keyup ->
       terms = $(this).val()
@@ -20,7 +21,6 @@ class Dashboard
 
   initSidebarTab: ->
     key = "dashboard_sidebar_filter"
-
     # store selection in cookie
     $('.dash-sidebar-tabs a').on 'click', (e) ->
       $.cookie(key, $(e.target).attr('id'))
@@ -34,5 +34,12 @@ class Dashboard
     sidebar_filter = $.cookie(key)
     $("#" + sidebar_filter).tab('show') if sidebar_filter
 
+  initChatTab: ->
+    window.chatController = new Chat.Controller($('#chat').data('uri'), true);
+    notes = $('ul.notes')
+    $('body, html').scrollTop(notes.height())
+    form = $('.wall-note-form')
+    form.find("#target_type").val('wall')
+    form.show()
 
 @Dashboard = Dashboard

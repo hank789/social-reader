@@ -34,4 +34,6 @@ Gitlab::Application.configure do
   config.action_mailer.delivery_method = :letter_opener
 
   config.eager_load = false
+  # for websocket-rails: https://github.com/DanKnox/websocket-rails/wiki/Installation-and-Setup
+  config.middleware.delete Rack::Lock
 end

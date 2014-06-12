@@ -20,7 +20,7 @@ class TwitterService < Service
     author.profile_url = "https://twitter.com/#{tweet.user.screen_name.to_s}"
     author.data = tweet.user
     if !author.save
-      author_exist = Author.find_last_by_provider_and_guid(self.provider,tweet.user.id)
+      author_exist = Author.where(provider: self.provider, guid: tweet.user.id).first
       author.id = author_exist.id
       author.save
     end
@@ -37,7 +37,7 @@ class TwitterService < Service
     post.updated_at = tweet.created_at
     post.data = tweet
     if !post.save
-      post_exist = Post.find_last_by_provider_and_guid(self.provider, tweet.id)
+      post_exist = Post.where(provider: self.provider, guid: tweet.id).first
       post.id = post_exist.id
       post.save
     else

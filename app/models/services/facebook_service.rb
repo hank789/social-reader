@@ -18,7 +18,7 @@ class FacebookService < Service
     author.profile_url = "https://www.facebook.com/#{tweet['from']['id']}"
 
     if !author.save
-      author_exist = Author.find_last_by_provider_and_guid(self.provider,tweet['from']['id'])
+      author_exist = Author.where(provider: self.provider, guid: tweet['from']['id']).first
       author.id = author_exist.id
       author.save
     end
@@ -35,7 +35,7 @@ class FacebookService < Service
     post.updated_at = tweet['updated_time']
     post.data = tweet
     if !post.save
-      post_exist = Post.find_last_by_provider_and_guid(self.provider, tweet['id'])
+      post_exist = Post.where(provider: self.provider, guid: tweet['id']).first
       post.id = post_exist.id
       post.save
     else

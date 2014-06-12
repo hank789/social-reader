@@ -66,7 +66,7 @@ class Post < ActiveRecord::Base
       author.profile_url = "http://" + feed.url.split('/')[2]
 
       if !author.save
-        author_exist = Author.find_last_by_provider_and_guid(feed.id,feed.url)
+        author_exist = Author.where(provider: feed.id, guid: feed.url).first
         author.id = author_exist.id
         author.save
       end

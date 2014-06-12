@@ -3,13 +3,19 @@
     = link_to '#services', 'data-toggle' => 'tab', id: 'sidebar-services-tab' do
       Services
       %span.badge= @services.count
+  %li
+    = link_to '#gloablchat', 'data-toggle' => 'tab', id: 'sidebar-gloablchat-tab' do
+      Join the chat
+      %span.badge#chat_users= 0
+
 
 .tab-content
   .tab-pane.active#services
     = render "services", services: @services
-
-.prepend-top-20
-  %span
-    = link_to "#", class: "cgray", id: 'sidebar-clear-filter' do
-      %i.icon-remove
-      %strong Clear filter
+    .prepend-top-20
+      %span
+        = link_to "#", class: "cgray", id: 'sidebar-clear-filter' do
+          %i.icon-remove
+          %strong Clear filter
+  .tab-pane#gloablchat
+    = render "chat/index"

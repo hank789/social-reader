@@ -1,0 +1,16 @@
+%div.wall-page
+  %div#chat{"data-uri" => "#{request.host}:#{request.port}/websocket", "data-username" => "#{current_user.name}" }
+    %ul.notes
+
+  .note-form-holder
+    %ul#user-list
+    %form.new_note.wall-note-form
+      = hidden_field_tag "user_name"
+      = hidden_field_tag(:target_type)
+      = hidden_field_tag(:target_id)
+      .note_text_and_preview
+        = text_area(:note, :text, size: 255, id: "message", class: 'note_text js-note-text js-gfm-input turn-on')
+      .note-form-actions
+        .buttons
+          %input{value: "Add Comment", id: "send", class: "btn comment-btn btn-grouped js-comment-button"}
+      .clearfix

@@ -79,16 +79,16 @@ class CreateRssFeeds < ActiveRecord::Migration
     execute "INSERT INTO rss_feeds (name, url, created_at, updated_at, last_fetched, status) VALUES ('CNN.com - Top Stories', 'http://rss.cnn.com/rss/edition.rss',  now(), now(), NOW() - INTERVAL 3 DAY, 1)"
     execute "INSERT INTO rss_feeds (name, url, created_at, updated_at, last_fetched, status) VALUES ('CNN.com - World', 'http://rss.cnn.com/rss/edition_world.rss',  now(), now(), NOW() - INTERVAL 3 DAY, 1)"
 
+    execute "INSERT INTO rss_feeds_rss_categories (rss_feed_id, rss_category_id, created_at, updated_at) VALUES (14, 3, now(), now())"
     execute "INSERT INTO rss_feeds_rss_categories (rss_feed_id, rss_category_id, created_at, updated_at) VALUES (15, 3, now(), now())"
-    execute "INSERT INTO rss_feeds_rss_categories (rss_feed_id, rss_category_id, created_at, updated_at) VALUES (16, 3, now(), now())"
 
     execute "INSERT INTO rss_feeds (name, url, created_at, updated_at, last_fetched, status) VALUES ('Hacker News', 'https://news.ycombinator.com/rss',  now(), now(), NOW() - INTERVAL 3 DAY, 1)"
     execute "INSERT INTO rss_feeds (name, url, created_at, updated_at, last_fetched, status) VALUES ('Re/code', 'http://recode.net/feed', now(), now(), NOW() - INTERVAL 3 DAY, 1)"
     execute "INSERT INTO rss_feeds (name, url, created_at, updated_at, last_fetched, status) VALUES ('ReadWrite', 'http://readwrite.com/main/feed/articles.xml', now(), now(), NOW() - INTERVAL 3 DAY, 1)"
 
-    execute "INSERT INTO rss_feeds_rss_categories (rss_feed_id, rss_category_id, created_at, updated_at) VALUES (19, 4, now(), now())"
-    execute "INSERT INTO rss_feeds_rss_categories (rss_feed_id, rss_category_id, created_at, updated_at) VALUES (20, 4, now(), now())"
-    execute "INSERT INTO rss_feeds_rss_categories (rss_feed_id, rss_category_id, created_at, updated_at) VALUES (21, 4, now(), now())"
+    execute "INSERT INTO rss_feeds_rss_categories (rss_feed_id, rss_category_id, created_at, updated_at) VALUES (16, 4, now(), now())"
+    execute "INSERT INTO rss_feeds_rss_categories (rss_feed_id, rss_category_id, created_at, updated_at) VALUES (17, 4, now(), now())"
+    execute "INSERT INTO rss_feeds_rss_categories (rss_feed_id, rss_category_id, created_at, updated_at) VALUES (18, 4, now(), now())"
 
   end
 

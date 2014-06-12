@@ -1,6 +1,4 @@
 class RssfeedsController < ApplicationController
-
-  before_action :authenticate_user!
   before_filter :set_title, only: [:index, :new, :add_rss_feed, :edit, :update]
 
   respond_to :html

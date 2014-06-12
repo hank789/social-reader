@@ -59,6 +59,8 @@ ActiveRecord::Schema.define(version: 20140527224769) do
     t.integer  "user_id"
     t.integer  "author_id"
     t.datetime "stars_at"
+    t.datetime "read_at"
+    t.datetime "book_at"
   end
 
   add_index "events", ["action"], name: "index_events_on_action", using: :btree
@@ -144,12 +146,10 @@ ActiveRecord::Schema.define(version: 20140527224769) do
     t.text     "info"
     t.string   "nickname"
     t.integer  "user_id",                           null: false
-    t.integer  "priority",                          null: false
     t.datetime "created_at"
     t.datetime "updated_at"
     t.datetime "deleted_at"
     t.boolean  "active",            default: false, null: false
-    t.integer  "visibility_level",  default: 0,     null: false
     t.datetime "last_activity_at"
     t.string   "since_id"
     t.datetime "last_read_time"
@@ -157,7 +157,6 @@ ActiveRecord::Schema.define(version: 20140527224769) do
   end
 
   add_index "services", ["active"], name: "index_services_on_active", using: :btree
-  add_index "services", ["priority"], name: "index_services_on_priority", using: :btree
   add_index "services", ["uid", "service_name"], name: "index_services_on_uid_and_service_name", unique: true, using: :btree
   add_index "services", ["user_id"], name: "index_services_on_user_id", using: :btree
 
