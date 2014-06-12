@@ -45,6 +45,8 @@ class Chat.Controller
 
   sendMessage: (event) =>
     event.preventDefault()
+    if @dispatcher.connection_stale()
+      @dispatcher.reconnect()
     message = $('#message').val()
     @dispatcher.trigger 'global_chat.new_message', {user_name: @user.user_name, msg_body: message}
     $('#message').val('')
