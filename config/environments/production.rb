@@ -91,4 +91,6 @@ Gitlab::Application.configure do
   config.assets.js_compressor = :uglifier
 
   config.allow_concurrency = false
+  # for websocket-rails: https://github.com/DanKnox/websocket-rails/wiki/Installation-and-Setup
+  config.middleware.delete Rack::Lock
 end
