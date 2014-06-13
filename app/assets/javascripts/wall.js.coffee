@@ -52,8 +52,11 @@ class Wall
   
   renderNote: (note) ->
     template = @noteTemplate()
+    if !note.user.avatar.url
+      note.user.avatar.url = "/assets/no_avatar.png"
+
     template = template.replace('{{author_name}}', note.user.name)
-    template = template.replace('{{author_avatar}}', note.user.avatar)
+    template = template.replace('{{author_avatar}}', note.user.avatar.url)
     template = template.replace(/{{created_at}}/g, $.format.date(note.created_at, "HH:mm:ss"))
     template = template.replace('{{text}}', simpleFormat(note.body))
 

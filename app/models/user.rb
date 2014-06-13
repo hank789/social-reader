@@ -120,23 +120,6 @@ class User < ActiveRecord::Base
   alias_attribute :private_token, :authentication_token
 
   state_machine :state, initial: :active do
-    after_transition any => :blocked do |user, transition|
-      # Remove user from all projects and
-      user.users_projects.find_each do |membership|
-        # skip owned resources
-        next if membership.project.owner == user
-
-        return false unless membership.destroy
-      end
-
-      # Remove user from all groups
-      user.users_groups.find_each do |membership|
-        # skip owned resources
-        next if membership.group.last_owner?(user)
-
-        return false unless membership.destroy
-      end
-    end
 
     event :block do
       transition active: :blocked

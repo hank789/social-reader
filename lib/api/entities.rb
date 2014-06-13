@@ -2,7 +2,7 @@ module API
   module Entities
     class User < Grape::Entity
       expose :id, :username, :email, :name, :bio, :skype, :linkedin, :twitter, :website_url,
-             :theme_id, :color_scheme_id, :state, :created_at, :extern_uid, :provider
+             :theme_id, :color_scheme_id, :state, :created_at, :extern_uid, :provider, :avatar
       expose :is_admin?, as: :is_admin
       expose :can_create_group?, as: :can_create_group
       expose :can_create_project?, as: :can_create_project
@@ -19,7 +19,7 @@ module API
     end
 
     class UserBasic < Grape::Entity
-      expose :id, :username, :email, :name, :state, :created_at
+      expose :id, :username, :email, :name, :state, :created_at, :avatar
     end
 
     class UserLogin < User
