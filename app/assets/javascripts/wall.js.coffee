@@ -53,7 +53,7 @@ class Wall
   renderNote: (note) ->
     template = @noteTemplate()
     if !note.user.avatar.url
-      note.user.avatar.url = "/assets/no_avatar.png"
+      note.user.avatar.url = "https://secure.gravatar.com/avatar/668b2c160b3a956346859747446c7486?s=16&d=mm"
 
     template = template.replace('{{author_name}}', note.user.name)
     template = template.replace('{{author_avatar}}', note.user.avatar.url)
