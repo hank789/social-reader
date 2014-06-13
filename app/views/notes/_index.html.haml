@@ -1,4 +1,4 @@
-%div.wall-page
+.wall-page
   %ul.notes
   .note-form-holder
     = form_for @note, remote: true, html: { multipart: true, id: nil, action: "/-1/notes", class: "new_note wall-note-form" }, authenticity_token: true do |f|

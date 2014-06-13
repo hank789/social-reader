@@ -51,26 +51,21 @@ class Wall
     form.show()
   
   renderNote: (note) ->
-    template = @noteTemplate()
     if !note.user.avatar.url
       note.user.avatar.url = "https://secure.gravatar.com/avatar/668b2c160b3a956346859747446c7486?s=16&d=mm"
-
-    template = template.replace('{{author_name}}', note.user.name)
-    template = template.replace('{{author_avatar}}', note.user.avatar.url)
-    template = template.replace(/{{created_at}}/g, $.format.date(note.created_at, "HH:mm:ss"))
-    template = template.replace('{{text}}', simpleFormat(note.body))
-
-
-
+    template = @noteTemplate(note)
     $('ul.notes').append(template)
 
-  noteTemplate: ->
-    return '<li>
-      <span class="wall-author"><img src="{{author_avatar}}" class="avatar s16" alt="">{{author_name}}</span>
-      <abbr class="timeago" title="{{created_at}}">{{created_at}}</abbr>
-      <span class="wall-text">
-        {{text}}
-      </span>
-    </li>'
+  noteTemplate: (note) ->
+    html =
+      """
+      <li><span class="wall-author"><img src="#{note.user.avatar.url}" class="avatar s16" alt="">#{note.user.name}</span>
+        <abbr class="timeago" title="{{created_at}}">#{$.format.date(note.created_at, "HH:mm:ss")}</abbr>
+        <span class="wall-text">
+        #{simpleFormat(note.body)}
+        </span>
+      </li>
+      """
+    $(html)
 
 @Wall = Wall
