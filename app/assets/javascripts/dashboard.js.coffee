@@ -35,11 +35,6 @@ class Dashboard
     $("#" + sidebar_filter).tab('show') if sidebar_filter
 
   initChatTab: ->
-    window.chatController = new Chat.Controller($('#chat').data('uri'), true);
-    notes = $('ul.notes')
-    $('body, html').scrollTop(notes.height())
-    form = $('.wall-note-form')
-    form.find("#target_type").val('wall')
-    form.show()
+    new Wall(-1)
 
 @Dashboard = Dashboard

@@ -22,7 +22,7 @@ class FetchFeedWorker
     feed = RssFeed.find(feed_id)
     raw_feed = Feedjira::Feed.fetch_and_parse(feed.url, if_modified_since: feed.last_fetched, timeout: 60, max_redirects: 2)
     count = 0
-    if raw_feed == 304 || raw_feed == 0
+    if raw_feed.is_a? Integer
       log("#{feed.url} has not been modified since last fetch")
     else
       new_entries_from(raw_feed,feed).each do |entry|

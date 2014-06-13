@@ -50,7 +50,7 @@ module DashboardHelper
     case service.service_name
       when 'RssFeedService'
         author = Author.where(provider: service.access_token).first
-        return author.avatar
+        return author.avatar unless author.nil?
       else
         return image_path("services/#{service.provider}.png")
     end

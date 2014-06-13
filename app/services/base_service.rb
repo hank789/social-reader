@@ -1,8 +1,8 @@
 class BaseService
-  attr_accessor :project, :current_user, :params
+  attr_accessor :post, :current_user, :params
 
-  def initialize(project, user, params)
-    @project, @current_user, @params = project, user, params.dup
+  def initialize(post, user, params)
+    @post, @current_user, @params = post, user, params.dup
   end
 
   def abilities

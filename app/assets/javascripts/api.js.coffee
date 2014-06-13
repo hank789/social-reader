@@ -1,15 +1,13 @@
 @Api =
   users_path: "/api/:version/users.json"
   user_path: "/api/:version/users/:id.json"
-  notes_path: "/api/:version/projects/:id/notes.json"
-  namespaces_path: "/api/:version/namespaces.json"
-  project_users_path: "/api/:version/projects/:id/users.json"
+  notes_path: "/api/:version/posts/:id/notes.json"
 
   # Get 20 (depends on api) recent notes
   # and sort the ascending from oldest to newest
-  notes: (project_id, callback) ->
+  notes: (post_id, callback) ->
     url = Api.buildUrl(Api.notes_path)
-    url = url.replace(':id', project_id)
+    url = url.replace(':id', post_id)
 
     $.ajax(
       url: url,

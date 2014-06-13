@@ -41,21 +41,6 @@ module API
       end
     end
 
-    def user_project
-      @project ||= find_project(params[:id])
-      @project || not_found!
-    end
-
-    def find_project(id)
-      project = Project.find_with_namespace(id) || Project.find_by(id: id)
-
-      if project && can?(current_user, :read_project, project)
-        project
-      else
-        nil
-      end
-    end
-
     def paginate(relation)
       per_page  = params[:per_page].to_i
       paginated = relation.page(params[:page]).per(per_page)

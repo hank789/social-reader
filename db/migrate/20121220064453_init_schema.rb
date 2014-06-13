@@ -187,6 +187,26 @@ class InitSchema < ActiveRecord::Migration
     add_index "snippets", ["user_id"], name: "index_snippets_on_user_id", using: :btree
     add_index "snippets", ["created_at"], name: "index_snippets_on_created_at", using: :btree
     add_index "snippets", ["expires_at"], name: "index_snippets_on_expires_at", using: :btree
+
+    create_table "notes", force: true do |t|
+      t.text     "note"
+      t.string   "noteable_type"
+      t.integer  "user_id"
+      t.datetime "created_at"
+      t.datetime "updated_at"
+      t.integer  "post_id"
+      t.string   "attachment"
+      t.integer  "noteable_id"
+      t.boolean  "system",        default: false, null: false
+    end
+
+    add_index "notes", ["user_id"], name: "index_notes_on_user_id", using: :btree
+    add_index "notes", ["created_at"], name: "index_notes_on_created_at", using: :btree
+    add_index "notes", ["noteable_id", "noteable_type"], name: "index_notes_on_noteable_id_and_noteable_type", using: :btree
+    add_index "notes", ["noteable_type"], name: "index_notes_on_noteable_type", using: :btree
+    add_index "notes", ["post_id", "noteable_type"], name: "index_notes_on_post_id_and_noteable_type", using: :btree
+    add_index "notes", ["post_id"], name: "index_notes_on_post_id", using: :btree
+    add_index "notes", ["updated_at"], name: "index_notes_on_updated_at", using: :btree
   end
 
   def down

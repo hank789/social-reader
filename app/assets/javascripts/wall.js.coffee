@@ -1,6 +1,6 @@
 class Wall
-  constructor: (project_id) ->
-    @project_id = project_id
+  constructor: (post_id) ->
+    @post_id = post_id
     @note_ids = []
     @getContent()
     @initRefresh()
@@ -10,7 +10,7 @@ class Wall
   # Gets an initial set of notes.
   # 
   getContent: ->
-    Api.notes @project_id, (notes) =>
+    Api.notes @post_id, (notes) =>
       $.each notes, (i, note) =>
         # render note if it not present in loaded list
         # or skip if rendered
@@ -18,7 +18,7 @@ class Wall
           @note_ids.push(note.id)
           @renderNote(note)
           @scrollDown()
-          $("abbr.timeago").timeago()
+          #$("abbr.timeago").timeago()
 
   initRefresh: ->
     setInterval =>
@@ -43,13 +43,6 @@ class Wall
     form.on 'ajax:complete', ->
       form.find(".js-comment-button").removeAttr('disabled')
       form.find(".js-comment-button").removeClass('disabled')
-
-    form.on "click", ".js-choose-note-attachment-button", ->
-      form.find(".js-note-attachment-input").click()
-
-    form.on "change", ".js-note-attachment-input", ->
-      filename = $(this).val().replace(/^.*[\\\/]/, '')
-      form.find(".js-attachment-filename").text(filename)
     
     form.find('.note_text').keydown (e) ->
       if e.ctrlKey && e.keyCode == 13
@@ -59,27 +52,22 @@ class Wall
   
   renderNote: (note) ->
     template = @noteTemplate()
-    template = template.replace('{{author_name}}', note.author.name)
-    template = template.replace(/{{created_at}}/g, note.created_at)
+    template = template.replace('{{author_name}}', note.user.name)
+    template = template.replace('{{author_avatar}}', note.user.avatar)
+    template = template.replace(/{{created_at}}/g, $.format.date(note.created_at, "HH:mm:ss"))
     template = template.replace('{{text}}', simpleFormat(note.body))
 
-    if note.attachment
-      file = '<i class="icon-paper-clip"/><a href="' + gon.relative_url_root + '/files/note/' + note.id + '/' + note.attachment + '">' + note.attachment + '</a>'
-    else
-      file = ''
-    template = template.replace('{{file}}', file)
 
 
     $('ul.notes').append(template)
 
   noteTemplate: ->
     return '<li>
-      <strong class="wall-author">{{author_name}}</strong>
+      <span class="wall-author"><img src="{{author_avatar}}" class="avatar s16" alt="">{{author_name}}</span>
+      <abbr class="timeago" title="{{created_at}}">{{created_at}}</abbr>
       <span class="wall-text">
         {{text}}
-        <span class="wall-file">{{file}}</span>
       </span>
-      <abbr class="timeago" title="{{created_at}}">{{created_at}}</abbr>
     </li>'
 
 @Wall = Wall

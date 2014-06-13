@@ -18,7 +18,7 @@ class RssfeedsController < ApplicationController
 
   def update
     @rss_child_categories = RssCategory.child_category(params[:id])
-    if params[:service][:select_feed]
+    if params[:service].present? && params[:service][:select_feed].present?
       cids = [params[:id],params[:service][:select_feed]]
     else
       cids = RssCategory.child_category(params[:id]).pluck(:id)
@@ -77,7 +77,7 @@ class RssfeedsController < ApplicationController
       service.uid = current_user.id.to_s + "_" + feed.id.to_s
       service.access_token = feed.id
       service.provider = params[:id]
-      if params[:service][:select_feed]
+      if params[:service].present? && params[:service][:select_feed].present?
         service.nickname = params[:service][:select_feed]
       end
       service.user = current_user

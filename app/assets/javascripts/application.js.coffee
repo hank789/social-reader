@@ -28,7 +28,6 @@
 #= require nprogress
 #= require nprogress-turbolinks
 #= require morris
-#= require websocket_rails/main
 #= require_tree .
 
 window.slugify = (text) ->

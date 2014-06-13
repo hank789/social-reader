@@ -131,5 +131,20 @@ Gitlab::Application.routes.draw do
       get :failure
     end
   end
+  resource :wall, only: [:show], constraints: {id: /\d+/} do
+    member do
+      get 'notes'
+    end
+  end
+
+  resources :notes, only: [:index, :create, :destroy, :update], constraints: {id: /\d+/} do
+    member do
+      delete :delete_attachment
+    end
+
+    collection do
+      post :preview
+    end
+  end
   root to: "dashboard#show"
 end

@@ -27,11 +27,11 @@ module API
     helpers APIHelpers
 
     mount Users
-    mount Posts
     mount Session
+    mount Notes
     mount Internal
     mount SystemHooks
-    mount Service
+    mount Services
     mount Files
   end
 end

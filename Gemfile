@@ -172,7 +172,7 @@ gem "feedjira", "~> 1.3.0"
 
 gem 'truncate_html', '~> 0.9.2'
 
-gem 'websocket-rails', '~> 0.7.0'
+# gem 'websocket-rails', '~> 0.7.0'
 
 group :development do
   gem "annotate", "~> 2.6.0.beta2"

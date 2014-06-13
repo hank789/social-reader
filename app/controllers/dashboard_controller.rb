@@ -11,6 +11,7 @@ class DashboardController < ApplicationController
     @events = Event.load_events(current_user.id)
     @events = @event_filter.apply_filter(@events,current_user.id)
     @events = @events.limit(50).offset(params[:offset] || 0)
+    @note = Note.new
 
     if params[:offset] == "0" && @events.first
       cookies['lasted_event_id'] = @events.first.id

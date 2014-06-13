@@ -16,7 +16,6 @@
           %hr
 
           .form-actions
-            - if @rss_category.select_type == 1
-              = f.submit 'Save service', class: "btn btn-create project-submit", tabindex: 4
+            = f.submit 'Save service', class: "btn btn-create project-submit", tabindex: 4
             - if @service.id
               = link_to "Disconnect #{@rss_category.name}", rssfeed_path(@service.id), class: "btn btn-remove", :data => { :confirm => "Disconnect #{@rss_category.name}?" }, :method => :delete

@@ -6,7 +6,6 @@
   %li
     = link_to '#gloablchat', 'data-toggle' => 'tab', id: 'sidebar-gloablchat-tab' do
       Join the chat
-      %span.badge#chat_users= 0
 
 
 .tab-content
@@ -18,4 +17,4 @@
           %i.icon-remove
           %strong Clear filter
   .tab-pane#gloablchat
-    = render "chat/index"
+    = render "notes/index"

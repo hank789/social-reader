@@ -25,10 +25,10 @@ Gitlab::Application.configure do
 
   # Specifies the header that your server uses for sending files
   # config.action_dispatch.x_sendfile_header = "X-Sendfile" # for apache
-  # config.action_dispatch.x_sendfile_header = 'X-Accel-Redirect' # for nginx
+  config.action_dispatch.x_sendfile_header = 'X-Accel-Redirect' # for nginx
 
   # Force all access to the app over SSL, use Strict-Transport-Security, and use secure cookies.
-  # config.force_ssl = true
+  config.force_ssl = true
 
   # See everything in the log (default is :info)
   # config.log_level = :debug
@@ -53,7 +53,7 @@ Gitlab::Application.configure do
                else
                  "redis://localhost:6379"
                end
-  config.cache_store = :redis_store, resque_url, {namespace: 'cache:gitlab', :driver => :hiredis}
+  config.cache_store = :redis_store, resque_url, {namespace: 'cache:gitlab'}
 
   # Enable serving of images, stylesheets, and JavaScripts from an asset server
   # config.action_controller.asset_host = "http://assets.example.com"
@@ -91,6 +91,4 @@ Gitlab::Application.configure do
   config.assets.js_compressor = :uglifier
 
   config.allow_concurrency = false
-  # for websocket-rails: https://github.com/DanKnox/websocket-rails/wiki/Installation-and-Setup
-  config.middleware.delete Rack::Lock
 end

@@ -26,18 +26,17 @@
       color: #666;
       float: left;
       font-size: 12px;
-      width: 120px;
       text-overflow: ellipsis;
       white-space: nowrap;
       overflow: hidden;
+      margin-left: 5px;
+      padding-left: 5px;
     }
 
     .wall-text {
-      border-left: 1px solid #CCC;
-      margin-left: 10px;
-      padding-left: 10px;
+      margin-left: 5px;
+      padding-left: 5px;
       float: left;
-      width: 75%;
     }
 
     .wall-file {
@@ -46,9 +45,11 @@
     }
 
     abbr {
-      float: right;
+      float: left;
       color: #AAA;
       border: none;
+      margin-left: 5px;
+      padding-left: 5px;
     }
   }
 }
