@@ -34,7 +34,7 @@ class ImportFromOpml
           FetchFeedWorker.perform_async feed.id
         end
       end
-
+      return false unless feed.id
       RssFeedsRssCategory.where(rss_feed_id: feed.id, rss_category_id: group.id).first_or_create
       service = Service.new
       service.service_name = 'RssFeedService'

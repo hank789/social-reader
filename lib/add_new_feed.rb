@@ -16,6 +16,7 @@ class AddNewFeed
         FetchFeedWorker.perform_async feed.id
       end
     end
+    return false unless feed.id
     service = Service.new
     service.service_name = 'RssFeedService'
     service.uid = user.id.to_s + "_" + feed.id.to_s

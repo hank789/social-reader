@@ -218,6 +218,13 @@ ActiveRecord::Schema.define(version: 20140527224769) do
 
   add_index "tags", ["name"], name: "index_tags_on_name", using: :btree
 
+  create_table "tmp_file", force: true do |t|
+    t.text     "note"
+    t.integer  "user_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "users", force: true do |t|
     t.string   "email",                    default: "",    null: false
     t.string   "encrypted_password",       default: "",    null: false

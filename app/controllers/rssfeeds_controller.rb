@@ -92,8 +92,13 @@ class RssfeedsController < ApplicationController
   end
 
   def apply_import
-    ImportFromOpml.import(params["opml_file"].read, current_user)
-    flash[:notice] = 'Your feeds was successfully imported.'
+    tmpfile = TmpFile.new
+    tmpfile.note = params["opml_file"].read
+    tmpfile.user_id = current_user.id
+    tmpfile.save
+    ImportOpmlWorker.perform_async(tmpfile.id)
+    #ImportFromOpml.import(params["opml_file"].read, current_user)
+    flash[:notice] = 'Please wait a minute until the importer worker is finished.'
     redirect_to new_service_url
   end
 

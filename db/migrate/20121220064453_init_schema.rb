@@ -207,6 +207,13 @@ class InitSchema < ActiveRecord::Migration
     add_index "notes", ["post_id", "noteable_type"], name: "index_notes_on_post_id_and_noteable_type", using: :btree
     add_index "notes", ["post_id"], name: "index_notes_on_post_id", using: :btree
     add_index "notes", ["updated_at"], name: "index_notes_on_updated_at", using: :btree
+
+    create_table "tmp_files", force: true do |t|
+      t.text     "note"
+      t.integer  "user_id"
+      t.datetime "created_at"
+      t.datetime "updated_at"
+    end
   end
 
   def down
