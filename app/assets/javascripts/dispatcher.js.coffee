@@ -20,7 +20,7 @@ class Dispatcher
       when 'dashboard:show', 'dashboard:archive'
         new Dashboard()
         new Activities()
-      when 'rssfeeds:add_rss_feed'
+      when 'rssfeeds:add_rss_feed', 'rssfeeds:rss'
         new Feeds()
 
 
