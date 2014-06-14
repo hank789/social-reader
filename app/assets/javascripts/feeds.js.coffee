@@ -13,8 +13,7 @@ class Feeds
             feed_url : slug
             feed_group : group
           success: (msg) ->
-            if msg == "1"
-              window.location.reload(true)
+            window.location.reload(true)
 
     $('.rssfeeds-delete-feed').bind "click", ->
       field = $('#' + this.id)
