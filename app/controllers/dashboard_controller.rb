@@ -77,7 +77,6 @@ class DashboardController < ApplicationController
     @services_limit = 30
     @has_authorized_services = @services.count > 0
     @services_count = @services.count
-    @services = @services.limit(@services_limit)
 
     @publicish_service_count = 1
   end
