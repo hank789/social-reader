@@ -1,5 +1,3 @@
-require "nokogiri"
-
 class OpmlParser
   def parse_feeds(contents)
     doc = Nokogiri.XML(contents)

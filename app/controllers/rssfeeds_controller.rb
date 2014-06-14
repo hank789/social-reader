@@ -92,9 +92,9 @@ class RssfeedsController < ApplicationController
   end
 
   def apply_import
-    ImportFromOpml.import(params["opml_file"], current_user)
+    ImportFromOpml.import(params["opml_file"].read, current_user)
     flash[:notice] = 'Your feeds was successfully imported.'
-    redirect_to rssfeeds_import_path
+    redirect_to new_service_url
   end
 
   def destroy
