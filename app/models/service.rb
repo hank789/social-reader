@@ -25,6 +25,7 @@ class Service < ActiveRecord::Base
   self.inheritance_column = :service_name
   belongs_to :user
   has_many :events
+  validates :access_token, presence: true
   validates_uniqueness_of :uid, :scope => :service_name
   # For Hash only
   serialize :info

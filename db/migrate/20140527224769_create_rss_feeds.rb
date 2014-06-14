@@ -20,9 +20,12 @@ class CreateRssFeeds < ActiveRecord::Migration
       t.datetime "created_at"
       t.datetime "updated_at"
       t.integer  "status"
+      t.integer  "user_id"
       t.integer  "select_type", default: 0
     end
     add_index "rss_categories", ["parent_id"], name: "index_rss_categories_on_parent_id", using: :btree
+    add_index "rss_categories", ["user_id"], name: "index_rss_categories_on_user_id", using: :btree
+    add_index "rss_categories", ["user_id","name"], name: "index_rss_categories_on_user_id_and_name", unique: true, using: :btree
 
     create_table "rss_feeds_rss_categories", force: true do |t|
       t.integer  "rss_feed_id"

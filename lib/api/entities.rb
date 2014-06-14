@@ -26,12 +26,6 @@ module API
       expose :private_token
     end
 
-    class Hook < Grape::Entity
-      expose :id, :url, :created_at
-    end
-
-
-
     class Note < Grape::Entity
       expose :id
       expose :note, as: :body
@@ -40,17 +34,6 @@ module API
       expose :created_at
     end
 
-    class MRNote < Grape::Entity
-      expose :note
-      expose :author, using: Entities::UserBasic
-    end
-
-    class Event < Grape::Entity
-      expose :title, :project_id, :action_name
-      expose :target_id, :target_type, :author_id
-      expose :data, :target_title
-      expose :created_at
-    end
 
     class Label < Grape::Entity
       expose :name

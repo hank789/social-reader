@@ -117,6 +117,11 @@ Gitlab::Application.routes.draw do
   devise_for :users, controllers: { omniauth_callbacks: :omniauth_callbacks, registrations: :registrations , passwords: :passwords}
   get 'services/test' => "services#test"
   get 'services/rssfeeds/:id' => "rssfeeds#add_rss_feed"
+  get 'rssfeeds/rss' => "rssfeeds#rss"
+  post 'rssfeeds/create_rss' => "rssfeeds#create_rss"
+  post 'rssfeeds/apply_import' => "rssfeeds#apply_import"
+  post 'rssfeeds/add_feed' => "rssfeeds#add_feed"
+  post 'rssfeeds/delete_feed/:id' => "rssfeeds#delete_feed", as: :rssfeeds_delete_feed
   resources :services do
 
   end

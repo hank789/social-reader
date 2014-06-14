@@ -3,8 +3,14 @@
     RSS Source
   .col-sm-10
     - rss_category.rss_feeds.each do |level|
-      .radio
-        = label :feed, level.id do
-          = content_tag :i, nil, class: 'icon-rss'
-          .option-title
-            = level.name
+      - if current_user.services.any?{|service| service.access_token == level.id.to_s}
+        .radio{id: "radio-feed-" + level.id.to_s}
+          = label :feed, level.id do
+            = content_tag :i, nil, class: 'icon-rss'
+            .option-title
+              = level.name
+          - if @service.id && @rss_category.status == 0
+            %small
+              = link_to "#", class: "cgray rssfeeds-delete-feed", id: "feed-#{level.id}", :'data-feed-path' => rssfeeds_delete_feed_path(level) do
+                %i.icon-remove{style: "font-size:14px"}
+                remove

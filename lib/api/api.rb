@@ -30,8 +30,6 @@ module API
     mount Session
     mount Notes
     mount Internal
-    mount SystemHooks
-    mount Services
     mount Files
   end
 end

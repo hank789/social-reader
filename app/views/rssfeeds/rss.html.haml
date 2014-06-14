@@ -1,0 +1,42 @@
+.project-edit-container
+  .project-edit-content
+    = form_for @feed, url: rssfeeds_create_rss_path,:method => :post, html: { class: 'form-horizontal' } do |f|
+      .row
+        .col-md-12
+          %h3.page-title
+            = image_tag image_path("services/rss.png"), class: "avatar s32"
+            RSS
+            .pull-right
+              = link_to '#modal-new-feed', class: "btn btn-new", "data-toggle" => "modal" do
+                %i.icon-plus
+                New Feed
+          %hr
+
+    .note-form-holder
+      = form_tag rssfeeds_apply_import_path, remote: true, multipart: true, id: "import_opml_form", authenticity_token: true do |f|
+
+        .note-form-actions
+          .buttons
+            = submit_tag 'Import', class: "btn comment-btn btn-grouped js-comment-button"
+
+          .note-form-option
+            %a.choose-btn.btn.btn-small.js-choose-note-attachment-button#js-choose-note-attachment-button
+              %i.icon-paper-clip
+                %span Choose OPML File ...
+            &nbsp;
+            %span.file_name.js-attachment-filename File name...
+            = file_field_tag :opml_file, class: "js-note-attachment-input hidden", id: "js-note-attachment-input"
+        .clearfix
+    = render 'new'
+
+    :javascript
+      $(document).ready(function() {
+        $('#js-choose-note-attachment-button').on("click", function(e) {
+          $('#js-note-attachment-input').click();
+        });
+        $('#js-note-attachment-input').on("change", function(e) {
+          filename = $(this).val().replace(/^.*[\\\/]/, '');
+          $(".js-attachment-filename").text(filename);
+        });
+      });
+

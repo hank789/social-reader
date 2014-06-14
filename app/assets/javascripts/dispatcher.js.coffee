@@ -14,13 +14,15 @@ class Dispatcher
       return false
 
     path = page.split(':')
-
     switch page
       when 'dashboard:stars', 'services:show'
         new Activities()
       when 'dashboard:show', 'dashboard:archive'
         new Dashboard()
         new Activities()
+      when 'rssfeeds:add_rss_feed'
+        new Feeds()
+
 
     switch path.first()
       when 'admin' then new Admin()

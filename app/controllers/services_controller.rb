@@ -17,7 +17,7 @@ class ServicesController < ApplicationController
   def new
     @services = current_user.services
     @feeds = RssFeed.list
-    @rss_categories = RssCategory.parent_category
+    @rss_categories = RssCategory.where("( parent_id = -1 and status = 0 and user_id = ? ) or ( parent_id = -1 and status = 1 )", current_user.id)
   end
 
   def create

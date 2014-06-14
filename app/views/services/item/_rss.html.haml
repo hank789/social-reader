@@ -1,0 +1,8 @@
+.form-service
+  = image_tag image_path("services/rss.png"), class: "icon"
+  %h4
+    RSS
+  %br
+  = link_to "/rssfeeds/rss", class: "btn btn-new", :disable_with => "Certification requesting..." do
+    %i.icon-plus{:style=>"margin-right: 0.25rem;"}
+    Add

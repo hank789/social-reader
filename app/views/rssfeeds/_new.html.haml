@@ -1,0 +1,14 @@
+%div#modal-new-feed.modal.hide
+  .modal-dialog
+    .modal-content
+      .modal-header
+        %a.close{href: "#", "data-dismiss" => "modal"} ×
+        %h3.page-title Need new stories?
+      .modal-body
+        = label_tag :feed_url do
+          %span Feed URL
+        = text_field_tag :feed_url, nil, placeholder: 'Paste in the URL of the blog you want to read.', class: 'form-control', required: true, :'data-feed-group' => params[:id], :'data-feed-path' => rssfeeds_add_feed_path(@rssfeed)
+        %p.hint
+          Please don't use spaces.
+      .modal-footer
+        = link_to 'Build', '#', class: 'build-new-feed btn btn-create'

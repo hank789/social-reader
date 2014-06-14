@@ -10,8 +10,8 @@ class FetchFeedWorker
       feeds.each do |feed|
         fetch_feed(feed.id)
       end
+      FetchFeedWorker.perform_in(3.hours)
     end
-    FetchFeedWorker.perform_in(3.hours)
   end
 
   def log(message)
