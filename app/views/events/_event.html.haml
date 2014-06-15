@@ -1,8 +1,5 @@
 .event-item{class: "#{event.body? ? "event-block" : "event-inline" }"}
   %span.cgray.pull-right
-    = favorite_tag(event)
-    #{time_ago_with_tooltip(event.created_at)}
-    %span.event_label{class: event.action_name}= event_action_name(event)
     - if params[:action] == 'show'
       .event-actions
         = link_to events_mark_above_as_read_path(id: event.id, service: params[:id]), method: :put,  class: "btn btn-small btn-grouped", remote: true do
@@ -15,4 +12,11 @@
       = render "events/event/rss", event: event
     -else
       = render "events/event/common", event: event
+
+
+  %span.cgray.pull-right
+    = favorite_tag(event)
+    #{time_ago_with_tooltip(event.created_at)}
+    %span.event_label{class: event.action_name}= event_action_name(event)
+  %br
 

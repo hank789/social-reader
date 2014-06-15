@@ -139,7 +139,7 @@ module EventsHelper
       short_text2.gsub! '<a class="text-expander js-toggle-button">...</a></p>', ''
       long_text = truncate_html(text, length: t_length + 100 , omission: '')
       long_text.gsub! short_text2, ''
-      return short_text.html_safe + "<div class='js-toggle-content'>#{long_text}#{favorite_tag(event)}</div>".html_safe
+      return  "#{short_text}<div class='js-toggle-content'>#{long_text}</div>".html_safe
     else
       return text.html_safe
     end
@@ -164,5 +164,9 @@ module EventsHelper
     end
     favorite_label = raw "#{icon}"
     raw "#{link_to(favorite_label, "#", :onclick => "return Events.favorite(this);", 'data-id' => event.id, :title => link_title, :rel => "twipsy")}"
+  end
+
+  def share_to_chat(event)
+
   end
 end
