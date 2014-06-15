@@ -10,37 +10,26 @@ class TwitterService < Service
   end
 
   def post tweet
-    author = Author.new
-    author.provider = self.provider
+    author = Author.where(guid: tweet.user.id, provider: self.provider).first_or_initialize
     author.name = tweet.user.name
-    author.guid = tweet.user.id
     author.slug = tweet.user.screen_name
     author.remote_avatar_url = tweet.user.profile_image_url.to_s
     author.description = tweet.user.description.to_s
     author.profile_url = "https://twitter.com/#{tweet.user.screen_name.to_s}"
     author.data = tweet.user
-    if !author.save
-      author_exist = Author.where(provider: self.provider, guid: tweet.user.id).first
-      author.id = author_exist.id
-      author.save
-    end
+    author.save
 
-
-    post = Post.new
+    post = Post.where(guid: tweet.id, provider: self.provider).first_or_initialize
+    post_new = post.new_record?
     post.description = tweet.full_text
     post.author_id = author.id
-    post.guid = tweet.id
-    post.provider = self.provider
     post.link = tweet.uri.to_s
     post.favourite_count = 0
     post.created_at = tweet.created_at
     post.updated_at = tweet.created_at
     post.data = tweet
-    if !post.save
-      post_exist = Post.where(provider: self.provider, guid: tweet.id).first
-      post.id = post_exist.id
-      post.save
-    else
+    post.save
+    if post_new
       # to-do link & tag &mention
       if tweet.media? && tweet.media[0].class == Twitter::Media::Photo
         photo = Photo.new

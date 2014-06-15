@@ -164,7 +164,7 @@ gem 'nprogress-rails'
 # service
 gem 'twitter', '~> 5.8.0'
 gem "koala", "~> 1.10.0rc"
-gem 'instagram', '~> 1.0.0'
+gem 'instagram', '~> 1.1.1'
 
 # rss
 gem "feedbag", "~> 0.9.2"

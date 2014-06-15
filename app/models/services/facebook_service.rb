@@ -9,36 +9,25 @@ class FacebookService < Service
   end
 
   def post(tweet)
-    author = Author.new
-    author.provider = self.provider
+    author = Author.where(guid: tweet['from']['id'], provider: self.provider).first_or_initialize
+
     author.name = tweet['from']['name']
-    author.guid = tweet['from']['id']
     author.slug = tweet['from']['category']
     author.remote_avatar_url = profile_photo_url(tweet['from']['id'])
     author.profile_url = "https://www.facebook.com/#{tweet['from']['id']}"
+    author.save
 
-    if !author.save
-      author_exist = Author.where(provider: self.provider, guid: tweet['from']['id']).first
-      author.id = author_exist.id
-      author.save
-    end
-
-
-    post = Post.new
+    post = Post.where(guid: tweet['id'], provider: self.provider).first_or_initialize
+    post_new = post.new_record?
     post.description = tweet['message']
     post.author_id = author.id
-    post.guid = tweet['id']
-    post.provider = self.provider
     post.link = "https://www.facebook.com/#{tweet['id'].gsub("_","/posts/")}"
     post.favourite_count = 0
     post.created_at = tweet['created_time']
     post.updated_at = tweet['updated_time']
     post.data = tweet
-    if !post.save
-      post_exist = Post.where(provider: self.provider, guid: tweet['id']).first
-      post.id = post_exist.id
-      post.save
-    else
+    post.save
+    if post_new
       # to-do link & tag &mention
       if tweet['type'] == 'photo'
         photo = Photo.new

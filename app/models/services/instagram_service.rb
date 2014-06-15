@@ -7,36 +7,26 @@ class InstagramService < Service
 
   def post(tweet)
     tweet.created_time = Time.at(tweet.created_time.to_i)
-    author = Author.new
-    author.provider = self.provider
+    author = Author.where(guid: tweet.user.id, provider: self.provider).first_or_initialize
+
     author.name = tweet.user.full_name
-    author.guid = tweet.user.id
     author.slug = tweet.user.username
     author.remote_avatar_url = tweet.user.profile_picture
     author.profile_url = "http://instagram.com/#{tweet.user.username}"
+    author.save
 
-    if !author.save
-      author_exist = Author.where(provider: self.provider, guid: tweet.user.id).first
-      author.id = author_exist.id
-      author.save
-    end
-
-
-    post = Post.new
+    post = Post.where(guid: tweet.id, provider: self.provider).first_or_initialize
+    post_new = post.new_record?
     post.description = tweet.caption.text unless tweet.caption.nil?
     post.author_id = author.id
-    post.guid = tweet.id
-    post.provider = self.provider
     post.link = tweet.link
     post.favourite_count = 0
     post.created_at = tweet.created_time
     post.updated_at = tweet.created_time
     post.data = tweet
-    if !post.save
-      post_exist = Post.where(provider: self.provider, guid: tweet.id).first
-      post.id = post_exist.id
-      post.save
-    else
+    post.save
+
+    if post_new
       # to-do link & tag &mention
       photo = Photo.new
       photo.post_id = post.id
