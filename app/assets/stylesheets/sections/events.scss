@@ -46,6 +46,11 @@
     position: absolute;
     right: 15px;
   }
+  [data-action="zoom"] {
+    cursor: pointer;
+    cursor: -webkit-zoom-in;
+    cursor: -moz-zoom-in;
+  }
   .text-expander {
     background: #eee;
     color: #555;

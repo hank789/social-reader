@@ -1,4 +1,4 @@
-.event-item{class: "#{event.body? ? "event-block" : "event-inline" }"}
+.event-item{class: "event-#{event.id}"}
   %span.cgray.pull-right
     - if params[:action] == 'show'
       .event-actions

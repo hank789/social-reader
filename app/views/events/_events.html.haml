@@ -1,1 +1,20 @@
 = render @events
+
+:javascript
+    $(document).ready(function() {
+      var el, exceptClasses, imgEls, _i, _len;
+
+      exceptClasses = ["emoji"];
+
+      imgEls = $(".activities .content_list .event-item .event-body img");
+      for (_i = 0, _len = imgEls.length; _i < _len; _i++) {
+        el = imgEls[_i];
+        if (exceptClasses.indexOf($(el).attr("class")) === -1 && $(el).parent().attr("class") != "fluidbox-wrap") {
+          $(el).wrap("<a href='" + ($(el).attr("src")) + "' class='zoom-image' data-action='zoom'></a>");
+        }
+      }
+
+      $('a.zoom-image').fluidbox({
+        overlayColor: "#FFF"
+      });
+    });
