@@ -218,9 +218,14 @@
   display: none;
   position: fixed;
   z-index: 49;
-  right: 25px;
-  bottom: 30px;
+  right: 30px;
+  bottom: 40px;
   font-size: 3em;
-  height: 30px;
-  width: 30px;
+  height: 35px;
+  width: 35px;
+  @media (max-width: $screen-xs-max) {
+    font-size: 6em;
+    position: fixed;
+    bottom: 100px;
+  }
 }

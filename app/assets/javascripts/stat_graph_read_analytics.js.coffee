@@ -22,5 +22,5 @@ class window.ReadAnalyticsStatGraph
     @change_date_header()
     return
   change_date_header: ->
-    print = 'Analytics Example'
+    print = 'Analytics graph'
     $("#date_header").text(print)
