@@ -2,6 +2,7 @@ class Feeds
   constructor: ->
     $('.build-new-feed').bind "click", ->
       field = $('#feed_url')
+      this.disabled = true
       slug = field.val()
       path = field.attr('data-feed-path')
       group = field.attr('data-feed-group')
@@ -14,6 +15,8 @@ class Feeds
             feed_group : group
           success: (msg) ->
             window.location.reload(true)
+      else
+        this.disabled = false
 
     $('.rssfeeds-delete-feed').bind "click", ->
       field = $('#' + this.id)

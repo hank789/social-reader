@@ -25,9 +25,9 @@ class AddNewFeed
       service.provider = group.id
     end
     service.user = user
-    service.active = 1
     if service.new_record?
       return_result = 1
+      service.active = 1
       service.last_activity_at = Time.now
       service.last_read_time = Time.now
       service.last_unread_count = 0
@@ -35,6 +35,7 @@ class AddNewFeed
     elsif service.active == 0
       return_result = 1
     end
+    service.active = 1
     service.save
     if return_result == 0
       return 0
