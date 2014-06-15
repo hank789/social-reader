@@ -36,18 +36,17 @@ class ImportFromOpml
       end
       return false unless feed.id
       RssFeedsRssCategory.where(rss_feed_id: feed.id, rss_category_id: group.id).first_or_create
-      service = Service.where(uid: user.id.to_s + "_" + feed.id.to_s, service_name: 'RssFeedService').first_or_initialize
+      service = Service.unscoped.where(uid: user.id.to_s + "_" + feed.id.to_s, service_name: 'RssFeedService').first_or_initialize
+      service.access_token = feed.id
+      service.provider = group.id
+      service.user = user
+      service.active = 1
       if service.new_record?
-        service.access_token = feed.id
-        service.provider = group.id
-        service.user = user
-        service.active = 1
         service.last_activity_at = Time.now
         service.last_read_time = Time.now
         service.last_unread_count = 0
-        service.save
       end
-
+      service.save
     end
   end
 end

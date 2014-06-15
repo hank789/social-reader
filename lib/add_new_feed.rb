@@ -16,24 +16,26 @@ class AddNewFeed
       end
     end
     return false unless feed.id
-    service = Service.where(uid: user.id.to_s + "_" + feed.id.to_s, service_name: 'RssFeedService').first_or_initialize
+    service = Service.unscoped.where(uid: user.id.to_s + "_" + feed.id.to_s, service_name: 'RssFeedService').first_or_initialize
+    service.access_token = feed.id
+    if group_id
+      service.provider = group_id
+    else
+      group = RssCategory.where(name: "Ungrouped", user_id: user.id).first_or_create
+      service.provider = group.id
+    end
+    service.user = user
+    service.active = 1
     if service.new_record?
       return_result = 1
-      service.access_token = feed.id
-      if group_id
-        service.provider = group_id
-      else
-        group = RssCategory.where(name: "Ungrouped", user_id: user.id).first_or_create
-        service.provider = group.id
-      end
-      service.user = user
-      service.active = 1
       service.last_activity_at = Time.now
       service.last_read_time = Time.now
       service.last_unread_count = 0
       service.save
+    elsif service.active == 0
+      return_result = 1
     end
-
+    service.save
     if return_result == 0
       return 0
     end
