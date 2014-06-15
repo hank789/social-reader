@@ -25,11 +25,10 @@ class Note < ActiveRecord::Base
 
   default_value_for :system, false
 
-  attr_accessible :note, :noteable, :noteable_id, :noteable_type, :post_id,
+  attr_accessible :note, :noteable_id, :noteable_type, :post_id,
                   :attachment
   attr_mentionable :note
 
-  belongs_to :noteable, polymorphic: true
   belongs_to :user
   belongs_to :post
 
@@ -39,7 +38,6 @@ class Note < ActiveRecord::Base
   validates :attachment, file_size: { maximum: 10.megabytes.to_i }
 
   validates :noteable_id, presence: true, if: ->(n) { n.noteable_type.present? && n.noteable_type != 'Commit' }
-  validates :commit_id, presence: true, if: ->(n) { n.noteable_type == 'Commit' }
 
   mount_uploader :attachment, AttachmentUploader
 
@@ -225,12 +223,6 @@ class Note < ActiveRecord::Base
     else
       "wall"
     end
-  end
-
-  # FIXME: Hack for polymorphic associations with STI
-  #        For more information wisit http://api.rubyonrails.org/classes/ActiveRecord/Associations/ClassMethods.html#label-Polymorphic+Associations
-  def noteable_type=(sType)
-    super(sType.to_s.classify.constantize.base_class.to_s)
   end
 
   # Reset notes events cache

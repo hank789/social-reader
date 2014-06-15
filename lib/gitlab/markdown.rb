@@ -26,7 +26,6 @@ module Gitlab
   #   >> gfm(":trollface:")
   #   => "<img alt=\":trollface:\" class=\"emoji\" src=\"/images/trollface.png" title=\":trollface:\" />
   module Markdown
-    include PostsHelper
 
     attr_reader :html_options
 

@@ -17,7 +17,12 @@ class NotesController < ApplicationController
   end
 
   def create
-    @note = Notes::CreateService.new(-1, current_user, params).execute
+    post_id = -1
+    if params[:post_id]
+      post_id = params[:post_id]
+    end
+
+    @note = Notes::CreateService.new(post_id, current_user, params).execute
 
     render text: -1
   end

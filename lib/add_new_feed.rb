@@ -8,7 +8,6 @@ class AddNewFeed
     feed = repo.where(url: result.feed_url).first_or_initialize
     return_result = 0
     if feed.new_record?
-      return_result = 1
       feed.name = result.title
       feed.last_fetched = Time.now - THREE_DAY
       feed.save
@@ -17,26 +16,24 @@ class AddNewFeed
       end
     end
     return false unless feed.id
-    service = Service.new
-    service.service_name = 'RssFeedService'
-    service.uid = user.id.to_s + "_" + feed.id.to_s
-    service.access_token = feed.id
-    if group_id
-      service.provider = group_id
-    else
-      group = RssCategory.where(name: "Ungrouped", user_id: user.id).first_or_create
-      service.provider = group.id
-    end
-    service.user = user
-    service.active = 1
-    service.last_activity_at = Time.now
-    service.last_read_time = Time.now
-    service.last_unread_count = 0
-    if !service.save
-      service_exist = Service.where(uid: service.uid, service_name: 'RssFeedService').first
-      service.id = service_exist.id
+    service = Service.where(uid: user.id.to_s + "_" + feed.id.to_s, service_name: 'RssFeedService').first_or_initialize
+    if service.new_record?
+      return_result = 1
+      service.access_token = feed.id
+      if group_id
+        service.provider = group_id
+      else
+        group = RssCategory.where(name: "Ungrouped", user_id: user.id).first_or_create
+        service.provider = group.id
+      end
+      service.user = user
+      service.active = 1
+      service.last_activity_at = Time.now
+      service.last_read_time = Time.now
+      service.last_unread_count = 0
       service.save
     end
+
     if return_result == 0
       return 0
     end

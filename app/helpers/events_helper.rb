@@ -167,6 +167,10 @@ module EventsHelper
   end
 
   def share_to_chat(event)
-
+    return "" if current_user.blank?
+    icon = content_tag(:i, "", :class => "icon-bullhorn")
+    link_title = "Share to global chat"
+    share_label = raw "#{icon}"
+    raw "#{link_to(share_label, "#", :onclick => "return Events.share_to_global_chat(this);", 'data-id' => event.post_id, :title => link_title, :rel => "twipsy")}"
   end
 end

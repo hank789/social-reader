@@ -62,7 +62,7 @@ class Wall
       <li><span class="wall-author"><img src="#{note.user.avatar.url}" class="avatar s16" alt="">#{note.user.name}</span>
         <abbr class="timeago" title="{{created_at}}">#{$.format.date(note.created_at, "HH:mm:ss")}</abbr>
         <span class="wall-text">
-        #{simpleFormat(note.body)}
+        #{note.body}
         </span>
       </li>
       """

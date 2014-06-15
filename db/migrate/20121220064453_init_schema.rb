@@ -54,6 +54,7 @@ class InitSchema < ActiveRecord::Migration
       t.string   "guid"
       t.string   "link"
       t.integer  "favourite_count", default: 0
+      t.integer  "gloabl_share_to_chat_count", default: 0
       t.text     "data"
     end
     execute %{ALTER TABLE posts MODIFY title varchar(255) COLLATE utf8mb4_general_ci NOT NULL}

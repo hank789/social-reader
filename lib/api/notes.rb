@@ -13,7 +13,7 @@ module API
       # Example Request:
       #   GET /projects/:id/notes
       get ":id/notes" do
-        @notes = Note.where(:post_id => params[:id]).common
+        @notes = Note.where(:post_id => params[:id])
 
         # Get recent notes if recent = true
         @notes = @notes.order('id DESC') if params[:recent]

@@ -12,3 +12,19 @@
         type: "POST"
       $("i", el).attr("class", "icon-star")
     false
+
+  share_to_global_chat: (el) ->
+    post_id = $(el).data("id")
+
+    $.ajax
+      url: "/notes"
+      type: "POST"
+      data:
+        post_id : post_id
+        chat_type : "GlobalChat"
+        note: "just a test"
+      success: (msg) ->
+        $(el).hide()
+        $('.dash-sidebar-tabs #sidebar-gloablchat-tab').click()
+
+    false
