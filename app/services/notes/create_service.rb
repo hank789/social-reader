@@ -15,7 +15,11 @@ module Notes
           post_object.save
           note.noteable_id = post
           note.post_id = -1
-          note.note = "Shared a post: <a href= '#{post_object.link}' target='_blank'>#{post_object.title}</a>"
+          note_title =  post_object.title
+          if post_object.title.empty?
+            note_title =  post_object.description
+          end
+          note.note = "Shared a post: <a href= '#{post_object.link}' target='_blank'>#{note_title}</a>"
       end
       note.save
       note
