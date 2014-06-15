@@ -163,7 +163,7 @@ module EventsHelper
       link_title = "unstar"
     end
     favorite_label = raw "#{icon}"
-    raw "#{link_to(favorite_label, "#", :onclick => "return Events.favorite(this);", 'data-id' => event.id, :title => link_title, :rel => "twipsy")}"
+    raw "#{link_to(favorite_label, "#", :onclick => "return Events.favorite(this);", 'data-id' => event.id, :title => link_title)}"
   end
 
   def share_to_chat(event)
@@ -171,6 +171,6 @@ module EventsHelper
     icon = content_tag(:i, "", :class => "icon-bullhorn")
     link_title = "Share to global chat"
     share_label = raw "#{icon}"
-    raw "#{link_to(share_label, "#", :onclick => "return Events.share_to_global_chat(this);", 'data-id' => event.post_id, :title => link_title, :rel => "twipsy")}"
+    raw "#{link_to(share_label, "#", :onclick => "return Events.share_to_global_chat(this);", 'data-id' => event.post_id, :title => link_title)}"
   end
 end

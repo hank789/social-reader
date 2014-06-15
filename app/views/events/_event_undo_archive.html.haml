@@ -1,0 +1,7 @@
+.undo-archive-message#undo-archive-message
+  .container
+    You just archived #{@events_all_unread_count} posts
+    .pull-right.hidden-xs
+      = link_to "Don't show again", "javascript:void(0)", :onclick => "return $('#undo-archive-message').hide();", class: 'hide-no-ssh-message'
+      |
+      = link_to 'Undo', 'javascript:void(0)', id: 'undo-archive-all', :'data-path' => events_undo_archive_all_path, class: 'hide-no-ssh-message'

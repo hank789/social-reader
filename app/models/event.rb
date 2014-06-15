@@ -14,12 +14,13 @@
 
 class Event < ActiveRecord::Base
   attr_accessible :project, :action, :user_id,
-                  :post_id, :service_id, :action, :author_id, :stars_at, :read_at, :book_at
+                  :post_id, :service_id, :action, :author_id, :stars_at, :read_at, :book_at, :archive_at
 
   validates_uniqueness_of :post_id, :scope => :user_id
 
   UNREAD  = 10
   READ = 11
+  ARCHIVE = 12
 
   belongs_to :user
   belongs_to :service
@@ -28,7 +29,7 @@ class Event < ActiveRecord::Base
   # Scopes
   scope :recent, -> { order("created_at DESC") }
   scope :load_events, ->(user_ids) { where(user_id: user_ids, action: Event::UNREAD).recent }
-  scope :load_archive_events, ->(user_ids) { where(user_id: user_ids, action: Event::READ).recent }
+  scope :load_archive_events, ->(user_ids) { where(user_id: user_ids).where("action >= ?", 11).recent }
   scope :load_star_events, ->(user_ids) { where(user_id: user_ids).where.not(stars_at: nil) }
   scope :load_events_for_service, ->(services_ids) { where(service_id: services_ids).recent }
 

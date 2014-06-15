@@ -106,6 +106,8 @@ Gitlab::Application.routes.draw do
   get 'dashboard/archive' => "dashboard#archive"
 
   match 'events/mark_above_as_read/:id' => "events#mark_above_as_read", as: :events_mark_above_as_read, via: :put
+  post 'events/archive_all' => "events#archive_all", as: :events_archive_all
+  post 'events/undo_archive_all' => "events#undo_archive_all", as: :events_undo_archive_all
   resources :events do
     member do
       post :favorite

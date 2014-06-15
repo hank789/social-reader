@@ -37,6 +37,26 @@ class Dashboard
       $(".content_list").html ''
       Pager.init 50, true
 
+    $('#sidebar-archive-all').on 'click', (e) ->
+      archive_path = $('#sidebar-archive-all').attr('data-path')
+      $.ajax
+        type: "POST"
+        url: archive_path
+        success: (msg) ->
+          $("#undo-archive-message").show()
+          $(".content_list").html ''
+          Pager.init 50, true
+
+    $('#undo-archive-all').on 'click', (e) ->
+      archive_path = $('#undo-archive-all').attr('data-path')
+      $.ajax
+        type: "POST"
+        url: archive_path
+        success: (msg) ->
+          $("#undo-archive-message").hide()
+          $(".content_list").html ''
+          Pager.init 50, true
+
     # show tab from cookie
     sidebar_filter = $.cookie(key)
     $("#" + sidebar_filter).tab('show') if sidebar_filter

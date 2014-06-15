@@ -1,6 +1,6 @@
 class EventsController < ApplicationController
 
-  before_action :load_event
+  before_action :load_event, except: [:archive_all, :undo_archive_all]
 
   def favorite
     @event.favorite(current_user.id)
@@ -34,6 +34,18 @@ class EventsController < ApplicationController
     respond_to do |format|
       format.js {render inline: "$('.content_list').html('');Pager.init(50, true);" }
     end
+  end
+
+  def archive_all
+    lasted_event = Event.find(cookies['lasted_event_id'])
+    Event.where(user_id: current_user.id).where("created_at <= ?", lasted_event.created_at).update_all(action: Event::ARCHIVE, archive_at: Time.now)
+    render text: 1
+  end
+
+  def undo_archive_all
+    lasted_event = Event.find(cookies['lasted_event_id'])
+    Event.where(user_id: current_user.id).where("created_at <= ?", lasted_event.created_at).update_all(action: Event::UNREAD)
+    render text: 1
   end
 
   private

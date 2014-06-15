@@ -12,9 +12,10 @@ class DashboardController < ApplicationController
     @events = @event_filter.apply_filter(@events,current_user.id)
     @events = @events.limit(50).offset(params[:offset] || 0)
     @note = Note.new
-
-    if params[:offset] == "0" && @events.first
+    @events_all_unread_count = 0
+    if (params[:offset] == "0" || params[:offset].nil?) && @events.first
       cookies['lasted_event_id'] = @events.first.id
+      @events_all_unread_count = Event.where(user_id: current_user.id, action: Event::UNREAD).count
     end
 
     respond_to do |format|
@@ -82,24 +83,22 @@ class DashboardController < ApplicationController
   end
 
   def check_last_events
-    if current_user
-      @last_unread_count = 0
-      @last_read_time = Time.now
-      if params[:offset] == "0"
-        current_user.services.each do |service|
-          if @last_read_time > service.last_read_time
-            @last_read_time = service.last_read_time
-          end
-          @last_unread_count += service.last_unread_count
-          if service.last_activity_at && Time.now.to_i - service.last_activity_at.to_time.to_i >= 90
-            service.last_activity_at = Time.now
+    @last_unread_count = 0
+    @last_read_time = Time.now
+    if params[:offset] == "0" || params[:offset].nil?
+      current_user.services.each do |service|
+        if @last_read_time > service.last_read_time
+          @last_read_time = service.last_read_time
+        end
+        @last_unread_count += service.last_unread_count
+        if params[:offset] == "0" && service.last_activity_at && Time.now.to_i - service.last_activity_at.to_time.to_i >= 90
+          service.last_activity_at = Time.now
 
-            service.last_unread_count = 0
-            service.last_read_time = Time.now
+          service.last_unread_count = 0
+          service.last_read_time = Time.now
 
-            service.save
-            ServicePullWorker.perform_async(service.id)
-          end
+          service.save
+          ServicePullWorker.perform_async(service.id)
         end
       end
     end

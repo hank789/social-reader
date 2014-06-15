@@ -13,8 +13,13 @@
     = render "services", services: @services
     .prepend-top-20
       %span
-        = link_to "#", class: "cgray", id: 'sidebar-clear-filter' do
+        = link_to "javascript:void(0)", class: "has_tooltip cgray", id: 'sidebar-clear-filter', 'data-original-title' => 'Will reload all posts.' do
           %i.icon-remove
           %strong Clear filter
+        &nbsp;
+        - if params[:action] == "show" && @events_all_unread_count >= 1
+          = link_to "javascript:void(0)", class: "has_tooltip cgray", id: 'sidebar-archive-all', :'data-path' => events_archive_all_path, 'data-original-title' => 'Move all your unread posts to archive folder.' do
+            %i.icon-check
+            %strong Archive all
   .tab-pane#gloablchat
     = render "notes/index"
