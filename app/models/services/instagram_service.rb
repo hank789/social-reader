@@ -50,14 +50,18 @@ class InstagramService < Service
   def get_home_timeline_items(since_id)
     client = Instagram.client(:access_token => access_token)
     if since_id.nil?
-      options = {:count => 100}
+      page_1 = client.user_media_feed
     else
-      options = {:count => 100, :min_id => since_id}
+      since_id = since_id.split('_')
+      page_1 = client.user_media_feed(:min_id => since_id[0].to_i)
     end
-    page_1 = client.user_media_feed(options)
+    if page_1.empty?
+      page_1 = client.user_media_feed
+    end
     page_2_max_id = page_1.pagination.next_max_id
     until page_2_max_id.nil? do
-      page_2 = client.user_media_feed(:count => 100, :max_id => page_2_max_id )
+      page_2_max_id = page_2_max_id.split('_')
+      page_2 = client.user_media_feed(:max_id => page_2_max_id[0].to_i )
       page_1.concat(page_2)
       page_2_max_id = page_2.pagination.next_max_id
     end
