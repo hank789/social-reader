@@ -91,15 +91,10 @@ class DashboardController < ApplicationController
           @last_read_time = service.last_read_time
         end
         @last_unread_count += service.last_unread_count
-        if params[:offset] == "0" && service.last_activity_at && Time.now.to_i - service.last_activity_at.to_time.to_i >= 90
-          service.last_activity_at = Time.now
-
-          service.last_unread_count = 0
-          service.last_read_time = Time.now
-
-          service.save
-          ServicePullWorker.perform_async(service.id)
-        end
+      end
+      if params[:offset] == "0" && Time.now.to_i - current_user.services.first.last_activity_at.to_time.to_i >= 90
+        Service.where(user_id: current_user.id).update_all(last_activity_at: Time.now, last_unread_count: 0, last_read_time: Time.now)
+        ServicePullWorker.perform_async(nil, current_user.id)
       end
     end
   end
