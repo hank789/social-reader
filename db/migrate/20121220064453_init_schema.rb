@@ -209,6 +209,7 @@ class InitSchema < ActiveRecord::Migration
     add_index "notes", ["post_id", "noteable_type"], name: "index_notes_on_post_id_and_noteable_type", using: :btree
     add_index "notes", ["post_id"], name: "index_notes_on_post_id", using: :btree
     add_index "notes", ["updated_at"], name: "index_notes_on_updated_at", using: :btree
+    execute %{ALTER TABLE notes MODIFY note text COLLATE utf8mb4_general_ci}
 
     create_table "tmp_files", force: true do |t|
       t.text     "note"
