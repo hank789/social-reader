@@ -70,16 +70,18 @@ class Post < ActiveRecord::Base
         author.id = author_exist.id
         author.save
       end
-      Post.create(provider: feed.id,
-                   title: entry.title,
-                   link: entry.url,
-                   description: extract_rss_content(entry),
-                   position: 0,
-                   author_id: author.id,
-                   favourite_count: 0,
-                   created_at: entry.published || Time.now,
-                   updated_at: entry.published || Time.now,
-                   guid: entry.id)
+      post = Post.where(guid: entry.id, provider: feed.id).first_or_initialize
+      if post.new_record?
+        post.title = entry.title
+        post.link = entry.url
+        post.description = extract_rss_content(entry)
+        post.position = 0
+        post.author_id = author.id
+        post.favourite_count = 0
+        post.created_at = entry.published || Time.now
+        post.updated_at = entry.published || Time.now
+        post.save
+      end
     end
 
     def extract_rss_content(entry)

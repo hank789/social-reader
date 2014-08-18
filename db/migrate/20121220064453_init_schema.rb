@@ -53,7 +53,7 @@ class InitSchema < ActiveRecord::Migration
       t.integer  "position",     default: 0
       t.text     "description"
       t.string   "guid"
-      t.string   "link"
+      t.string   "link",  limit: 1024
       t.integer  "favourite_count", default: 0
       t.integer  "gloabl_share_to_chat_count", default: 0
       t.text     "data"
